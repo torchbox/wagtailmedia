@@ -1,0 +1,44 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+{% block titletag %}Media{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        window.headerSearch = {
+            url: "{% url 'wagtailmedia:index' %}",
+            termInput: "#id_q",
+            targetOutput: "#media-results"
+        };
+
+        $(function() {
+            $('#collection_chooser_collection_id').change(function() {
+                this.form.submit();
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% trans "Media" as media_str %}
+
+    {% if user_can_add %}
+        {% trans "Add a media file" as add_media_str %}
+        {% include "wagtailadmin/shared/header.html" with title=media_str add_link="wagtailmedia:add" icon="media" add_text=add_media_str search_url="wagtailmedia:index" %}
+    {% else %}
+        {% include "wagtailadmin/shared/header.html" with title=media_str icon="media" search_url="wagtailmedia:index" %}
+    {% endif %}
+
+    <div class="nice-padding">
+        {% if collections %}
+            <form class="image-search search-bar" action="{% url 'wagtailmedia:index' %}" method="GET">
+                <ul class="fields">
+                    {% include "wagtailadmin/shared/collection_chooser.html" %}
+                </ul>
+            </form>
+        {% endif %}
+
+        <div id="media-results" class="media">
+            {% include "wagtailmedia/media/results.html" %}
+        </div>
+    </div>
+{% endblock %}

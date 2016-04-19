@@ -1,0 +1,11 @@
+{% load i18n wagtailadmin_tags %}
+
+<li class="icon icon-media">
+    <a href="{% url 'wagtailmedia:index' %}">
+    {% blocktrans count counter=total_media with total_media|intcomma as total %}
+        <span>{{ total }}</span> Media file
+    {% plural %}
+        <span>{{ total }}</span> Media files
+    {% endblocktrans %}
+    </a>
+</li>

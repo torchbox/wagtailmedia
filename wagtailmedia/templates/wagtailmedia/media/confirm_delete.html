@@ -1,0 +1,15 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+{% block titletag %}{% blocktrans with title=media.title %}Delete {{ title }}{% endblocktrans %}{% endblock %}
+{% block content %}
+    {% trans "Delete media file" as del_str %}
+    {% include "wagtailadmin/shared/header.html" with title=del_str subtitle=media.title icon="media" %}
+
+    <div class="nice-padding">
+        <p>{% trans "Are you sure you want to delete this media file?" %}</p>
+        <form action="{% url 'wagtailmedia:delete' media.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value='{% trans "Yes, delete" %}' class="serious" />
+        </form>
+    </div>
+{% endblock %}
