@@ -36,8 +36,8 @@ class AbstractMedia(CollectionMember, TagSearchable):
     title = models.CharField(max_length=255, verbose_name=_('title'))
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
-    type = models.CharField(choices=MEDIA_TYPES, max_length=255)
-    duration = models.PositiveIntegerField(verbose_name=_('duration'))
+    type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
+    duration = models.PositiveIntegerField(verbose_name=_('duration'), help_text=_('Duration in seconds'))
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
     thumbnail = models.FileField(upload_to='media_thumbnails', blank=True, verbose_name=_('thumbnail'))
@@ -66,6 +66,10 @@ class AbstractMedia(CollectionMember, TagSearchable):
     @property
     def filename(self):
         return os.path.basename(self.file.name)
+
+    @property
+    def thumbnail_filename(self):
+        return os.path.basename(self.thumbnail.name)
 
     @property
     def file_extension(self):
@@ -102,7 +106,6 @@ class Media(AbstractMedia):
         'title',
         'file',
         'collection',
-        'type',
         'duration',
         'width',
         'height',
@@ -136,6 +139,7 @@ def get_media_model():
 def media_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.file.delete(False)
+    instance.thumbnail.delete(False)
 
 
 media_served = Signal(providing_args=['request'])

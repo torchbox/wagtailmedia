@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
@@ -12,6 +14,17 @@ from wagtailmedia.permissions import permission_policy as media_permission_polic
 
 class BaseMediaForm(BaseCollectionMemberForm):
     permission_policy = media_permission_policy
+
+    def __init__(self, *args, **kwargs):
+        super(BaseMediaForm, self).__init__(*args, **kwargs)
+
+        # We will need to exclude duration, width, height, thumbnail
+        # if we would get this information from files metadata
+
+        if self.instance.type == 'audio':
+            del self.fields['width']
+            del self.fields['height']
+            del self.fields['thumbnail']
 
 
 def get_media_form(model):
@@ -29,7 +42,8 @@ def get_media_form(model):
         fields=fields,
         widgets={
             'tags': widgets.AdminTagWidget,
-            'file': forms.FileInput()
+            'file': forms.FileInput(),
+            'thumbnail': forms.FileInput(),
         })
 
 

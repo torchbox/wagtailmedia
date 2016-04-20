@@ -21,11 +21,12 @@
          
          {% search_other %}
     {% else %}
-        {% url 'wagtailmedia:add' as wagtailmedia_add_media_url %}
+        {% url 'wagtailmedia:add' 'audio' as wagtailmedia_add_audio_url %}
+        {% url 'wagtailmedia:add' 'video' as wagtailmedia_add_video_url %}
         {% if current_collection %}
-            <p>{% blocktrans %}You haven't uploaded any media files in this collection. Why not <a href="{{ wagtailmedia_add_media_url }}">upload one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any media files in this collection. You can upload <a href="{{ wagtailmedia_add_audio_url }}">audio</a> or <a href="{{ wagtailmedia_add_video_url }}">video</a> files.{% endblocktrans %}</p>
         {% else %}
-            <p>{% blocktrans %}You haven't uploaded any media files. Why not <a href="{{ wagtailmedia_add_media_url }}">upload one now</a>?{% endblocktrans %}</p>
+            <p>{% blocktrans %}You haven't uploaded any media files. You can upload <a href="{{ wagtailmedia_add_audio_url }}">audio</a> or <a href="{{ wagtailmedia_add_video_url }}">video</a> files.{% endblocktrans %}</p>
         {% endif %}
     {% endif %}
 {% endif %}

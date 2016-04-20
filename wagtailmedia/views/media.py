@@ -90,12 +90,12 @@ def index(request):
 
 
 @permission_checker.require('add')
-def add(request):
+def add(request, media_type):
     media_model = get_media_model()
     media_form = get_media_form(media_model)
 
     if request.POST:
-        media = media_model(uploaded_by_user=request.user)
+        media = media_model(uploaded_by_user=request.user, type=media_type)
         form = media_form(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
             form.save()
@@ -111,10 +111,12 @@ def add(request):
         else:
             messages.error(request, _("The media file could not be saved due to errors."))
     else:
-        form = media_form(user=request.user)
+        media = media_model(uploaded_by_user=request.user, type=media_type)
+        form = media_form(user=request.user, instance=media)
 
     return render(request, "wagtailmedia/media/add.html", {
         'form': form,
+        'media_type': media_type,
     })
 
 
