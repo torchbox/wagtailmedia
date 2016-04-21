@@ -8,10 +8,8 @@ from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin.utils import PermissionPolicyChecker
 from wagtail.wagtailcore.models import Collection
-from wagtail.wagtailsearch.backends import get_search_backends
 
 from wagtailmedia.models import get_media_model
-from wagtailmedia.forms import get_media_form
 from wagtailmedia.permissions import permission_policy
 
 
@@ -33,12 +31,6 @@ def get_media_json(media):
 
 def chooser(request):
     Media = get_media_model()
-
-    if permission_policy.user_has_permission(request.user, 'add'):
-        MediaForm = get_media_form(Media)
-        uploadform = MediaForm()
-    else:
-        uploadform = None
 
     media_files = []
 
@@ -81,7 +73,6 @@ def chooser(request):
 
     return render_modal_workflow(request, 'wagtailmedia/chooser/chooser.html', 'wagtailmedia/chooser/chooser.js', {
         'media_files': media_files,
-        'uploadform': uploadform,
         'searchform': searchform,
         'collections': collections,
         'is_searching': False,
@@ -94,35 +85,4 @@ def media_chosen(request, media_id):
     return render_modal_workflow(
         request, None, 'wagtailmedia/chooser/media_chosen.js',
         {'media_json': get_media_json(media)}
-    )
-
-
-@permission_checker.require('add')
-def chooser_upload(request):
-    media_model = get_media_model()
-    media_form = get_media_form(media_model)
-
-    if request.POST:
-        media = media_model(uploaded_by_user=request.user)
-        form = media_form(request.POST, request.FILES, instance=media)
-
-        if form.is_valid():
-            form.save()
-
-            # Reindex the media entry to make sure all tags are indexed
-            for backend in get_search_backends():
-                backend.add(media)
-
-            return render_modal_workflow(
-                request, None, 'wagtailmedia/chooser/media_chosen.js',
-                {'media_json': get_media_json(media)}
-            )
-    else:
-        form = media_form()
-
-    media_files = media_model.objects.order_by('title')
-
-    return render_modal_workflow(
-        request, 'wagtailmedia/chooser/chooser.html', 'wagtailmedia/chooser/chooser.js',
-        {'media_files': media_files, 'uploadform': form}
     )
