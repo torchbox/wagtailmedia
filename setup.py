@@ -12,7 +12,7 @@ setup(
     name='wagtailmedia',
     version=__version__,
     description='A module for Wagtail that provides functionality '
-                'similar to wagtaildocs module, but for audio and video files.',
+                'similar to wagtail.wagtaildocs module, but for audio and video files.',
     author='Mikalai Radchuk',
     author_email='mikalai.radchuk@torchbox.com',
     packages=find_packages(),
