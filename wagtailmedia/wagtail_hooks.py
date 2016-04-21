@@ -13,7 +13,6 @@ from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
-from wagtailmedia.rich_text import MediaLinkHandler
 
 
 @hooks.register('register_admin_urls')
@@ -44,7 +43,6 @@ def register_media_menu_item():
 @hooks.register('insert_editor_js')
 def editor_js():
     js_files = [
-        static('wagtailmedia/js/hallo-plugins/hallo-wagtailmedialink.js'),
         static('wagtailmedia/js/media-chooser.js'),
     ]
     js_includes = format_html_join(
@@ -55,16 +53,10 @@ def editor_js():
         """
         <script>
             window.chooserUrls.mediaChooser = '{0}';
-            registerHalloPlugin('hallowagtailmedialink');
         </script>
         """,
         urlresolvers.reverse('wagtailmedia:chooser')
     )
-
-
-@hooks.register('register_rich_text_link_handler')
-def register_media_link_handler():
-    return 'media', MediaLinkHandler
 
 
 class MediaSummaryItem(SummaryItem):
