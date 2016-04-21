@@ -1,0 +1,4 @@
+include LICENSE *.rst *.txt
+graft wagtailmedia
+global-exclude __pycache__
+global-exclude *.py[co]
