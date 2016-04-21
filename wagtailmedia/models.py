@@ -21,18 +21,17 @@ from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
 
-MEDIA_TYPES = (
-    ('audio', _('Audio file')),
-    ('video', _('Video file')),
-)
-
-
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
     pass
 
 
 @python_2_unicode_compatible
 class AbstractMedia(CollectionMember, TagSearchable):
+    MEDIA_TYPES = (
+        ('audio', _('Audio file')),
+        ('video', _('Video file')),
+    )
+
     title = models.CharField(max_length=255, verbose_name=_('title'))
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 

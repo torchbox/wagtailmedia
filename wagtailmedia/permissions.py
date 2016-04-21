@@ -1,6 +1,7 @@
 from wagtail.wagtailcore.permission_policies.collections import (
     CollectionOwnershipPermissionPolicy
 )
+
 from wagtailmedia.models import Media, get_media_model
 
 
