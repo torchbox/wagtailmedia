@@ -102,7 +102,7 @@ Here is an example:
                 return ''
 
             if value.type == 'video':
-                player_code = u'''
+                player_code = '''
                 <div>
                     <video width="320" height="240" controls>
                         <source src="{0}" type="video/mp4">
@@ -111,7 +111,7 @@ Here is an example:
                 </div>
                 '''
             else:
-                player_code = u'''
+                player_code = '''
                 <div>
                     <audio controls>
                         <source src="{0}" type="audio/mpeg">
