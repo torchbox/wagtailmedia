@@ -120,3 +120,20 @@ Here is an example:
             return format_html(player_code, value.file.url)
 
 You also can use your template engine. For more detail see `StreamField documentation <http://docs.wagtail.io/en/stable/topics/streamfield.html#basic-block-types>`_.
+
+
+How to run tests
+================
+
+To run tests you need to clone this repository::
+
+    git clone https://github.com/torchbox/wagtailmedia.git
+    cd wagtailmedia
+
+With your preferred virtualenv activated, install testing dependencies::
+
+    pip install -e .[testing] -U
+
+Now you can run tests as shown below::
+
+    python runtests.py
