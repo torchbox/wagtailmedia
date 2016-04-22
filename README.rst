@@ -11,10 +11,7 @@ How to install
 
 Install using pip::
 
-    pip install wagtailmedia
-
-Note that wagtailmedia is not published on PyPI yet, but you can install module using ``pip install --editable``
-(for details see `pip install documentation <https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs>`_).
+    pip install git+https://github.com/torchbox/wagtailmedia.git
 
 
 Settings
