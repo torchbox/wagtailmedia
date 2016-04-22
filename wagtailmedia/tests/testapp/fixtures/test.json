@@ -1,0 +1,72 @@
+[
+{
+    "pk": 1,
+    "model": "wagtailcore.page",
+    "fields": {
+        "title": "Root",
+        "numchild": 1,
+        "show_in_menus": false,
+        "live": true,
+        "depth": 1,
+        "content_type": [
+            "wagtailcore",
+            "page"
+        ],
+        "path": "0001",
+        "url_path": "/",
+        "slug": "root"
+    }
+},
+
+{
+    "pk": 2,
+    "model": "wagtailcore.page",
+    "fields": {
+        "title": "Welcome to the Wagtail test site!",
+        "numchild": 6,
+        "show_in_menus": false,
+        "live": true,
+        "depth": 2,
+        "content_type": ["wagtailcore", "page"],
+        "path": "00010001",
+        "url_path": "/home/",
+        "slug": "home"
+    }
+},
+{
+    "pk": 3,
+    "model": "wagtailcore.page",
+    "fields": {
+        "title": "Event - Christmas",
+        "numchild": 6,
+        "show_in_menus": true,
+        "live": true,
+        "depth": 3,
+        "content_type": ["wagtailmedia_tests", "eventpage"],
+        "path": "000100010001",
+        "url_path": "/home/events/",
+        "slug": "event"
+    }
+},
+{
+    "pk": 3,
+    "model": "wagtailmedia_tests.eventpage",
+    "fields": {
+        "date_from": "2014-12-25",
+        "location": "The North Pole",
+        "body": "<p>Chestnuts roasting on an open fire</p>",
+        "cost": "Free"
+    }
+},
+{
+    "pk": 1,
+    "model": "wagtailmedia.Media",
+    "fields": {
+        "title": "test media",
+        "created_at": "2014-01-01T12:00:00.000Z",
+        "type": "video",
+        "file": "media/music.mp3",
+        "duration": "100"
+    }
+}
+]
