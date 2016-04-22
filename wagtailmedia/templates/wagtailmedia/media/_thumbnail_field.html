@@ -2,7 +2,9 @@
 {% load i18n %}
 {% block form_field %}
 
-    <a href="{{ media.thumbnail.url }}" class="icon icon-image">{{ media.thumbnail_filename }}</a><br /><br />
+    {% if media.thumbnail %}
+        <a href="{{ media.thumbnail.url }}" class="icon icon-image">{{ media.thumbnail_filename }}</a><br /><br />
+    {% endif %}
 
     {% trans "Change thumbnail file:" %}
     {{ field }}
