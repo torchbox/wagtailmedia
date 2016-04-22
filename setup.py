@@ -8,6 +8,16 @@ except ImportError:
     from distutils.core import setup
 
 
+# Testing dependencies
+testing_extras = [
+    # Required for running the tests
+    'mock>=1.0.0',
+
+    # For coverage and PEP8 linting
+    'coverage>=3.7.0',
+    'flake8>=2.2.0',
+]
+
 setup(
     name='wagtailmedia',
     version=__version__,
@@ -41,5 +51,8 @@ setup(
         'Django>=1.8.1,<1.10',
         'wagtail>=1.4',
     ],
+    extras_require={
+        'testing': testing_extras,
+    },
     zip_safe=False,
 )
