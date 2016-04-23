@@ -25,10 +25,11 @@ setup(
                 'similar to wagtail.wagtaildocs module, but for audio and video files.',
     author='Mikalai Radchuk',
     author_email='mikalai.radchuk@torchbox.com',
+    url='https://github.com/torchbox/wagtailmedia',
     packages=find_packages(),
     include_package_data=True,
     license='BSD',
-    long_description=open('README.rst').read(),
+    long_description='See https://github.com/torchbox/wagtailmedia for details',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
