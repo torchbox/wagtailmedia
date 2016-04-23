@@ -74,16 +74,27 @@ WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 
 ## How to use
 
-You can use ``Media`` in StreamField. To do this, you need
-to add a new block class that inherits from ``wagtailmedia.blocks.AbstractMediaChooserBlock``
-and implement your own ``render_basic`` method.
+### In StreamField
+
+You can use `Media` in StreamField. To do this, you need
+to add a new block class that inherits from `wagtailmedia.blocks.AbstractMediaChooserBlock`
+and implement your own `render_basic` method.
 
 Here is an example:
 
 ```python
 from __future__ import unicode_literals
+
+from django.db import models
 from django.utils.html import format_html
+
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.fields import StreamField
+from wagtail.wagtailcore import blocks
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+
 from wagtailmedia.blocks import AbstractMediaChooserBlock
+
 
 class TestMediaBlock(AbstractMediaChooserBlock):
     def render_basic(self, value):
@@ -110,9 +121,61 @@ class TestMediaBlock(AbstractMediaChooserBlock):
             '''
 
         return format_html(player_code, value.file.url)
+
+
+class BlogPage(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname="full title", icon='title')),
+        ('paragraph', blocks.RichTextBlock(icon='pilcrow')),
+        ('media', TestMediaBlock(icon='media')),
+    ])
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        StreamFieldPanel('body'),
+    ]
 ```
 
-You also can use your template engine. For more detail see [StreamField documentation](http://docs.wagtail.io/en/stable/topics/streamfield.html#basic-block-types).
+### As regular Django field
+
+Also, you can use `Media` in regular Django filed.
+
+Example
+
+```python
+from __future__ import unicode_literals
+
+from django.db import models
+
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.fields import RichTextField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+
+from wagtailmedia.edit_handlers import MediaChooserPanel
+
+
+class BlogPageWithMedia(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = RichTextField(blank=False)
+    media = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('body'),
+        MediaChooserPanel('media'),
+    ]
+```
 
 
 ## How to run tests
