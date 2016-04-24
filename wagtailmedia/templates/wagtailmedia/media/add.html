@@ -3,9 +3,9 @@
 {% load wagtailimages_tags %}
 {% block titletag %}
     {% if media_type == 'audio' %}
-        {% trans "Add an audio" %}
+        {% trans "Add audio" %}
     {% else %}
-        {% trans "Add a video" %}
+        {% trans "Add video" %}
     {% endif %}
 {% endblock %}
 
@@ -24,9 +24,9 @@
 
 {% block content %}
     {% if media_type == 'audio' %}
-        {% trans "Add an audio" as add_str %}
+        {% trans "Add audio" as add_str %}
     {% else %}
-        {% trans "Add a video" as add_str %}
+        {% trans "Add video" as add_str %}
     {% endif %}
     {% include "wagtailadmin/shared/header.html" with title=add_str icon="media" %}
 

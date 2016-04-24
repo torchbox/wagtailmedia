@@ -30,8 +30,8 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/index.html')
-        self.assertContains(response, "Add an audio")
-        self.assertContains(response, "Add a video")
+        self.assertContains(response, "Add audio")
+        self.assertContains(response, "Add video")
 
     def test_search(self):
         response = self.client.get(reverse('wagtailmedia:index'), {'q': "Hello"})
@@ -99,7 +99,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         # as standard, only the root collection exists and so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
-        self.assertContains(response, 'Add an audio')
+        self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
@@ -112,7 +112,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:add', args=('video', )))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
-        self.assertContains(response, 'Add a video')
+        self.assertContains(response, 'Add video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
@@ -135,7 +135,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, '<label for="id_collection">')
         self.assertContains(response, "Evil plans")
-        self.assertContains(response, 'Add an audio')
+        self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
@@ -154,7 +154,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, '<label for="id_collection">')
         self.assertContains(response, "Evil plans")
-        self.assertContains(response, 'Add a video')
+        self.assertContains(response, 'Add video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
@@ -304,7 +304,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         # user only has access to one collection, so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
-        self.assertContains(response, 'Add an audio')
+        self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
@@ -321,7 +321,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         # user only has access to one collection, so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
-        self.assertContains(response, 'Add a video')
+        self.assertContains(response, 'Add video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(

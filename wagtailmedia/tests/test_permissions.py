@@ -93,9 +93,9 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/index.html')
 
-        # user should not get an "Add an audio" and "Add a video" buttons
-        self.assertNotContains(response, "Add an audio")
-        self.assertNotContains(response, "Add a video")
+        # user should not get an "Add audio" and "Add video" buttons
+        self.assertNotContains(response, "Add audio")
+        self.assertNotContains(response, "Add video")
 
         # user should be able to see media not owned by them
         self.assertContains(response, "Test media")
