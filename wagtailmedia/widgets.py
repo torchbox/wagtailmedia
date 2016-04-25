@@ -11,9 +11,9 @@ from wagtailmedia.models import get_media_model
 
 
 class AdminMediaChooser(AdminChooser):
-    choose_one_text = _('Choose a media')
-    choose_another_text = _('Choose another media')
-    link_to_chosen_text = _('Edit this media')
+    choose_one_text = _('Choose a media item')
+    choose_another_text = _('Choose another media item')
+    link_to_chosen_text = _('Edit this media item')
 
     def __init__(self, **kwargs):
         super(AdminMediaChooser, self).__init__(**kwargs)
