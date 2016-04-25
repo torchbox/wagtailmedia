@@ -28,19 +28,7 @@ INSTALLED_APPS = [
 
 ### URL configuration
 
-Now make the following additions to your `urls.py` file:
-
-```python
-from wagtailmedia import urls as wagtailmedia_urls
-
-urlpatterns = [
-    # ...
-    url(r'^media_files/', include(wagtailmedia_urls)),
-    # ...
-]
-```
-
-Finally, your project needs to be set up to serve user-uploaded files from `MEDIA_ROOT`.
+Your project needs to be set up to serve user-uploaded files from `MEDIA_ROOT`.
 Your Django project may already have this in place, but if not, add the following snippet to `urls.py`:
 
 ```python

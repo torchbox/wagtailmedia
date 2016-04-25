@@ -40,8 +40,16 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
     @staticmethod
     def make_media():
+        fake_file = ContentFile(b("A boring example song"))
+        fake_file.name = 'song.mp3'
+
         for i in range(50):
-            media = models.Media(title="Test " + str(i), duration=100 + i)
+            media = models.Media(
+                title="Test " + str(i),
+                duration=100 + i,
+                file=fake_file,
+                type='audio',
+            )
             media.save()
 
     def test_pagination(self):
@@ -473,8 +481,16 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
     @staticmethod
     def make_media():
+        fake_file = ContentFile(b("A boring example song"))
+        fake_file.name = 'song.mp3'
+
         for i in range(50):
-            media = models.Media(title="Test " + str(i), duration=100 + i)
+            media = models.Media(
+                title="Test " + str(i),
+                duration=100 + i,
+                file=fake_file,
+                type='audio',
+            )
             media.save()
 
     def test_pagination(self):
@@ -642,138 +658,3 @@ class TestGetUsage(TestCase, WagtailTestUtils):
                                            args=(1,)))
         # There's no usage so there should be no table rows
         self.assertRegex(response.content, b'<tbody>(\s|\n)*</tbody>')
-
-
-class TestServeView(TestCase):
-    def setUp(self):
-        self.media = models.Media(title="Test media", duration=100)
-        self.media.file.save('example.mp3', ContentFile("A boring example song"))
-
-    def get(self):
-        return self.client.get(reverse('wagtailmedia_serve', args=(self.media.id, 'example.mp3')))
-
-    def test_response_code(self):
-        self.assertEqual(self.get().status_code, 200)
-
-    def test_content_disposition_header(self):
-        self.assertEqual(
-            self.get()['Content-Disposition'],
-            'attachment; filename="{}"'.format(self.media.filename))
-
-    def test_content_length_header(self):
-        self.assertEqual(self.get()['Content-Length'], '21')
-
-    def test_audio_content_type_header(self):
-        self.assertEqual(self.get()['Content-Type'], 'audio/mpeg')
-
-    def test_video_content_type_header(self):
-        media = models.Media(title="Test media", duration=100)
-        media.file.save('video_example.mp4', ContentFile("A boring example video"))
-
-        result = self.client.get(reverse('wagtailmedia_serve', args=(media.id, 'video_example.mp4')))
-
-        self.assertEqual(result['Content-Type'], 'video/mp4')
-
-    def test_is_streaming_response(self):
-        self.assertTrue(self.get().streaming)
-
-    def test_content(self):
-        self.assertEqual(b"".join(self.get().streaming_content), b"A boring example song")
-
-    def test_media_served_fired(self):
-        mock_handler = mock.MagicMock()
-        models.media_served.connect(mock_handler)
-
-        self.get()
-
-        self.assertEqual(mock_handler.call_count, 1)
-        self.assertEqual(mock_handler.mock_calls[0][2]['sender'], models.Media)
-        self.assertEqual(mock_handler.mock_calls[0][2]['instance'], self.media)
-
-    def test_with_nonexistent_media(self):
-        response = self.client.get(reverse('wagtailmedia_serve', args=(1000, 'blahblahblah', )))
-        self.assertEqual(response.status_code, 404)
-
-    def test_with_incorrect_filename(self):
-        """
-        Wagtail should be forgiving with filenames at the end of the URL. These
-        filenames are to make the URL look nice, and to provide a fallback for
-        browsers that do not handle the 'Content-Disposition' header filename
-        component. They should not be validated.
-        """
-        response = self.client.get(reverse('wagtailmedia_serve', args=(self.media.id, 'incorrectfilename')))
-        self.assertEqual(response.status_code, 200)
-
-
-class TestServeViewWithSendfile(TestCase):
-    def setUp(self):
-        # Import using a try-catch block to prevent crashes if the
-        # django-sendfile module is not installed
-        try:
-            import sendfile  # noqa
-        except ImportError:
-            raise unittest.SkipTest("django-sendfile not installed")
-
-        self.media = models.Media(title="Test media", duration=100)
-        self.media.file.save('example.mp3', ContentFile("A boring example song"))
-
-    def get(self):
-        return self.client.get(reverse('wagtailmedia_serve', args=(self.media.id, 'example.mp3')))
-
-    @staticmethod
-    def clear_sendfile_cache():
-        from wagtail.utils.sendfile import _get_sendfile
-        _get_sendfile.clear()
-
-    @override_settings(SENDFILE_BACKEND='sendfile.backends.xsendfile')
-    def test_sendfile_xsendfile_backend(self):
-        self.clear_sendfile_cache()
-        response = self.get()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['X-Sendfile'], os.path.join(settings.MEDIA_ROOT, self.media.file.name))
-
-    @unittest.skipIf(
-        django.VERSION < (1, 9), "Fails on Django 1.8"
-    )  # Under Django 1.8. It adds "http://" to beginning of Location when it shouldn't
-    @override_settings(
-        SENDFILE_BACKEND='sendfile.backends.mod_wsgi',
-        SENDFILE_ROOT=settings.MEDIA_ROOT,
-        SENDFILE_URL=settings.MEDIA_URL[:-1]
-    )
-    def test_sendfile_mod_wsgi_backend(self):
-        self.clear_sendfile_cache()
-        response = self.get()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Location'], os.path.join(settings.MEDIA_URL, self.media.file.name))
-
-    @override_settings(
-        SENDFILE_BACKEND='sendfile.backends.nginx',
-        SENDFILE_ROOT=settings.MEDIA_ROOT,
-        SENDFILE_URL=settings.MEDIA_URL[:-1]
-    )
-    def test_sendfile_nginx_backend(self):
-        self.clear_sendfile_cache()
-        response = self.get()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['X-Accel-Redirect'], os.path.join(settings.MEDIA_URL, self.media.file.name))
-
-
-class TestServeWithUnicodeFilename(TestCase):
-    def setUp(self):
-        self.media = models.Media(title="Test media", duration=100)
-
-        # Setting this filename in the content-disposition header fails on Django <1.8, Python 2
-        # due to https://code.djangoproject.com/ticket/20889
-        self.filename = 'media\u0627\u0644\u0643\u0627\u062a\u062f\u0631\u0627'
-        '\u064a\u064a\u0629_\u0648\u0627\u0644\u0633\u0648\u0642'
-        try:
-            self.media.file.save(self.filename, ContentFile("A boring example song"))
-        except UnicodeEncodeError:
-            raise unittest.SkipTest("Filesystem doesn't support unicode filenames")
-
-    def test_response_code(self):
-        response = self.client.get(reverse('wagtailmedia_serve', args=(self.media.id, self.filename)))
-        self.assertEqual(response.status_code, 200)

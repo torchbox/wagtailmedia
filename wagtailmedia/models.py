@@ -76,7 +76,7 @@ class AbstractMedia(CollectionMember, TagSearchable):
 
     @property
     def url(self):
-        return reverse('wagtailmedia_serve', args=[self.id, self.filename])
+        return self.file.url
 
     def get_usage(self):
         return get_object_usage(self)
