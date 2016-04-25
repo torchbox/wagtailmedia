@@ -37,7 +37,13 @@
                         <h2><a href="{% url 'wagtailmedia:edit' media_file.id %}">{{ media_file.title }}</a></h2>
                     {% endif %}
                 </td>
-                <td><a href="{{ media_file.url }}" class="nolink">{{ media_file.filename }}</a></td>
+                <td>
+                    {% if choosing %}
+                        {{ media_file.filename }}
+                    {% else %}
+                        <a href="{{ media_file.url }}" class="nolink">{{ media_file.filename }}</a>
+                    {% endif %}
+                </td>
                 <td>{{ media_file.get_type_display }}</td>
                 <td><div class="human-readable-date" title="{{ media_file.created_at|date:"d M Y H:i" }}">{{ media_file.created_at|timesince }} ago</div></td>
             </tr>
