@@ -9,7 +9,7 @@ but for audio and video files.
 Install using pip:
 
 ```
-pip install git+https://github.com/torchbox/wagtailmedia.git
+pip install wagtailmedia
 ```
 
 
