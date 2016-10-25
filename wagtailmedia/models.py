@@ -55,9 +55,9 @@ class AbstractMedia(CollectionMember, TagSearchable):
 
     objects = MediaQuerySet.as_manager()
 
-    search_fields = TagSearchable.search_fields + CollectionMember.search_fields + (
+    search_fields = TagSearchable.search_fields + CollectionMember.search_fields + [
         index.FilterField('uploaded_by_user'),
-    )
+    ]
 
     def __str__(self):
         return self.title
