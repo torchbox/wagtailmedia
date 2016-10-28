@@ -1,22 +1,17 @@
 from __future__ import unicode_literals
 
-import os
-import unittest
-
-import django
-import mock
-
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
-from six import b
 
+from six import b
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import Page, Collection, GroupCollectionPermission
+from wagtail.wagtailcore.models import (
+    Collection, GroupCollectionPermission, Page
+)
 
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia

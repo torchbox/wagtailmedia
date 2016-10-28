@@ -4,14 +4,13 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 
 from wagtail.utils.pagination import paginate
-from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
 from wagtail.wagtailadmin.forms import SearchForm
+from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
 from wagtail.wagtailadmin.utils import PermissionPolicyChecker
 from wagtail.wagtailcore.models import Collection
 
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
-
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 
