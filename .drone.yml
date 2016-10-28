@@ -8,6 +8,7 @@ build:
     image: python:3.5
     commands:
       - XDG_CACHE_HOME=/drone/pip-cache pip install -e .[testing]
+      - XDG_CACHE_HOME=/drone/pip-cache pip install isort
       - isort --check-only --diff --recursive wagtailmedia
   unittest:
     image: python:3.5
