@@ -6,10 +6,10 @@ from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from six import b
 from wagtail.tests.utils import WagtailTestUtils
 from wagtail.wagtailcore.models import Collection, GroupCollectionPermission
 
-from six import b
 from wagtailmedia import models
 
 

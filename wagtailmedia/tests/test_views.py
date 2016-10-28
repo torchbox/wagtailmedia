@@ -7,12 +7,12 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 
+from six import b
 from wagtail.tests.utils import WagtailTestUtils
 from wagtail.wagtailcore.models import (
     Collection, GroupCollectionPermission, Page
 )
 
-from six import b
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
