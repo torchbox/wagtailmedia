@@ -110,7 +110,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('audio',))
             ),
             count=1
@@ -123,7 +123,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, 'Add video')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('video',))
             ),
             count=1
@@ -146,7 +146,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('audio',))
             ),
             count=1
@@ -165,7 +165,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, 'Add video')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('video',))
             ),
             count=1
@@ -315,7 +315,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         self.assertContains(response, 'Add audio')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('audio',))
             ),
             count=1
@@ -332,7 +332,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         self.assertContains(response, 'Add video')
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data">'.format(
+            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse('wagtailmedia:add', args=('video',))
             ),
             count=1
