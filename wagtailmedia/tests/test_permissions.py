@@ -5,10 +5,10 @@ from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from six import b
 
+from six import b
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import GroupCollectionPermission, Collection
+from wagtail.wagtailcore.models import Collection, GroupCollectionPermission
 
 from wagtailmedia import models
 

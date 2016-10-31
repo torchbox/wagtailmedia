@@ -10,7 +10,8 @@ from wagtail.wagtailadmin.forms import (
 )
 
 from wagtailmedia.models import Media
-from wagtailmedia.permissions import permission_policy as media_permission_policy
+from wagtailmedia.permissions import \
+    permission_policy as media_permission_policy
 
 
 class BaseMediaForm(BaseCollectionMemberForm):

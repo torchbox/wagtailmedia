@@ -7,9 +7,9 @@
 
     <div class="nice-padding">
         <p>{% trans "Are you sure you want to delete this media file?" %}</p>
-        <form action="{% url 'wagtailmedia:delete' media.id %}" method="POST">
+        <form action="{% url 'wagtailmedia:delete' media.id %}" method="POST" novalidate>
             {% csrf_token %}
-            <input type="submit" value='{% trans "Yes, delete" %}' class="serious" />
+            <input type="submit" value='{% trans "Yes, delete" %}' class="button serious" />
         </form>
     </div>
 {% endblock %}

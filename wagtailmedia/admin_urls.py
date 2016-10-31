@@ -1,7 +1,6 @@
 from django.conf.urls import url
 
-from wagtailmedia.views import media, chooser
-
+from wagtailmedia.views import chooser, media
 
 urlpatterns = [
     url(r'^$', media.index, name='index'),

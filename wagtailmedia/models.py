@@ -2,18 +2,17 @@ from __future__ import unicode_literals
 
 import os.path
 
-from taggit.managers import TaggableManager
-
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
-from django.dispatch.dispatcher import receiver
 from django.dispatch import Signal
-from django.core.urlresolvers import reverse
-from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
+from taggit.managers import TaggableManager
 from wagtail.wagtailadmin.taggable import TagSearchable
 from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailcore.models import CollectionMember
@@ -55,9 +54,9 @@ class AbstractMedia(CollectionMember, TagSearchable):
 
     objects = MediaQuerySet.as_manager()
 
-    search_fields = TagSearchable.search_fields + CollectionMember.search_fields + (
+    search_fields = TagSearchable.search_fields + CollectionMember.search_fields + [
         index.FilterField('uploaded_by_user'),
-    )
+    ]
 
     def __str__(self):
         return self.title
