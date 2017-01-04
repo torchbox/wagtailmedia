@@ -9,7 +9,7 @@ from wagtail.utils.pagination import paginate
 from wagtail.wagtailadmin import messages
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin.utils import (
-    PermissionPolicyChecker, permission_denied
+    PermissionPolicyChecker, permission_denied, popular_tags_for_model
 )
 from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch.backends import get_search_backends
@@ -83,7 +83,7 @@ def index(request):
             'is_searching': bool(query_string),
 
             'search_form': form,
-            'popular_tags': media_model.popular_tags(),
+            'popular_tags': popular_tags_for_model(media_model),
             'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
             'collections': collections,
             'current_collection': current_collection,

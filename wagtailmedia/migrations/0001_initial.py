@@ -6,8 +6,8 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import taggit.managers
-import wagtail.wagtailadmin.taggable
 import wagtail.wagtailcore.models
+import wagtail.wagtailsearch.index
 
 
 class Migration(migrations.Migration):
@@ -41,6 +41,6 @@ class Migration(migrations.Migration):
                 'abstract': False,
                 'verbose_name': 'media',
             },
-            bases=(models.Model, wagtail.wagtailadmin.taggable.TagSearchable),
+            bases=(models.Model, wagtail.wagtailsearch.index.Indexed),
         ),
     ]
