@@ -9,7 +9,7 @@ from wagtail.utils.pagination import paginate
 from wagtail.wagtailadmin import messages
 from wagtail.wagtailadmin.forms import SearchForm
 from wagtail.wagtailadmin.utils import (
-    PermissionPolicyChecker, permission_denied
+    PermissionPolicyChecker, permission_denied, popular_tags_for_model
 )
 from wagtail.wagtailcore.models import Collection
 from wagtail.wagtailsearch.backends import get_search_backends
@@ -24,7 +24,7 @@ permission_checker = PermissionPolicyChecker(permission_policy)
 @permission_checker.require_any('add', 'change', 'delete')
 @vary_on_headers('X-Requested-With')
 def index(request):
-    media_model = get_media_model()
+    Media = get_media_model()
 
     # Get media files (filtered by user permission)
     media = permission_policy.instances_user_has_any_permission_for(
@@ -83,7 +83,7 @@ def index(request):
             'is_searching': bool(query_string),
 
             'search_form': form,
-            'popular_tags': media_model.popular_tags(),
+            'popular_tags': popular_tags_for_model(Media),
             'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
             'collections': collections,
             'current_collection': current_collection,
@@ -92,12 +92,12 @@ def index(request):
 
 @permission_checker.require('add')
 def add(request, media_type):
-    media_model = get_media_model()
-    media_form = get_media_form(media_model)
+    Media = get_media_model()
+    MediaForm = get_media_form(Media)
 
     if request.POST:
-        media = media_model(uploaded_by_user=request.user, type=media_type)
-        form = media_form(request.POST, request.FILES, instance=media, user=request.user)
+        media = Media(uploaded_by_user=request.user, type=media_type)
+        form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
             form.save()
 
@@ -112,8 +112,8 @@ def add(request, media_type):
         else:
             messages.error(request, _("The media file could not be saved due to errors."))
     else:
-        media = media_model(uploaded_by_user=request.user, type=media_type)
-        form = media_form(user=request.user, instance=media)
+        media = Media(uploaded_by_user=request.user, type=media_type)
+        form = MediaForm(user=request.user, instance=media)
 
     return render(request, "wagtailmedia/media/add.html", {
         'form': form,
@@ -123,17 +123,17 @@ def add(request, media_type):
 
 @permission_checker.require('change')
 def edit(request, media_id):
-    media_model = get_media_model()
-    media_form = get_media_form(media_model)
+    Media = get_media_model()
+    MediaForm = get_media_form(Media)
 
-    media = get_object_or_404(media_model, id=media_id)
+    media = get_object_or_404(Media, id=media_id)
 
     if not permission_policy.user_has_permission_for_instance(request.user, 'change', media):
         return permission_denied(request)
 
     if request.POST:
         original_file = media.file
-        form = media_form(request.POST, request.FILES, instance=media, user=request.user)
+        form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
             if 'file' in form.changed_data:
                 # if providing a new media file, delete the old one.
@@ -153,7 +153,7 @@ def edit(request, media_id):
         else:
             messages.error(request, _("The media could not be saved due to errors."))
     else:
-        form = media_form(instance=media, user=request.user)
+        form = MediaForm(instance=media, user=request.user)
 
     filesize = None
 
@@ -184,8 +184,8 @@ def edit(request, media_id):
 
 @permission_checker.require('delete')
 def delete(request, media_id):
-    media_model = get_media_model()
-    media = get_object_or_404(media_model, id=media_id)
+    Media = get_media_model()
+    media = get_object_or_404(Media, id=media_id)
 
     if not permission_policy.user_has_permission_for_instance(request.user, 'delete', media):
         return permission_denied(request)
@@ -201,8 +201,8 @@ def delete(request, media_id):
 
 
 def usage(request, media_id):
-    media_model = get_media_model()
-    media = get_object_or_404(media_model, id=media_id)
+    Media = get_media_model()
+    media = get_object_or_404(Media, id=media_id)
 
     paginator, used_by = paginate(request, media.get_usage())
 
