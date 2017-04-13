@@ -24,9 +24,10 @@ class BaseMediaForm(BaseCollectionMemberForm):
         # if we would get this information from files metadata
 
         if self.instance.type == 'audio':
-            del self.fields['width']
-            del self.fields['height']
-            del self.fields['thumbnail']
+            for name in ('width', 'height', 'thumbnail'):
+                # these fields might be editable=False so verify before accessing
+                if name in self.fields:
+                    del self.fields[name]
 
 
 def get_media_form(model):
