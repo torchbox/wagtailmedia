@@ -48,3 +48,8 @@ class TestMediaQuerySet(TestCase):
         for media_type in ('audio', 'video'):
             for field_name in ('width', 'height', 'thumbnail'):
                 self._test_form_init_with_non_editable_field(media_type, field_name)
+
+    def test_audio_form_presents_thumbnail(self):
+        MediaForm = get_media_form(models.Media)
+        media = models.Media.objects.create(title="Test media file", type='audio', duration=100)
+        self.assertIn('thumbnail', MediaForm(instance=media).fields.keys())
