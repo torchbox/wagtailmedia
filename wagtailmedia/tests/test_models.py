@@ -34,7 +34,7 @@ class TestMediaQuerySet(TestCase):
         self.assertEqual(list(results), [aaa_media, zzz_media])
         results = models.Media.objects.order_by('-title').search("Test")
         self.assertEqual(list(results), [zzz_media, aaa_media])
-    
+
     def _test_form_init_with_non_editable_field(self, media_type, field_name):
         MediaForm = get_media_form(models.Media)
         models.Media._meta.get_field(field_name).editable = False
@@ -43,7 +43,7 @@ class TestMediaQuerySet(TestCase):
             MediaForm(media)
         finally:
             models.Media._meta.get_field(field_name).editable = True
-            
+
     def test_form_init_with_non_editable_field(self):
         for media_type in ('audio', 'video'):
             for field_name in ('width', 'height', 'thumbnail'):
