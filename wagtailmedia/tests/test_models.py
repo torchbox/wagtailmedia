@@ -36,7 +36,7 @@ class TestMediaQuerySet(TestCase):
         self.assertEqual(list(results), [zzz_media, aaa_media])
     
     def _test_form_init_with_non_editable_field(self, media_type, field_name):
-        MediaForm = get_media_form()
+        MediaForm = get_media_form(models.Media)
         models.Media._meta.get_field(field_name).editable = False
         media = models.Media.objects.create(title="Test media file", type=media_type, duration=100)
         try:
