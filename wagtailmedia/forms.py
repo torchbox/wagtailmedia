@@ -24,7 +24,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
         # if we would get this information from files metadata
 
         if self.instance.type == 'audio':
-            for name in ('width', 'height', 'thumbnail'):
+            for name in ('width', 'height'):
                 # these fields might be editable=False so verify before accessing
                 if name in self.fields:
                     del self.fields[name]
