@@ -89,7 +89,7 @@ from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 
 class TestMediaBlock(AbstractMediaChooserBlock):
-    def render_basic(self, value):
+    def render_basic(self, value, context=None):
         if not value:
             return ''
 
