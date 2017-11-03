@@ -133,7 +133,7 @@ class BlogPage(Page):
 
 ### As a regular Django field
 
-Also, you can use `Media` as a regular Django filed.
+Also, you can use `Media` as a regular Django field.
 
 Example
 
