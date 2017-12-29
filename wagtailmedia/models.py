@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models.signals import pre_delete, post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import Signal
 from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
@@ -18,6 +18,8 @@ from wagtail.wagtailadmin.utils import get_object_usage
 from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
+
+from .sniffers.ffmpeg import generate_media_thumb, get_video_stream_data, sniff_media_data
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
@@ -35,7 +37,8 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=True, null=True, verbose_name=_('duration'), help_text=_('Duration in seconds'))
+    duration = models.PositiveIntegerField(blank=True, null=True, verbose_name=_('duration'),
+                                           help_text=_('Duration in seconds'))
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
     thumbnail = models.FileField(upload_to='media_thumbnails', blank=True, verbose_name=_('thumbnail'))
@@ -151,29 +154,23 @@ def media_sniff(sender, instance, created, update_fields, **kwargs):
     if hasattr(settings, 'WAGTAILMEDIA_FFPROBE_CMD'):
         created = True
         if created or (update_fields and 'file' in update_fields):
-            from .sniffers.ffmpeg import (sniff_media_data,
-                generate_media_thumb, get_video_stream_data)
             data = sniff_media_data(instance.file.path)
             if data:
                 duration = int(float(data['format']['duration']))
-                Media.objects.filter(pk=instance.pk).update(duration=duration,
-                    mediainfo=data)
+                Media.objects.filter(pk=instance.pk).update(duration=duration, mediainfo=data)
                 if instance.type=='video':
                     video_stream = get_video_stream_data(data)
                     if video_stream:
                         height = int(float(video_stream['height']))
                         width = int(float(video_stream['width']))
-                        Media.objects.filter(pk=instance.pk).update(
-                            height=height, width=width)
+                        Media.objects.filter(pk=instance.pk).update(height=height, width=width)
 
                     # Try to scrape a thumbnail from video
                     if hasattr(settings, 'WAGTAILMEDIA_FFMPEG_CMD')\
                         and not instance.thumbnail:
-                        thumb_path = generate_media_thumb(instance.file.path,
-                            f'{instance.file.name}.jpg',
-                            skip_seconds=int(duration*1.0/2))
-                        instance.thumbnail.save(os.path.basename(thumb_path),
-                            File(open(thumb_path, 'rb')))
+                        thumb_path = generate_media_thumb(instance.file.path, f'{instance.file.name}.jpg',
+                                                          skip_seconds=int(duration*1.0/2))
+                        instance.thumbnail.save(os.path.basename(thumb_path), File(open(thumb_path, 'rb')))
                         os.remove(thumb_path)
 
 
