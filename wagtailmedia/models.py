@@ -154,7 +154,6 @@ def get_media_model():
 @receiver(post_save, sender=Media)
 def media_sniff(sender, instance, created, update_fields, **kwargs):
     if hasattr(settings, 'WAGTAILMEDIA_FFPROBE_CMD'):
-        created = True
         if created or (update_fields and 'file' in update_fields):
             data = sniff_media_data(instance.file.path)
             if data:
