@@ -169,6 +169,19 @@ class BlogPageWithMedia(Page):
     ]
 ```
 
+## Sniffing media metadata and auto-thumbnails
+
+If you have `ffprobe` (via ffmpeg) installed (and specify the command path in
+settings), it can sniff the media file to auto-populate duration, height and
+width.
+
+    WAGTAILMEDIA_FFPROBE_CMD = '/usr/local/bin/ffprobe'
+
+Additionaly, `ffmpeg` can extract a frame from a video file to auto-generate a
+thumbnail. Just set the path to ffmpeg in settings.
+
+    WAGTAILMEDIA_FFMPEG_CMD = '/usr/local/bin/ffmpeg'
+
 
 ## How to run tests
 
