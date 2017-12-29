@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import json
 import subprocess
 import sys
-import os
 
 from django.conf import settings
 
@@ -22,6 +21,7 @@ def generate_media_thumb(video_path, out_path, skip_seconds=0):
     subprocess.check_output([ffmpeg, "-y", "-v", "quiet", "-accurate_seek", "-ss", str(skip_seconds), "-i", video_path,
                              "-frames:v", "1", out_path])
     return out_path
+
 
 def get_stream_by_type(data, typestr):
     ''' Returns the appropriate mediainfo stream data. '''

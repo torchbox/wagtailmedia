@@ -19,7 +19,9 @@ from wagtail.wagtailcore.models import CollectionMember
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
-from .sniffers.ffmpeg import generate_media_thumb, get_video_stream_data, sniff_media_data
+from .sniffers.ffmpeg import (
+    generate_media_thumb, get_video_stream_data, sniff_media_data
+)
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
@@ -158,7 +160,7 @@ def media_sniff(sender, instance, created, update_fields, **kwargs):
             if data:
                 duration = int(float(data['format']['duration']))
                 Media.objects.filter(pk=instance.pk).update(duration=duration, mediainfo=data)
-                if instance.type=='video':
+                if instance.type == 'video':
                     video_stream = get_video_stream_data(data)
                     if video_stream:
                         height = int(float(video_stream['height']))
@@ -167,7 +169,7 @@ def media_sniff(sender, instance, created, update_fields, **kwargs):
 
                     # Try to scrape a thumbnail from video
                     if hasattr(settings, 'WAGTAILMEDIA_FFMPEG_CMD')\
-                        and not instance.thumbnail:
+                            and not instance.thumbnail:
                         thumb_path = generate_media_thumb(instance.file.path, f'{instance.file.name}.jpg',
                                                           skip_seconds=int(duration*1.0/2))
                         instance.thumbnail.save(os.path.basename(thumb_path), File(open(thumb_path, 'rb')))
