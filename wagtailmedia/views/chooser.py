@@ -39,9 +39,9 @@ def get_media_json(media):
 
 
 def chooser(request):
-    Media = get_media_model()
-
-    media_files = Media.objects.all()
+    media_files = permission_policy.instances_user_has_any_permission_for(
+        request.user, ['change', 'delete']
+    )
 
     # allow hooks to modify the queryset
     for hook in hooks.get_hooks('construct_media_chooser_queryset'):
