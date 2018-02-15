@@ -1,13 +1,17 @@
 from __future__ import unicode_literals
 
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import ugettext as _
+from django.views.decorators.vary import vary_on_headers
+
+from wagtailmedia.forms import get_media_form
+from wagtailmedia.models import get_media_model
+from wagtailmedia.permissions import permission_policy
+
 try:
     from django.urls import reverse
 except: #fallback for older Django
     from django.core.urlresolvers import reverse
-
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.translation import ugettext as _
-from django.views.decorators.vary import vary_on_headers
 
 try:
     from wagtail.utils.pagination import paginate
@@ -28,9 +32,6 @@ except ImportError: # fallback for wagtail <2.0
     from wagtail.wagtailcore.models import Collection
     from wagtail.wagtailsearch.backends import get_search_backends
 
-from wagtailmedia.forms import get_media_form
-from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 

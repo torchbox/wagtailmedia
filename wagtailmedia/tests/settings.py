@@ -1,7 +1,7 @@
 import os
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from django import VERSION as DJANGO_VERSION
+from wagtail import VERSION as WAGTAIL_VERSION
 
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-static')

@@ -6,13 +6,16 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.test.utils import override_settings
 
+from six import b
+from wagtail.tests.utils import WagtailTestUtils
+
+from wagtailmedia import models
+from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
+
 try:
     from django.urls import reverse
 except ImportError: #fallback for older Django
     from django.core.urlresolvers import reverse
-
-from six import b
-from wagtail.tests.utils import WagtailTestUtils
 
 try:
     from wagtail.core.models import (
@@ -22,9 +25,6 @@ except ImportError: # fallback for wagtail <2.0
     from wagtail.wagtailcore.models import (
         Collection, GroupCollectionPermission, Page
     )
-
-from wagtailmedia import models
-from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):

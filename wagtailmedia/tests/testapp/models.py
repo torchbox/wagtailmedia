@@ -15,7 +15,7 @@ except ImportError: # fallback for wagtail <2.0
     
 
 class EventPageRelatedMedia(Orderable):
-    page = ParentalKey('wagtailmedia_tests.EventPage', related_name='related_media')
+    page = ParentalKey('wagtailmedia_tests.EventPage', related_name='related_media', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, help_text="Link title")
     link_media = models.ForeignKey(
         'wagtailmedia.Media',

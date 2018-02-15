@@ -5,20 +5,20 @@ from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.test import TestCase
 
+from six import b
+from wagtail.tests.utils import WagtailTestUtils
+
+from wagtailmedia import models
+
 try:
     from django.urls import reverse
 except ImportError: # fallback for older Django
     from django.core.urlresolvers import reverse
 
-from six import b
-from wagtail.tests.utils import WagtailTestUtils
-
 try:
     from wagtail.core.models import Collection, GroupCollectionPermission
 except ImportError: # fallback for wagtail <2.0
     from wagtail.wagtailcore.models import Collection, GroupCollectionPermission
-
-from wagtailmedia import models
 
 
 class TestMediaPermissions(TestCase):

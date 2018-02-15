@@ -10,13 +10,13 @@ from django.dispatch import Signal
 from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
+from taggit.managers import TaggableManager
+
 try:
     from django.urls import reverse
 except ImportError: #fallback for older versions of Django
     from django.core.urlresolvers import reverse
-
-
-from taggit.managers import TaggableManager
 
 try:
     from wagtail.admin.utils import get_object_usage

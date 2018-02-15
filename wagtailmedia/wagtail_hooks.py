@@ -4,6 +4,11 @@ from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext
 
+from wagtailmedia import admin_urls
+from wagtailmedia.forms import GroupMediaPermissionFormSet
+from wagtailmedia.models import get_media_model
+from wagtailmedia.permissions import permission_policy
+
 try:
     from django.urls import reverse
 except ImportError: # fallback for older Django
@@ -19,11 +24,6 @@ except ImportError: # fallback for Wagtail <2.0
     from wagtail.wagtailadmin.search import SearchArea
     from wagtail.wagtailadmin.site_summary import SummaryItem
     from wagtail.wagtailcore import hooks
-
-from wagtailmedia import admin_urls
-from wagtailmedia.forms import GroupMediaPermissionFormSet
-from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
 
 
 @hooks.register('register_admin_urls')

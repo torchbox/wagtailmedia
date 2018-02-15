@@ -4,6 +4,10 @@ from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
+from wagtailmedia.models import Media
+from wagtailmedia.permissions import \
+    permission_policy as media_permission_policy
+
 try:
     from wagtail.admin import widgets
     from wagtail.admin.forms import (
@@ -14,10 +18,6 @@ except ImportError: # fallback for Wagtail <2.0
     from wagtail.wagtailadmin.forms import (
         BaseCollectionMemberForm, collection_member_permission_formset_factory
     )
-
-from wagtailmedia.models import Media
-from wagtailmedia.permissions import \
-    permission_policy as media_permission_policy
 
 
 class BaseMediaForm(BaseCollectionMemberForm):

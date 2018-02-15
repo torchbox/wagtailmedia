@@ -1,11 +1,14 @@
 import json
 
+from django.shortcuts import get_object_or_404, render
+
+from wagtailmedia.models import get_media_model
+from wagtailmedia.permissions import permission_policy
+
 try:
     from django.urls import reverse
 except ImportError: # fallback for older Django
     from django.core.urlresolvers import reverse
-    
-from django.shortcuts import get_object_or_404, render
 
 try:
     from wagtail.utils.pagination import paginate
@@ -20,8 +23,6 @@ except ImportError: # fallback for wagtail <2.0
     from wagtail.wagtailadmin.utils import PermissionPolicyChecker
     from wagtail.wagtailcore.models import Collection
 
-from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 

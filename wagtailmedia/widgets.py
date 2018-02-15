@@ -5,12 +5,12 @@ import json
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from wagtailmedia.models import get_media_model
+
 try:
     from wagtail.admin.widgets import AdminChooser
 except ImportError: #fallback for Wagtail <2.0
     from wagtail.wagtailadmin.widgets import AdminChooser
-
-from wagtailmedia.models import get_media_model
 
 
 class AdminMediaChooser(AdminChooser):
