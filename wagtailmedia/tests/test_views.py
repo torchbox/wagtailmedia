@@ -617,10 +617,6 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse('wagtailmedia:edit',
                                            args=(1,)))
-        print(response)
-        print(str(response))
-        print(bytes(response))
-        print(dir(response))
         self.assertContains(response, 'Used 0 times')
 
 
