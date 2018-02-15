@@ -10,7 +10,7 @@ from wagtailmedia.permissions import permission_policy
 
 try:
     from django.urls import reverse
-except: #fallback for older Django
+except ImportError:  # fallback for older Django
     from django.core.urlresolvers import reverse
 
 try:
@@ -22,7 +22,7 @@ try:
     )
     from wagtail.core.models import Collection
     from wagtail.search.backends import get_search_backends
-except ImportError: # fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.utils.pagination import paginate
     from wagtail.wagtailadmin import messages
     from wagtail.wagtailadmin.forms import SearchForm

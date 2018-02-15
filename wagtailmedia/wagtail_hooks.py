@@ -11,7 +11,7 @@ from wagtailmedia.permissions import permission_policy
 
 try:
     from django.urls import reverse
-except ImportError: # fallback for older Django
+except ImportError:  # fallback for older Django
     from django.core.urlresolvers import reverse
 
 try:
@@ -19,7 +19,7 @@ try:
     from wagtail.admin.search import SearchArea
     from wagtail.admin.site_summary import SummaryItem
     from wagtail.core import hooks
-except ImportError: # fallback for Wagtail <2.0
+except ImportError:  # fallback for Wagtail <2.0
     from wagtail.wagtailadmin.menu import MenuItem
     from wagtail.wagtailadmin.search import SearchArea
     from wagtail.wagtailadmin.site_summary import SummaryItem

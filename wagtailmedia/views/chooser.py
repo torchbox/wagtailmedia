@@ -7,7 +7,7 @@ from wagtailmedia.permissions import permission_policy
 
 try:
     from django.urls import reverse
-except ImportError: # fallback for older Django
+except ImportError:  # fallback for older Django
     from django.core.urlresolvers import reverse
 
 try:
@@ -16,7 +16,7 @@ try:
     from wagtail.admin.modal_workflow import render_modal_workflow
     from wagtail.admin.utils import PermissionPolicyChecker
     from wagtail.core.models import Collection
-except ImportError: # fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.utils.pagination import paginate
     from wagtail.wagtailadmin.forms import SearchForm
     from wagtail.wagtailadmin.modal_workflow import render_modal_workflow

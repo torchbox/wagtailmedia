@@ -7,12 +7,12 @@ try:
     from wagtail.core.fields import RichTextField
     from wagtail.core.models import Orderable, Page
     from wagtail.documents.edit_handlers import DocumentChooserPanel
-except ImportError: # fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
     from wagtail.wagtailcore.fields import RichTextField
     from wagtail.wagtailcore.models import Orderable, Page
     from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
-    
+
 
 class EventPageRelatedMedia(Orderable):
     page = ParentalKey('wagtailmedia_tests.EventPage', related_name='related_media', on_delete=models.CASCADE)

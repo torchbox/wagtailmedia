@@ -103,7 +103,6 @@ else:
         ]
 
 
-        
 INSTALLED_APPS = [
     'wagtailmedia.tests.testapp',
     'wagtailmedia',
@@ -134,7 +133,6 @@ else:
         'wagtail.wagtailadmin',
         'wagtail.wagtailcore',
     ]
-
 
 
 # Using DatabaseCache to make sure THAT the cache is cleared between tests.

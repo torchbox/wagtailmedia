@@ -14,14 +14,14 @@ from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
 try:
     from django.urls import reverse
-except ImportError: #fallback for older Django
+except ImportError:  # fallback for older Django
     from django.core.urlresolvers import reverse
 
 try:
     from wagtail.core.models import (
         Collection, GroupCollectionPermission, Page
     )
-except ImportError: # fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.wagtailcore.models import (
         Collection, GroupCollectionPermission, Page
     )

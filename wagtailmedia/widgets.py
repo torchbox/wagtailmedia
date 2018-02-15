@@ -9,7 +9,7 @@ from wagtailmedia.models import get_media_model
 
 try:
     from wagtail.admin.widgets import AdminChooser
-except ImportError: #fallback for Wagtail <2.0
+except ImportError:  # fallback for Wagtail <2.0
     from wagtail.wagtailadmin.widgets import AdminChooser
 
 

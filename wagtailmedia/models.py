@@ -15,7 +15,7 @@ from taggit.managers import TaggableManager
 
 try:
     from django.urls import reverse
-except ImportError: #fallback for older versions of Django
+except ImportError:  # fallback for older versions of Django
     from django.core.urlresolvers import reverse
 
 try:
@@ -23,7 +23,7 @@ try:
     from wagtail.core.models import CollectionMember
     from wagtail.search import index
     from wagtail.search.queryset import SearchableQuerySetMixin
-except ImportError: #fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.wagtailadmin.utils import get_object_usage
     from wagtail.wagtailcore.models import CollectionMember
     from wagtail.wagtailsearch import index

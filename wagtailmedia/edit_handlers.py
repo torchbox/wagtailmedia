@@ -4,7 +4,7 @@ from wagtailmedia.widgets import AdminMediaChooser
 
 try:
     from wagtail.admin.edit_handlers import BaseChooserPanel
-except ImportError: # fallback for wagtail <2.0
+except ImportError:  # fallback for wagtail <2.0
     from wagtail.wagtailadmin.edit_handlers import BaseChooserPanel
 
 
