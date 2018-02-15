@@ -1,6 +1,7 @@
 import os
 
 from django import VERSION as DJANGO_VERSION
+
 from wagtail import VERSION as WAGTAIL_VERSION
 
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
