@@ -3,15 +3,25 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 
+try:
+    from django.urls import reverse
+except ImportError: #fallback for older Django
+    from django.core.urlresolvers import reverse
+
 from six import b
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import (
-    Collection, GroupCollectionPermission, Page
-)
+
+try:
+    from wagtail.core.models import (
+        Collection, GroupCollectionPermission, Page
+    )
+except ImportError: # fallback for wagtail <2.0
+    from wagtail.wagtailcore.models import (
+        Collection, GroupCollectionPermission, Page
+    )
 
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
@@ -607,6 +617,10 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse('wagtailmedia:edit',
                                            args=(1,)))
+        print(response)
+        print(str(response))
+        print(bytes(response))
+        print(dir(response))
         self.assertContains(response, 'Used 0 times')
 
 

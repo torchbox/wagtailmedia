@@ -1,18 +1,32 @@
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except: #fallback for older Django
+    from django.core.urlresolvers import reverse
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
 
-from wagtail.utils.pagination import paginate
-from wagtail.wagtailadmin import messages
-from wagtail.wagtailadmin.forms import SearchForm
-from wagtail.wagtailadmin.utils import (
-    PermissionPolicyChecker, permission_denied, popular_tags_for_model
-)
-from wagtail.wagtailcore.models import Collection
-from wagtail.wagtailsearch.backends import get_search_backends
+try:
+    from wagtail.utils.pagination import paginate
+    from wagtail.admin import messages
+    from wagtail.admin.forms import SearchForm
+    from wagtail.admin.utils import (
+        PermissionPolicyChecker, permission_denied, popular_tags_for_model
+    )
+    from wagtail.core.models import Collection
+    from wagtail.search.backends import get_search_backends
+except ImportError: # fallback for wagtail <2.0
+    from wagtail.utils.pagination import paginate
+    from wagtail.wagtailadmin import messages
+    from wagtail.wagtailadmin.forms import SearchForm
+    from wagtail.wagtailadmin.utils import (
+        PermissionPolicyChecker, permission_denied, popular_tags_for_model
+    )
+    from wagtail.wagtailcore.models import Collection
+    from wagtail.wagtailsearch.backends import get_search_backends
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model

@@ -6,8 +6,13 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import taggit.managers
-import wagtail.wagtailcore.models
-import wagtail.wagtailsearch.index
+
+try:
+    from wagtail.core import models as wagtail_models
+    from wagtail.search import index
+except ImportError: # fallback wagtail <2.0
+    from wagtail.wagtailcore import models as wagtail_models
+    from wagtail.wagtailsearch import index
 
 
 class Migration(migrations.Migration):
@@ -33,7 +38,7 @@ class Migration(migrations.Migration):
                 ('height', models.PositiveIntegerField(blank=True, null=True, verbose_name='height')),
                 ('thumbnail', models.FileField(blank=True, upload_to='media_thumbnails', verbose_name='thumbnail')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
-                ('collection', models.ForeignKey(default=wagtail.wagtailcore.models.get_root_collection_id, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wagtailcore.Collection', verbose_name='collection')),
+                ('collection', models.ForeignKey(default=wagtail_models.get_root_collection_id, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wagtailcore.Collection', verbose_name='collection')),
                 ('tags', taggit.managers.TaggableManager(blank=True, help_text=None, through='taggit.TaggedItem', to='taggit.Tag', verbose_name='tags')),
                 ('uploaded_by_user', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='uploaded by user')),
             ],
@@ -41,6 +46,6 @@ class Migration(migrations.Migration):
                 'abstract': False,
                 'verbose_name': 'media',
             },
-            bases=(models.Model, wagtail.wagtailsearch.index.Indexed),
+            bases=(models.Model, index.Indexed),
         ),
     ]

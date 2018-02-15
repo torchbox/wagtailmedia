@@ -1,5 +1,8 @@
 import os
 
+from wagtail import VERSION as WAGTAIL_VERSION
+from django import VERSION as DJANGO_VERSION
+
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-static')
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-media')
@@ -52,29 +55,58 @@ TEMPLATES = [
     }
 ]
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+if DJANGO_VERSION >= (1, 10):
+    MIDDLEWARE = [
+        'django.middleware.common.CommonMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ]
 
-    'wagtail.wagtailcore.middleware.SiteMiddleware',
-    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
-)
+    if DJANGO_VERSION < (2, 0):
+        MIDDLEWARE += [
+            'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        ]
 
-INSTALLED_APPS = (
+    if WAGTAIL_VERSION >= (2, 0):
+        MIDDLEWARE += [
+            'wagtail.core.middleware.SiteMiddleware',
+            'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+        ]
+    else:
+        MIDDLEWARE += [
+            'wagtail.wagtailcore.middleware.SiteMiddleware',
+            'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+        ]
+else:
+    MIDDLEWARE_CLASSES = [
+        'django.middleware.common.CommonMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ]
+
+    if WAGTAIL_VERSION >= (2, 0):
+        MIDDLEWARE_CLASSES += [
+            'wagtail.core.middleware.SiteMiddleware',
+            'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+        ]
+    else:
+        MIDDLEWARE_CLASSES += [
+            'wagtail.wagtailcore.middleware.SiteMiddleware',
+            'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+        ]
+
+
+        
+INSTALLED_APPS = [
     'wagtailmedia.tests.testapp',
     'wagtailmedia',
-
-    'wagtail.wagtailredirects',
-    'wagtail.wagtailimages',
-    'wagtail.wagtailusers',
-    'wagtail.wagtaildocs',
-    'wagtail.wagtailadmin',
-    'wagtail.wagtailcore',
 
     'taggit',
 
@@ -82,7 +114,27 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-)
+]
+
+if WAGTAIL_VERSION >= (2, 0):
+    INSTALLED_APPS += [
+        'wagtail.contrib.redirects',
+        'wagtail.images',
+        'wagtail.users',
+        'wagtail.documents',
+        'wagtail.admin',
+        'wagtail.core',
+    ]
+else:
+    INSTALLED_APPS += [
+        'wagtail.wagtailredirects',
+        'wagtail.wagtailimages',
+        'wagtail.wagtailusers',
+        'wagtail.wagtaildocs',
+        'wagtail.wagtailadmin',
+        'wagtail.wagtailcore',
+    ]
+
 
 
 # Using DatabaseCache to make sure THAT the cache is cleared between tests.
@@ -100,11 +152,18 @@ PASSWORD_HASHERS = (
 )
 
 
-WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.wagtailsearch.backends.db',
+if WAGTAIL_VERSION >= (2, 0):
+    WAGTAILSEARCH_BACKENDS = {
+        'default': {
+            'BACKEND': 'wagtail.search.backends.db',
+        }
     }
-}
+else:
+    WAGTAILSEARCH_BACKENDS = {
+        'default': {
+            'BACKEND': 'wagtail.wagtailsearch.backends.db',
+        }
+    }
 
 
 WAGTAIL_SITE_NAME = "Test Site"

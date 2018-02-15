@@ -1,11 +1,18 @@
 from django.db import models
 
 from modelcluster.fields import ParentalKey
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailcore.models import Orderable, Page
-from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 
+try:
+    from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+    from wagtail.core.fields import RichTextField
+    from wagtail.core.models import Orderable, Page
+    from wagtail.documents.edit_handlers import DocumentChooserPanel
+except ImportError: # fallback for wagtail <2.0
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
+    from wagtail.wagtailcore.fields import RichTextField
+    from wagtail.wagtailcore.models import Orderable, Page
+    from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+    
 
 class EventPageRelatedMedia(Orderable):
     page = ParentalKey('wagtailmedia_tests.EventPage', related_name='related_media')
@@ -14,7 +21,8 @@ class EventPageRelatedMedia(Orderable):
         'wagtailmedia.Media',
         null=True,
         blank=True,
-        related_name='+'
+        related_name='+',
+        on_delete=models.CASCADE
     )
 
     @property
