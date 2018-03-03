@@ -1,14 +1,20 @@
 from django.conf.urls import include, url
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.core import urlresolvers
+from django import urls
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext
 
-from wagtail.wagtailadmin.menu import MenuItem
-from wagtail.wagtailadmin.search import SearchArea
-from wagtail.wagtailadmin.site_summary import SummaryItem
-from wagtail.wagtailcore import hooks
+try:
+    from wagtail.admin.menu import MenuItem
+    from wagtail.admin.search import SearchArea
+    from wagtail.admin.site_summary import SummaryItem
+    from wagtail.core import hooks
+except ImportError:
+    from wagtail.wagtailadmin.menu import MenuItem
+    from wagtail.wagtailadmin.search import SearchArea
+    from wagtail.wagtailadmin.site_summary import SummaryItem
+    from wagtail.wagtailcore import hooks
 
 from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
@@ -19,7 +25,7 @@ from wagtailmedia.permissions import permission_policy
 @hooks.register('register_admin_urls')
 def register_admin_urls():
     return [
-        url(r'^media/', include(admin_urls, app_name='wagtailmedia', namespace='wagtailmedia')),
+        url(r'^media/', include(admin_urls)),
     ]
 
 
@@ -34,7 +40,7 @@ class MediaMenuItem(MenuItem):
 def register_media_menu_item():
     return MediaMenuItem(
         _('Media'),
-        urlresolvers.reverse('wagtailmedia:index'),
+        urls.reverse('wagtailmedia:index'),
         name='media',
         classnames='icon icon-media',
         order=300
@@ -56,7 +62,7 @@ def editor_js():
             window.chooserUrls.mediaChooser = '{0}';
         </script>
         """,
-        urlresolvers.reverse('wagtailmedia:chooser')
+        urls.reverse('wagtailmedia:chooser')
     )
 
 
@@ -85,7 +91,7 @@ class MediaSearchArea(SearchArea):
 @hooks.register('register_admin_search_area')
 def register_media_search_area():
     return MediaSearchArea(
-        _('Media'), urlresolvers.reverse('wagtailmedia:index'),
+        _('Media'), urls.reverse('wagtailmedia:index'),
         name='media',
         classnames='icon icon-media',
         order=400)
@@ -100,7 +106,7 @@ def register_media_permissions_panel():
 def describe_collection_media(collection):
     media_count = get_media_model().objects.filter(collection=collection).count()
     if media_count:
-        url = urlresolvers.reverse('wagtailmedia:index') + ('?collection_id=%d' % collection.id)
+        url = urls.reverse('wagtailmedia:index') + ('?collection_id=%d' % collection.id)
         return {
             'count': media_count,
             'count_text': ungettext(

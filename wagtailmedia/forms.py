@@ -4,10 +4,16 @@ from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
-from wagtail.wagtailadmin import widgets
-from wagtail.wagtailadmin.forms import (
-    BaseCollectionMemberForm, collection_member_permission_formset_factory
-)
+try:
+    from wagtail.admin import widgets
+    from wagtail.admin.forms import (
+        BaseCollectionMemberForm, collection_member_permission_formset_factory
+    )
+except ImportError:
+    from wagtail.wagtailadmin import widgets
+    from wagtail.wagtailadmin.forms import (
+        BaseCollectionMemberForm, collection_member_permission_formset_factory
+    )
 
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import \

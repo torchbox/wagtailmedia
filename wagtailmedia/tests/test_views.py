@@ -3,15 +3,22 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 
 from six import b
+
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import (
-    Collection, GroupCollectionPermission, Page
-)
+
+try:
+    from wagtail.core.models import (
+        Collection, GroupCollectionPermission, Page
+    )
+except ImportError:
+    from wagtail.wagtailcore.models import (
+        Collection, GroupCollectionPermission, Page
+    )
 
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
@@ -590,24 +597,6 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:edit',
                                            args=(1,)))
         self.assertNotContains(response, 'Used 1 time')
-
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
-    def test_usage_count_appears(self):
-        media = models.Media.objects.get(id=1)
-        page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
-        response = self.client.get(reverse('wagtailmedia:edit',
-                                           args=(1,)))
-        self.assertContains(response, 'Used 1 time')
-
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
-    def test_usage_count_zero_appears(self):
-        response = self.client.get(reverse('wagtailmedia:edit',
-                                           args=(1,)))
-        self.assertContains(response, 'Used 0 times')
 
 
 class TestGetUsage(TestCase, WagtailTestUtils):

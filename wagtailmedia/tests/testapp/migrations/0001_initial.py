@@ -5,7 +5,11 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.fields
-import wagtail.wagtailcore.fields
+
+try:
+    from wagtail.core.fields import RichTextField
+except ImportError:
+    from wagtail.wagtailcore.fields import RichTextField
 
 
 class Migration(migrations.Migration):
@@ -27,7 +31,7 @@ class Migration(migrations.Migration):
                 ('time_from', models.TimeField(blank=True, null=True, verbose_name=b'Start time')),
                 ('time_to', models.TimeField(blank=True, null=True, verbose_name=b'End time')),
                 ('location', models.CharField(max_length=255)),
-                ('body', wagtail.wagtailcore.fields.RichTextField(blank=True)),
+                ('body', RichTextField(blank=True)),
                 ('cost', models.CharField(max_length=255)),
                 ('signup_link', models.URLField(blank=True)),
             ],

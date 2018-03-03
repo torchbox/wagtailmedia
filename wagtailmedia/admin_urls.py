@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from wagtailmedia.views import chooser, media
 
+app_name = 'wagtailmedia'
+
 urlpatterns = [
     url(r'^$', media.index, name='index'),
     url(r'^(\w+)/add/$', media.add, name='add'),
