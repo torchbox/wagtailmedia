@@ -4,7 +4,7 @@ import os.path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import Signal
@@ -13,10 +13,17 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
-from wagtail.wagtailadmin.utils import get_object_usage
-from wagtail.wagtailcore.models import CollectionMember
-from wagtail.wagtailsearch import index
-from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
+
+try:
+    from wagtail.admin.utils import get_object_usage
+    from wagtail.core.models import CollectionMember
+    from wagtail.search import index
+    from wagtail.search.queryset import SearchableQuerySetMixin
+except ImportError:
+    from wagtail.wagtailadmin.utils import get_object_usage
+    from wagtail.wagtailcore.models import CollectionMember
+    from wagtail.wagtailsearch import index
+    from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):

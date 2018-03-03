@@ -3,12 +3,17 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from six import b
+
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import Collection, GroupCollectionPermission
+
+try:
+    from wagtail.core.models import Collection, GroupCollectionPermission
+except ImportError:
+    from wagtail.wagtailcore.models import Collection, GroupCollectionPermission
 
 from wagtailmedia import models
 

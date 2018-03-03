@@ -1,6 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
-from wagtail.wagtailadmin.edit_handlers import BaseChooserPanel
+try:
+    from wagtail.admin.edit_handlers import BaseChooserPanel
+except ImportError:
+    from wagtail.wagtailadmin.edit_handlers import BaseChooserPanel
 
 from wagtailmedia.widgets import AdminMediaChooser
 

@@ -1,13 +1,20 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 
 from wagtail.utils.pagination import paginate
-from wagtail.wagtailadmin.forms import SearchForm
-from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
-from wagtail.wagtailadmin.utils import PermissionPolicyChecker
-from wagtail.wagtailcore.models import Collection
+
+try:
+    from wagtail.admin.forms import SearchForm
+    from wagtail.admin.modal_workflow import render_modal_workflow
+    from wagtail.admin.utils import PermissionPolicyChecker
+    from wagtail.core.models import Collection
+except ImportError:
+    from wagtail.wagtailadmin.forms import SearchForm
+    from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
+    from wagtail.wagtailadmin.utils import PermissionPolicyChecker
+    from wagtail.wagtailcore.models import Collection
 
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy

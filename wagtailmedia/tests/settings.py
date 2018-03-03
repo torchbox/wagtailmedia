@@ -52,30 +52,66 @@ TEMPLATES = [
     }
 ]
 
-MIDDLEWARE_CLASSES = (
+try:
+    # Wagtail 2.x
+    import wagtail.core
+
+    WAGTAIL_MIDDLEWARE = (
+        'wagtail.core.middleware.SiteMiddleware',
+        'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    )
+
+    WAGTAIL_INSTALLED_APPS = (
+        'wagtail.contrib.redirects',
+        'wagtail.images',
+        'wagtail.users',
+        'wagtail.documents',
+        'wagtail.admin',
+        'wagtail.core',
+    )
+
+    WAGTAILSEARCH_BACKENDS = {
+        'default': {
+            'BACKEND': 'wagtail.search.backends.db',
+        }
+    }
+except ImportError:
+    # Wagtail < 2.0
+    import wagtail.wagtailcore
+
+    WAGTAIL_MIDDLEWARE = (
+        'wagtail.wagtailcore.middleware.SiteMiddleware',
+        'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+    )
+
+    WAGTAIL_INSTALLED_APPS = (
+        'wagtail.wagtailredirects',
+        'wagtail.wagtailimages',
+        'wagtail.wagtailusers',
+        'wagtail.wagtaildocs',
+        'wagtail.wagtailadmin',
+        'wagtail.wagtailcore',
+    )
+
+    WAGTAILSEARCH_BACKENDS = {
+        'default': {
+            'BACKEND': 'wagtail.wagtailsearch.backends.db',
+        }
+    }
+
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'wagtail.wagtailcore.middleware.SiteMiddleware',
-    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
-)
+) + WAGTAIL_MIDDLEWARE
 
 INSTALLED_APPS = (
     'wagtailmedia.tests.testapp',
     'wagtailmedia',
-
-    'wagtail.wagtailredirects',
-    'wagtail.wagtailimages',
-    'wagtail.wagtailusers',
-    'wagtail.wagtaildocs',
-    'wagtail.wagtailadmin',
-    'wagtail.wagtailcore',
-
+) + WAGTAIL_INSTALLED_APPS + (
     'taggit',
 
     'django.contrib.auth',
@@ -98,13 +134,5 @@ CACHES = {
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',  # don't use the intentionally slow default password hasher
 )
-
-
-WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.wagtailsearch.backends.db',
-    }
-}
-
 
 WAGTAIL_SITE_NAME = "Test Site"
