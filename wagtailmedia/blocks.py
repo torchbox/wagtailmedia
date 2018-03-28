@@ -2,7 +2,10 @@ from __future__ import unicode_literals
 
 from django.utils.functional import cached_property
 
-from wagtail.wagtailcore.blocks import ChooserBlock
+try:
+    from wagtail.core.blocks import ChooserBlock
+except ImportError:  # fallback for wagtail <2.0
+    from wagtail.wagtailcore.blocks import ChooserBlock
 
 
 class AbstractMediaChooserBlock(ChooserBlock):
