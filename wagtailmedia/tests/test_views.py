@@ -468,6 +468,13 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
+    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
+    def test_usage_link(self):
+        response = self.client.get(reverse('wagtailmedia:delete', args=(self.media.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/confirm_delete.html')
+        self.assertIn('Used 0 times', str(response.content))
+
 
 class TestMediaChooserView(TestCase, WagtailTestUtils):
     def setUp(self):
