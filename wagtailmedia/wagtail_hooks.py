@@ -29,7 +29,7 @@ except ImportError:  # fallback for Wagtail <2.0
 @hooks.register('register_admin_urls')
 def register_admin_urls():
     return [
-        url(r'^media/', include((admin_urls, 'wagtailmedia'), namespace='wagtailmedia')),
+        url(r'^media/', include(admin_urls, namespace='wagtailmedia')),
     ]
 
 
@@ -53,14 +53,16 @@ def register_media_menu_item():
 
 @hooks.register('insert_editor_js')
 def editor_js():
-    js_files = [
-        static('wagtailmedia/js/media-chooser.js'),
-    ]
-    js_includes = format_html_join(
-        '\n', '<script src="{0}"></script>',
-        ((filename, ) for filename in js_files)
-    )
-    return js_includes + format_html(
+    #This does not match wagtail/images. I think it is wrong.
+    #js_files = [
+    #    static('wagtailmedia/js/media-chooser.js'),
+    #]
+    #js_includes = format_html_join(
+    #    '\n', '<script src="{0}"></script>',
+    #    ((filename, ) for filename in js_files)
+    #)
+    #return js_includes + format_html(
+    return format_html(
         """
         <script>
             window.chooserUrls.mediaChooser = '{0}';
@@ -78,6 +80,12 @@ class MediaSummaryItem(SummaryItem):
         return {
             'total_media': get_media_model().objects.count(),
         }
+
+    #This was also added to only show media that user can modify.
+    def is_shown(self):
+        return permission_policy.user_has_any_permission(
+            self.request.user, ['add', 'change', 'delete']
+        )
 
 
 @hooks.register('construct_homepage_summary_items')

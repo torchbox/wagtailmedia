@@ -16,12 +16,13 @@ except ImportError:  # fallback for older Django
 try:
     from wagtail.utils.pagination import paginate
     from wagtail.admin import messages
-    from wagtail.admin.forms import SearchForm
+    from wagtail.admin.forms.search import SearchForm
     from wagtail.admin.utils import (
         PermissionPolicyChecker, permission_denied, popular_tags_for_model
     )
     from wagtail.core.models import Collection
     from wagtail.search.backends import get_search_backends
+    from wagtail.search import index as search_index
 except ImportError:  # fallback for wagtail <2.0
     from wagtail.utils.pagination import paginate
     from wagtail.wagtailadmin import messages
@@ -44,24 +45,7 @@ def index(request):
     # Get media files (filtered by user permission)
     media = permission_policy.instances_user_has_any_permission_for(
         request.user, ['change', 'delete']
-    )
-
-    # Ordering
-    if 'ordering' in request.GET and request.GET['ordering'] in ['title', '-created_at']:
-        ordering = request.GET['ordering']
-    else:
-        ordering = '-created_at'
-    media = media.order_by(ordering)
-
-    # Filter by collection
-    current_collection = None
-    collection_id = request.GET.get('collection_id')
-    if collection_id:
-        try:
-            current_collection = Collection.objects.get(id=collection_id)
-            media = media.filter(collection=current_collection)
-        except (ValueError, Collection.DoesNotExist):
-            pass
+    ).order_by('-created_at')
 
     # Search
     query_string = None
@@ -73,6 +57,16 @@ def index(request):
     else:
         form = SearchForm(placeholder=_("Search media"))
 
+    # Filter by collection
+    current_collection = None
+    collection_id = request.GET.get('collection_id')
+    if collection_id:
+        try:
+            current_collection = Collection.objects.get(id=collection_id)
+            media = media.filter(collection=current_collection)
+        except (ValueError, Collection.DoesNotExist):
+            pass
+
     # Pagination
     paginator, media = paginate(request, media)
 
@@ -81,59 +75,28 @@ def index(request):
     )
     if len(collections) < 2:
         collections = None
+    else:
+        collections = Collection.order_for_display(collections)
 
     # Create response
     if request.is_ajax():
         return render(request, 'wagtailmedia/media/results.html', {
-            'ordering': ordering,
             'media_files': media,
             'query_string': query_string,
             'is_searching': bool(query_string),
         })
     else:
         return render(request, 'wagtailmedia/media/index.html', {
-            'ordering': ordering,
             'media_files': media,
             'query_string': query_string,
             'is_searching': bool(query_string),
 
             'search_form': form,
             'popular_tags': popular_tags_for_model(Media),
-            'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
             'collections': collections,
             'current_collection': current_collection,
+            'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
         })
-
-
-@permission_checker.require('add')
-def add(request, media_type):
-    Media = get_media_model()
-    MediaForm = get_media_form(Media)
-
-    if request.POST:
-        media = Media(uploaded_by_user=request.user, type=media_type)
-        form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
-        if form.is_valid():
-            form.save()
-
-            # Reindex the media entry to make sure all tags are indexed
-            for backend in get_search_backends():
-                backend.add(media)
-
-            messages.success(request, _("Media file '{0}' added.").format(media.title), buttons=[
-                messages.button(reverse('wagtailmedia:edit', args=(media.id,)), _('Edit'))
-            ])
-            return redirect('wagtailmedia:index')
-        else:
-            messages.error(request, _("The media file could not be saved due to errors."))
-    else:
-        media = Media(uploaded_by_user=request.user, type=media_type)
-        form = MediaForm(user=request.user, instance=media)
-
-    return render(request, "wagtailmedia/media/add.html", {
-        'form': form,
-        'media_type': media_type,
-    })
 
 
 @permission_checker.require('change')
@@ -158,8 +121,7 @@ def edit(request, media_id):
             media = form.save()
 
             # Reindex the media entry to make sure all tags are indexed
-            for backend in get_search_backends():
-                backend.add(media)
+            search_index.insert_or_update_object(media)
 
             messages.success(request, _("Media file '{0}' updated").format(media.title), buttons=[
                 messages.button(reverse('wagtailmedia:edit', args=(media.id,)), _('Edit'))
@@ -170,8 +132,8 @@ def edit(request, media_id):
     else:
         form = MediaForm(instance=media, user=request.user)
 
-    filesize = None
 
+    filesize = None
     # Get file size when there is a file associated with the Media object
     if media.file:
         try:
@@ -196,11 +158,9 @@ def edit(request, media_id):
         ),
     })
 
-
 @permission_checker.require('delete')
 def delete(request, media_id):
-    Media = get_media_model()
-    media = get_object_or_404(Media, id=media_id)
+    media = get_object_or_404(get_media_model(), id=media_id)
 
     if not permission_policy.user_has_permission_for_instance(request.user, 'delete', media):
         return permission_denied(request)
@@ -213,6 +173,37 @@ def delete(request, media_id):
     return render(request, "wagtailmedia/media/confirm_delete.html", {
         'media': media,
     })
+
+
+@permission_checker.require('add')
+def add(request, media_type):
+    Media = get_media_model()
+    MediaForm = get_media_form(Media)
+
+    if request.method == 'POST':
+        media = Media(uploaded_by_user=request.user, type=media_type)
+        form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
+        if form.is_valid():
+            form.save()
+
+            # Reindex the media entry to make sure all tags are indexed
+            search_index.insert_or_update_object(media)
+            messages.success(request, _("Media file '{0}' added.").format(media.title), buttons=[
+                messages.button(reverse('wagtailmedia:edit', args=(media.id,)), _('Edit'))
+            ])
+            return redirect('wagtailmedia:index')
+        else:
+            messages.error(request, _("The media file could not be saved due to errors."))
+    else:
+        media = Media(uploaded_by_user=request.user, type=media_type)
+        form = MediaForm(user=request.user, instance=media)
+
+    return render(request, "wagtailmedia/media/add.html", {
+        'form': form,
+        'media_type': media_type,
+    })
+
+
 
 
 def usage(request, media_id):

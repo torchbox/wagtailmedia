@@ -2,10 +2,16 @@
 {% trans "Choose a media file" as  choose_str %}
 {% include "wagtailadmin/shared/header.html" with title=choose_str tabbed=1 merged=1 icon="media" %}
 
+{% if uploadform %}
+    <ul class="tab-nav merged">
+        <li class="{% if not uploadform.errors %}active{% endif %}"><a href="#search" >{% trans "Search" %}</a></li>
+        <li class="{% if uploadform.errors %}active{% endif %}"><a href="#upload">{% trans "Upload" %}</a></li>
+    </ul>
+{% endif %}
 
 <div class="tab-content">
     <section id="search" class="{% if not uploadform.errors %}active {% endif %}nice-padding">
-        <form class="media-search search-bar" action="{% url 'wagtailmedia:chooser' %}" method="GET" novalidate>
+        <form class="media-search search-bar" action="{% url 'wagtailmedia:chooser' %}" novalidate>
             <ul class="fields">
                 {% for field in searchform %}
                     {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
@@ -15,8 +21,28 @@
                 {% endif %}
             </ul>
         </form>
-        <div id="search-results" class="listing media">
+        <div id="media-results" class="listing media">
             {% include "wagtailmedia/chooser/results.html" %}
         </div>
     </section>
+
+    {% if uploadform %}
+        <section id="upload" class="{% if uploadform.errors %}active{% endif %} nice-padding">
+            <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' %}{% if will_select_format %}?select_format=true{% endif %}" method="POST" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <ul class="fields">
+                    {% for field in uploadform %}
+                        {% if field.is_hidden %}
+                            {{ field }}
+                        {% else %}
+                            {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Upload' %}</em></button>
+                   </li>
+                </ul>
+            </form>
+        </section>
+    {% endif %}
 </div>

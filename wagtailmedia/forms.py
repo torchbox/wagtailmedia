@@ -10,7 +10,7 @@ from wagtailmedia.permissions import \
 
 try:
     from wagtail.admin import widgets
-    from wagtail.admin.forms import (
+    from wagtail.admin.forms.collections import (
         BaseCollectionMemberForm, collection_member_permission_formset_factory
     )
 except ImportError:  # fallback for Wagtail <2.0
@@ -19,12 +19,14 @@ except ImportError:  # fallback for Wagtail <2.0
         BaseCollectionMemberForm, collection_member_permission_formset_factory
     )
 
+#Could potentially add a formfield_for_dbfield as in wagtail/images, but seems like it works okay without it.
+
 
 class BaseMediaForm(BaseCollectionMemberForm):
     permission_policy = media_permission_policy
 
     def __init__(self, *args, **kwargs):
-        super(BaseMediaForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # We will need to exclude duration, width, height, thumbnail
         # if we would get this information from files metadata
@@ -32,6 +34,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
         if self.instance.type == 'audio':
             for name in ('width', 'height'):
                 # these fields might be editable=False so verify before accessing
+                # POSSIBLY ADD DURATION AND THUMBNAIL HERE.
                 if name in self.fields:
                     del self.fields[name]
 

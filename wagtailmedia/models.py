@@ -45,6 +45,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
+    #To get duration of audio, use MutaGen module rather than ask user to input.
     duration = models.PositiveIntegerField(verbose_name=_('duration'), help_text=_('Duration in seconds'))
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
@@ -120,26 +121,29 @@ class Media(AbstractMedia):
         'tags',
     )
 
+def get_media_model_string():
+    """
+    Get the dotted ``app.Model`` name for the image model as a string.
+    Useful for developers making Wagtail plugins that need to refer to the
+    image model, such as in foreign keys, but the model itself is not required.
+    """
+    return getattr(settings, 'WAGTAILMEDIA_MEDIA_MODEL', 'wagtailmedia.Media')
+
+
 
 def get_media_model():
-    from django.conf import settings
     from django.apps import apps
 
+    model_string = get_media_model_string()
     try:
-        app_label, model_name = settings.WAGTAILMEDIA_MEDIA_MODEL.split('.')
-    except AttributeError:
-        return Media
+        return apps.get_model(model_string)
     except ValueError:
         raise ImproperlyConfigured("WAGTAILMEDIA_MEDIA_MODEL must be of the form 'app_label.model_name'")
-
-    media_model = apps.get_model(app_label, model_name)
-    if media_model is None:
+    except LookupError:
         raise ImproperlyConfigured(
             "WAGTAILMEDIA_MEDIA_MODEL refers to model '%s' that has not been installed" %
-            settings.WAGTAILMEDIA_MEDIA_MODEL
+            model_string
         )
-    return media_model
-
 
 # Receive the pre_delete signal and delete the file associated with the model instance.
 @receiver(pre_delete, sender=Media)

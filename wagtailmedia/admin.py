@@ -9,4 +9,4 @@ if hasattr(settings, 'WAGTAILMEDIA_MEDIA_MODEL') and settings.WAGTAILMEDIA_MEDIA
     # in the admin.
     pass
 else:
-    admin.site.register(Media)
+    admin.site.register(Media) 
