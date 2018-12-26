@@ -5,8 +5,8 @@ from wagtailmedia.views import chooser, media
 app_name = 'wagtailmedia'
 urlpatterns = [
     url(r'^$', media.index, name='index'),
-#    url(r'^(\w+)/add/$', media.add, name='add'),
-    url(r'^add/$', media.add, name='add'),
+    url(r'^(\w+)/add/$', media.add, name='add'),
+#    url(r'^add/$', media.add, name='add'),
     url(r'^edit/(\d+)/$', media.edit, name='edit'),
     url(r'^delete/(\d+)/$', media.delete, name='delete'),
 

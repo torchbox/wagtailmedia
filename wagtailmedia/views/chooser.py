@@ -129,7 +129,7 @@ def media_chosen(request, media_id):
     return render_modal_workflow(
         request, None, None, None,
         json_data={
-            'step':'media-chosen',
+            'step':'media_chosen',
             'result': get_media_result_data(media)
         }
     )
