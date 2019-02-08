@@ -36,3 +36,9 @@ class AdminMediaChooser(AdminChooser):
 
     def render_js_init(self, id_, name, value):
         return "createMediaChooser({0});".format(json.dumps(id_))
+
+    class Media:
+        js = [
+            'wagtailmedia/js/media-chooser-modal.js',
+            'wagtailmedia/js/media-chooser.js',
+        ]
