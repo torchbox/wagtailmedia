@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import json
-
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -36,3 +34,9 @@ class AdminMediaChooser(AdminChooser):
 
     def render_js_init(self, id_, name, value):
         return "createMediaChooser({0});".format(json.dumps(id_))
+
+    class Media:
+        js = [
+            'wagtailmedia/js/media-chooser-modal.js',
+            'wagtailmedia/js/media-chooser.js',
+        ]

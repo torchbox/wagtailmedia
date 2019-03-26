@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
@@ -483,8 +485,11 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def test_simple(self):
         response = self.client.get(reverse('wagtailmedia:chooser'))
         self.assertEqual(response.status_code, 200)
+
+        response_json = json.loads(response.content.decode())
+        self.assertEqual(response_json['step'], 'chooser')
+
         self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.js')
 
     def test_search(self):
         response = self.client.get(reverse('wagtailmedia:chooser'), {'q': "Hello"})
@@ -552,8 +557,9 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
     def test_simple(self):
         response = self.client.get(reverse('wagtailmedia:media_chosen', args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/media_chosen.js')
 
+        response_json = json.loads(response.content.decode())
+        self.assertEqual(response_json['step'], 'media_chosen')
 
 class TestMediaFilenameProperties(TestCase):
     def setUp(self):

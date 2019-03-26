@@ -1,6 +1,7 @@
 import json
 
 from django.shortcuts import get_object_or_404, render
+from django.utils.translation import ugettext as _
 
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
@@ -27,18 +28,14 @@ except ImportError:  # fallback for wagtail <2.0
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 
-def get_media_json(media):
-    """
-    helper function: given a media, return the json to pass back to the
-    chooser panel
-    """
-
-    return json.dumps({
-        'id': media.id,
-        'title': media.title,
-        'edit_link': reverse('wagtailmedia:edit', args=(media.id,)),
-    })
-
+def get_chooser_json():
+    """construct context variables needed by the chooser JS"""
+    return {
+        'step': 'chooser',
+        'error_label': _("Server Error"),
+        'error_message': _("Report this error to your webmaster with the following information:"),
+	'tag_autocomplete_url': reverse('wagtailadmin_tag_autocomplete'),
+    }
 
 def chooser(request):
     Media = get_media_model()
@@ -82,18 +79,32 @@ def chooser(request):
         media_files = Media.objects.order_by('-created_at')
         paginator, media_files = paginate(request, media_files, per_page=10)
 
-    return render_modal_workflow(request, 'wagtailmedia/chooser/chooser.html', 'wagtailmedia/chooser/chooser.js', {
+    context =  {
         'media_files': media_files,
         'searchform': searchform,
         'collections': collections,
         'is_searching': False,
-    })
+    }
 
+    return render_modal_workflow(
+        request, 'wagtailmedia/chooser/chooser.html', None, context, get_chooser_json()
+    )
+
+def get_media_json(media):
+    """
+    helper function: given a media, return the json to pass back to the
+    chooser panel
+    """
+    return {
+        'id': media.id,
+        'title': media.title,
+        'edit_link': reverse('wagtailmedia:edit', args=(media.id,)),
+    }
 
 def media_chosen(request, media_id):
     media = get_object_or_404(get_media_model(), id=media_id)
 
     return render_modal_workflow(
-        request, None, 'wagtailmedia/chooser/media_chosen.js',
-        {'media_json': get_media_json(media)}
+        request, None, None, None,
+        {'step': 'media_chosen', 'result': get_media_json(media)}
     )

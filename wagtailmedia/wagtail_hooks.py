@@ -53,14 +53,7 @@ def register_media_menu_item():
 
 @hooks.register('insert_editor_js')
 def editor_js():
-    js_files = [
-        static('wagtailmedia/js/media-chooser.js'),
-    ]
-    js_includes = format_html_join(
-        '\n', '<script src="{0}"></script>',
-        ((filename, ) for filename in js_files)
-    )
-    return js_includes + format_html(
+    return format_html(
         """
         <script>
             window.chooserUrls.mediaChooser = '{0}';

@@ -7,6 +7,7 @@ function createMediaChooser(id) {
     $('.action-choose', chooserElement).click(function() {
         ModalWorkflow({
             url: window.chooserUrls.mediaChooser,
+            onload: MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS,
             responses: {
                 mediaChosen: function(mediaData) {
                     input.val(mediaData.id);
