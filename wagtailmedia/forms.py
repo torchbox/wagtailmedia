@@ -11,8 +11,12 @@ from wagtailmedia.permissions import \
 try:
     from wagtail.admin import widgets
     from wagtail.admin.forms import (
-        BaseCollectionMemberForm, collection_member_permission_formset_factory
+        collection_member_permission_formset_factory
     )
+    try:
+        from wagtail.admin.forms.collections import BaseCollectionMemberForm
+    except ImportError:  # fallback for Wagtail <2.5
+        from wagtail.admin.forms import BaseCollectionMemberForm
 except ImportError:  # fallback for Wagtail <2.0
     from wagtail.wagtailadmin import widgets
     from wagtail.wagtailadmin.forms import (

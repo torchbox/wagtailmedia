@@ -16,12 +16,16 @@ except ImportError:  # fallback for older Django
 try:
     from wagtail.utils.pagination import paginate
     from wagtail.admin import messages
-    from wagtail.admin.forms import SearchForm
     from wagtail.admin.utils import (
         PermissionPolicyChecker, permission_denied, popular_tags_for_model
     )
     from wagtail.core.models import Collection
     from wagtail.search.backends import get_search_backends
+
+    try:
+        from wagtail.admin.forms.search import SearchForm
+    except ImportError:  # fallback for Wagtail <2.5
+        from wagtail.admin.forms import SearchForm
 except ImportError:  # fallback for wagtail <2.0
     from wagtail.utils.pagination import paginate
     from wagtail.wagtailadmin import messages
