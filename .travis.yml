@@ -7,6 +7,21 @@ cache:
 dist: xenial
 sudo: false
 
+matrix:
+  include:
+   - env: TOXENV=py37-dj22-wag25
+     python: 3.7
+   - env: TOXENV=py36-dj21-wag24
+     python: 3.6
+   - env: TOXENV=py36-dj21-wag23
+     python: 3.6
+   - env: TOXENV=py36-dj20-wag22
+     python: 3.6
+   - env: TOXENV=py35-dj20-wag21
+     python: 3.5
+   - env: TOXENV=py36-dj20-wag20
+     python: 3.6
+
 install:
   - pip install wheel flake8 isort
   - pip install -e .[testing,docs]
@@ -14,4 +29,4 @@ install:
 script:
   - flake8 wagtailmedia
   - isort --check-only --diff --recursive wagtailmedia
-  - python runtests.py
+  - tox
