@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.utils.functional import cached_property
+
 from wagtail import VERSION as WAGTAIL_VERSION
 
 if WAGTAIL_VERSION < (2, 0):

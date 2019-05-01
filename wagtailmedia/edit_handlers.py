@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
-from wagtailmedia.widgets import AdminMediaChooser
-
 from wagtail.admin.edit_handlers import BaseChooserPanel
+
+from wagtailmedia.widgets import AdminMediaChooser
 
 
 class BaseMediaChooserPanel(BaseChooserPanel):

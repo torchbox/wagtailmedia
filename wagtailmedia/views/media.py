@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
+
 from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtailmedia.forms import get_media_form

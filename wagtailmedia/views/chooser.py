@@ -1,17 +1,16 @@
 import json
 
 from django.shortcuts import get_object_or_404, render
-
-from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
-
 from django.urls import reverse
 
 from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.utils.pagination import paginate
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import PermissionPolicyChecker
 from wagtail.core.models import Collection
+from wagtail.utils.pagination import paginate
+
+from wagtailmedia.models import get_media_model
+from wagtailmedia.permissions import permission_policy
 
 if WAGTAIL_VERSION < (2, 0):
     from wagtail.wagtailadmin.forms import SearchForm

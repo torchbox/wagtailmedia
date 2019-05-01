@@ -4,6 +4,7 @@ import json
 
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
 from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtailmedia.models import get_media_model
