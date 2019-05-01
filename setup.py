@@ -16,6 +16,9 @@ testing_extras = [
     # For coverage and PEP8 linting
     'coverage>=3.7.0',
     'flake8>=2.2.0',
+
+    # Required for matrix build on Travis
+    'tox==3.9.0',
 ]
 
 setup(
