@@ -10,6 +10,7 @@ from django.dispatch import Signal
 from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from wagtail import VERSION as WAGTAIL_VERSION
 
 from taggit.managers import TaggableManager
 
@@ -18,16 +19,16 @@ try:
 except ImportError:  # fallback for older versions of Django
     from django.core.urlresolvers import reverse
 
-try:
-    from wagtail.admin.utils import get_object_usage
-    from wagtail.core.models import CollectionMember
-    from wagtail.search import index
-    from wagtail.search.queryset import SearchableQuerySetMixin
-except ImportError:  # fallback for wagtail <2.0
+if WAGTAIL_VERSION < (2, 0):
     from wagtail.wagtailadmin.utils import get_object_usage
     from wagtail.wagtailcore.models import CollectionMember
     from wagtail.wagtailsearch import index
     from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
+else:
+    from wagtail.admin.utils import get_object_usage
+    from wagtail.core.models import CollectionMember
+    from wagtail.search import index
+    from wagtail.search.queryset import SearchableQuerySetMixin
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):

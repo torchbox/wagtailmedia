@@ -7,15 +7,18 @@ from wagtailmedia.permissions import permission_policy
 
 from django.urls import reverse
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.utils.pagination import paginate
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import PermissionPolicyChecker
 from wagtail.core.models import Collection
 
-try:
-    from wagtail.admin.forms.search import SearchForm
-except ImportError:  # fallback for Wagtail <2.5
+if WAGTAIL_VERSION < (2, 0):
+    from wagtail.wagtailadmin.forms import SearchForm
+elif WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
+else:
+    from wagtail.admin.forms.search import SearchForm
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 

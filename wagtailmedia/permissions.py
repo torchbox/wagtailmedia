@@ -1,9 +1,11 @@
-try:
-    from wagtail.core.permission_policies.collections import (
+from wagtail import VERSION as WAGTAIL_VERSION
+
+if WAGTAIL_VERSION < (2, 0):
+    from wagtail.wagtailcore.permission_policies.collections import (
         CollectionOwnershipPermissionPolicy
     )
-except ImportError:
-    from wagtail.wagtailcore.permission_policies.collections import (
+else:
+    from wagtail.core.permission_policies.collections import (
         CollectionOwnershipPermissionPolicy
     )
 
