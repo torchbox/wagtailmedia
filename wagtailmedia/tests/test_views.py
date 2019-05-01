@@ -487,7 +487,9 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
         json_data = json.loads(response.content)
-        self.assertSetEqual(set(json_data.keys()), {'html', 'step', 'error_label', 'error_message', 'tag_autocomplete_url'})
+        self.assertSetEqual(set(json_data.keys()), {
+            'html', 'step', 'error_label', 'error_message', 'tag_autocomplete_url'
+        })
         self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
         self.assertEqual(json_data['step'], 'chooser')
         self.assertEqual(json_data['tag_autocomplete_url'], reverse('wagtailadmin_tag_autocomplete'))
@@ -683,4 +685,4 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:media_usage',
                                            args=(1,)))
         # There's no usage so there should be no table rows
-        self.assertRegex(response.content, b'<tbody>(\s|\n)*</tbody>')
+        self.assertRegex(response.content, rb'<tbody>(\s|\n)*</tbody>')

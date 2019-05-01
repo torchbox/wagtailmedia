@@ -1,5 +1,3 @@
-import json
-
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
@@ -82,9 +80,12 @@ def chooser(request):
         'searchform': searchform,
         'collections': collections,
         'is_searching': False,
-    }, json_data={'step': 'chooser','error_label': "Server Error",
+    }, json_data={
+        'step': 'chooser',
+        'error_label': "Server Error",
         'error_message': "Report this error to your webmaster with the following information:",
-        'tag_autocomplete_url': reverse('wagtailadmin_tag_autocomplete'),})
+        'tag_autocomplete_url': reverse('wagtailadmin_tag_autocomplete'),
+    })
 
 
 def media_chosen(request, media_id):
