@@ -3,11 +3,12 @@ from __future__ import unicode_literals
 from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
+
 from wagtail import VERSION as WAGTAIL_VERSION
+
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import \
     permission_policy as media_permission_policy
-
 
 if WAGTAIL_VERSION < (2, 0):
     from wagtail.wagtailadmin import widgets

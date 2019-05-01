@@ -1,5 +1,7 @@
 from wagtail import VERSION as WAGTAIL_VERSION
 
+from wagtailmedia.models import Media, get_media_model
+
 if WAGTAIL_VERSION < (2, 0):
     from wagtail.wagtailcore.permission_policies.collections import (
         CollectionOwnershipPermissionPolicy
@@ -9,7 +11,6 @@ else:
         CollectionOwnershipPermissionPolicy
     )
 
-from wagtailmedia.models import Media, get_media_model
 
 permission_policy = CollectionOwnershipPermissionPolicy(
     get_media_model(),

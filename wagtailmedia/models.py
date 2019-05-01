@@ -10,9 +10,9 @@ from django.dispatch import Signal
 from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from wagtail import VERSION as WAGTAIL_VERSION
 
 from taggit.managers import TaggableManager
+from wagtail import VERSION as WAGTAIL_VERSION
 
 try:
     from django.urls import reverse
