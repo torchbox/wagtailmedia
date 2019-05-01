@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
@@ -483,8 +485,12 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def test_simple(self):
         response = self.client.get(reverse('wagtailmedia:chooser'))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_data = json.loads(response.content)
+        self.assertSetEqual(set(json_data.keys()), {'html', 'step', 'error_label', 'error_message', 'tag_autocomplete_url'})
         self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.js')
+        self.assertEqual(json_data['step'], 'chooser')
+        self.assertEqual(json_data['tag_autocomplete_url'], reverse('wagtailadmin_tag_autocomplete'))
 
     def test_search(self):
         response = self.client.get(reverse('wagtailmedia:chooser'), {'q': "Hello"})
@@ -552,7 +558,15 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
     def test_simple(self):
         response = self.client.get(reverse('wagtailmedia:media_chosen', args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/media_chosen.js')
+        self.assertEqual(response['Content-Type'], 'application/json')
+        self.assertDictEqual(json.loads(response.content), {
+            'step': 'media_chosen',
+            'result': {
+                'id': self.media.id,
+                'title': self.media.title,
+                'edit_link': reverse('wagtailmedia:edit', args=[self.media.id],)
+            }
+        })
 
 
 class TestMediaFilenameProperties(TestCase):
