@@ -474,7 +474,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:chooser'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
-        json_data = json.loads(response.content)
+        json_data = json.loads(response.content.decode('utf-8'))
         self.assertSetEqual(set(json_data.keys()), {
             'html', 'step', 'error_label', 'error_message', 'tag_autocomplete_url'
         })
@@ -549,7 +549,7 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:media_chosen', args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
-        self.assertDictEqual(json.loads(response.content), {
+        self.assertDictEqual(json.loads(response.content.decode('utf-8')), {
             'step': 'media_chosen',
             'result': {
                 'id': self.media.id,
