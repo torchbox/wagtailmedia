@@ -7,15 +7,15 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         var currentTag;
 
         function ajaxifyLinks (context) {
-            $('a.media-choice', context).on('click', function() {
+            $('a.media-choice', context).on('click', function(e) {
                 modal.loadUrl(this.href);
-                return false;
+                e.preventDefault();
             });
 
-            $('.pagination a', context).on('click', function() {
+            $('.pagination a', context).on('click', function(e) {
                 var page = this.getAttribute("data-page");
                 setPage(page);
-                return false;
+                e.preventDefault();
             });
         }
 
