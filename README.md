@@ -5,7 +5,7 @@ but for audio and video files.
 
 ### Compatibility
 
-`wagtailmedia` is compatible with Wagtail 1.6 and above.
+`wagtailmedia` is compatible with Wagtail 2.2 and above.
 
 
 ## How to install

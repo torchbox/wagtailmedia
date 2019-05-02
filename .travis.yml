@@ -17,10 +17,8 @@ matrix:
      python: 3.6
    - env: TOXENV=py36-dj20-wag22
      python: 3.6
-   - env: TOXENV=py35-dj20-wag21
+   - env: TOXENV=py35-dj20-wag22
      python: 3.5
-   - env: TOXENV=py36-dj20-wag20
-     python: 3.6
 
 install:
   - pip install wheel flake8 isort
