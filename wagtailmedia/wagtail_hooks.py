@@ -1,30 +1,18 @@
 from django.conf.urls import include, url
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.menu import MenuItem
+from wagtail.admin.search import SearchArea
+from wagtail.admin.site_summary import SummaryItem
+from wagtail.core import hooks
 
 from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
-
-try:
-    from django.urls import reverse
-except ImportError:  # fallback for older Django
-    from django.core.urlresolvers import reverse
-
-if WAGTAIL_VERSION < (2, 0):
-    from wagtail.wagtailadmin.menu import MenuItem
-    from wagtail.wagtailadmin.search import SearchArea
-    from wagtail.wagtailadmin.site_summary import SummaryItem
-    from wagtail.wagtailcore import hooks
-else:
-    from wagtail.admin.menu import MenuItem
-    from wagtail.admin.search import SearchArea
-    from wagtail.admin.site_summary import SummaryItem
-    from wagtail.core import hooks
 
 
 @hooks.register('register_admin_urls')

@@ -8,27 +8,15 @@ from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import Signal
 from django.dispatch.dispatcher import receiver
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
-from wagtail import VERSION as WAGTAIL_VERSION
-
-try:
-    from django.urls import reverse
-except ImportError:  # fallback for older versions of Django
-    from django.core.urlresolvers import reverse
-
-if WAGTAIL_VERSION < (2, 0):
-    from wagtail.wagtailadmin.utils import get_object_usage
-    from wagtail.wagtailcore.models import CollectionMember
-    from wagtail.wagtailsearch import index
-    from wagtail.wagtailsearch.queryset import SearchableQuerySetMixin
-else:
-    from wagtail.admin.utils import get_object_usage
-    from wagtail.core.models import CollectionMember
-    from wagtail.search import index
-    from wagtail.search.queryset import SearchableQuerySetMixin
+from wagtail.admin.utils import get_object_usage
+from wagtail.core.models import CollectionMember
+from wagtail.search import index
+from wagtail.search.queryset import SearchableQuerySetMixin
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):

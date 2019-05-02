@@ -10,9 +10,7 @@ from wagtail.utils.pagination import paginate
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 
-if WAGTAIL_VERSION < (2, 0):
-    from wagtail.wagtailadmin.forms import SearchForm
-elif WAGTAIL_VERSION < (2, 5):
+if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
 else:
     from wagtail.admin.forms.search import SearchForm

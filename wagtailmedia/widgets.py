@@ -6,13 +6,9 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.widgets import AdminChooser
 
 from wagtailmedia.models import get_media_model
-
-if WAGTAIL_VERSION < (2, 0):
-    from wagtail.wagtailadmin.widgets import AdminChooser
-else:
-    from wagtail.admin.widgets import AdminChooser
 
 
 class AdminMediaChooser(AdminChooser):
