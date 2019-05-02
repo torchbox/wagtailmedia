@@ -7,26 +7,14 @@ from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.urls import reverse
 
 from six import b
+from wagtail.core.models import Collection, GroupCollectionPermission, Page
 from wagtail.tests.utils import WagtailTestUtils
 
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
-
-try:
-    from django.urls import reverse
-except ImportError:  # fallback for older Django
-    from django.core.urlresolvers import reverse
-
-try:
-    from wagtail.core.models import (
-        Collection, GroupCollectionPermission, Page
-    )
-except ImportError:  # fallback for wagtail <2.0
-    from wagtail.wagtailcore.models import (
-        Collection, GroupCollectionPermission, Page
-    )
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):

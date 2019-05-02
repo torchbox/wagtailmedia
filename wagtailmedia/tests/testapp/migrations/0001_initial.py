@@ -6,11 +6,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.fields
 
-try:
-    from wagtail.core import fields
-except ImportError: # fallback for wagtail <2.0
-    from wagtail.wagtailcore import fields
-    
+from wagtail.core import fields
+
 
 class Migration(migrations.Migration):
 

@@ -7,12 +7,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import taggit.managers
 
-try:
-    from wagtail.core import models as wagtail_models
-    from wagtail.search import index
-except ImportError: # fallback wagtail <2.0
-    from wagtail.wagtailcore import models as wagtail_models
-    from wagtail.wagtailsearch import index
+from wagtail.core import models as wagtail_models
+from wagtail.search import index
 
 
 class Migration(migrations.Migration):
