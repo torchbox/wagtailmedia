@@ -16,6 +16,9 @@ testing_extras = [
     # For coverage and PEP8 linting
     'coverage>=3.7.0',
     'flake8>=2.2.0',
+
+    # Required for matrix build on Travis
+    'tox==3.9.0',
 ]
 
 setup(
@@ -44,13 +47,14 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Framework :: Django',
-        'Framework :: Django :: 1.8',
-        'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 2.0',
+        'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
+        'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     install_requires=[
-        'wagtail>=1.6.3',
+        'wagtail>=2.2',
     ],
     extras_require={
         'testing': testing_extras,

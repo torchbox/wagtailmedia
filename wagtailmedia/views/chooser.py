@@ -1,28 +1,19 @@
-import json
-
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+
+from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.modal_workflow import render_modal_workflow
+from wagtail.admin.utils import PermissionPolicyChecker
+from wagtail.core.models import Collection
+from wagtail.utils.pagination import paginate
 
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 
-try:
-    from django.urls import reverse
-except ImportError:  # fallback for older Django
-    from django.core.urlresolvers import reverse
-
-try:
-    from wagtail.utils.pagination import paginate
+if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
-    from wagtail.admin.modal_workflow import render_modal_workflow
-    from wagtail.admin.utils import PermissionPolicyChecker
-    from wagtail.core.models import Collection
-except ImportError:  # fallback for wagtail <2.0
-    from wagtail.utils.pagination import paginate
-    from wagtail.wagtailadmin.forms import SearchForm
-    from wagtail.wagtailadmin.modal_workflow import render_modal_workflow
-    from wagtail.wagtailadmin.utils import PermissionPolicyChecker
-    from wagtail.wagtailcore.models import Collection
-
+else:
+    from wagtail.admin.forms.search import SearchForm
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 
@@ -33,11 +24,11 @@ def get_media_json(media):
     chooser panel
     """
 
-    return json.dumps({
+    return {
         'id': media.id,
         'title': media.title,
-        'edit_link': reverse('wagtailmedia:edit', args=(media.id,)),
-    })
+        'edit_link': reverse('wagtailmedia:edit', args=(media.id,))
+    }
 
 
 def chooser(request):
@@ -82,11 +73,16 @@ def chooser(request):
         media_files = Media.objects.order_by('-created_at')
         paginator, media_files = paginate(request, media_files, per_page=10)
 
-    return render_modal_workflow(request, 'wagtailmedia/chooser/chooser.html', 'wagtailmedia/chooser/chooser.js', {
+    return render_modal_workflow(request, 'wagtailmedia/chooser/chooser.html', None, {
         'media_files': media_files,
         'searchform': searchform,
         'collections': collections,
         'is_searching': False,
+    }, json_data={
+        'step': 'chooser',
+        'error_label': "Server Error",
+        'error_message': "Report this error to your webmaster with the following information:",
+        'tag_autocomplete_url': reverse('wagtailadmin_tag_autocomplete'),
     })
 
 
@@ -94,6 +90,7 @@ def media_chosen(request, media_id):
     media = get_object_or_404(get_media_model(), id=media_id)
 
     return render_modal_workflow(
-        request, None, 'wagtailmedia/chooser/media_chosen.js',
-        {'media_json': get_media_json(media)}
+        request, None, None,
+        None,
+        json_data={'step': 'media_chosen', 'result': get_media_json(media)}
     )

@@ -4,18 +4,19 @@ from django import forms
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
+from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin import widgets
+
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import \
     permission_policy as media_permission_policy
 
-try:
-    from wagtail.admin import widgets
+if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import (
         BaseCollectionMemberForm, collection_member_permission_formset_factory
     )
-except ImportError:  # fallback for Wagtail <2.0
-    from wagtail.wagtailadmin import widgets
-    from wagtail.wagtailadmin.forms import (
+else:
+    from wagtail.admin.forms.collections import (
         BaseCollectionMemberForm, collection_member_permission_formset_factory
     )
 

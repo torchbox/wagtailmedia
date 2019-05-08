@@ -5,12 +5,9 @@ import json
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from wagtailmedia.models import get_media_model
+from wagtail.admin.widgets import AdminChooser
 
-try:
-    from wagtail.admin.widgets import AdminChooser
-except ImportError:  # fallback for Wagtail <2.0
-    from wagtail.wagtailadmin.widgets import AdminChooser
+from wagtailmedia.models import get_media_model
 
 
 class AdminMediaChooser(AdminChooser):
@@ -36,3 +33,9 @@ class AdminMediaChooser(AdminChooser):
 
     def render_js_init(self, id_, name, value):
         return "createMediaChooser({0});".format(json.dumps(id_))
+
+    class Media:
+        js = [
+            'wagtailmedia/js/media-chooser-modal.js',
+            'wagtailmedia/js/media-chooser.js',
+        ]

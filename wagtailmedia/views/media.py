@@ -1,36 +1,27 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.vary import vary_on_headers
+
+from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin import messages
+from wagtail.admin.utils import (
+    PermissionPolicyChecker, permission_denied, popular_tags_for_model
+)
+from wagtail.core.models import Collection
+from wagtail.search.backends import get_search_backends
+from wagtail.utils.pagination import paginate
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 
-try:
-    from django.urls import reverse
-except ImportError:  # fallback for older Django
-    from django.core.urlresolvers import reverse
-
-try:
-    from wagtail.utils.pagination import paginate
-    from wagtail.admin import messages
+if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
-    from wagtail.admin.utils import (
-        PermissionPolicyChecker, permission_denied, popular_tags_for_model
-    )
-    from wagtail.core.models import Collection
-    from wagtail.search.backends import get_search_backends
-except ImportError:  # fallback for wagtail <2.0
-    from wagtail.utils.pagination import paginate
-    from wagtail.wagtailadmin import messages
-    from wagtail.wagtailadmin.forms import SearchForm
-    from wagtail.wagtailadmin.utils import (
-        PermissionPolicyChecker, permission_denied, popular_tags_for_model
-    )
-    from wagtail.wagtailcore.models import Collection
-    from wagtail.wagtailsearch.backends import get_search_backends
+else:
+    from wagtail.admin.forms.search import SearchForm
 
 
 permission_checker = PermissionPolicyChecker(permission_policy)
