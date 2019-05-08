@@ -1,11 +1,11 @@
-# wagtailmedia [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://travis-ci.org/torchbox/wagtailmedia.svg?branch=master)](https://travis-ci.org/torchbox/wagtailmedia)
+# [wagtailmedia](https://pypi.org/project/wagtailmedia/) [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://travis-ci.org/torchbox/wagtailmedia.svg?branch=master)](https://travis-ci.org/torchbox/wagtailmedia)
 
-A module for Wagtail that provides functionality similar to `wagtail.wagtaildocs` module,
+A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
 
 ### Compatibility
 
-`wagtailmedia` is compatible with Wagtail 2.2 and above. For compatibility with Wagtail 2.1 and 2.0, use the [v0.2.0 release](https://github.com/torchbox/wagtailmedia/releases/tag/v0.2.0).
+`wagtailmedia` is compatible with Wagtail 2.2 and above. For compatibility with Wagtail 2.1 and 2.0, use the [v0.2.0 release](https://pypi.org/project/wagtailmedia/0.2.0/).
 
 
 ## How to install

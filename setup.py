@@ -25,7 +25,7 @@ setup(
     name='wagtailmedia',
     version=__version__,
     description='A module for Wagtail that provides functionality '
-                'similar to wagtail.wagtaildocs module, but for audio and video files.',
+                'similar to wagtail.documents module, but for audio and video files.',
     author='Mikalai Radchuk',
     author_email='mikalai.radchuk@torchbox.com',
     url='https://github.com/torchbox/wagtailmedia',
