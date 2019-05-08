@@ -54,7 +54,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     install_requires=[
-        'wagtail>=1.6.3',
+        'wagtail>=2.2',
     ],
     extras_require={
         'testing': testing_extras,
