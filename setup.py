@@ -2,6 +2,8 @@
 
 from wagtailmedia import __version__
 
+import io
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -21,6 +23,9 @@ testing_extras = [
     'tox==3.9.0',
 ]
 
+with io.open('README.md', encoding='utf-8') as readme_file:
+    long_description = readme_file.read()
+
 setup(
     name='wagtailmedia',
     version=__version__,
@@ -32,7 +37,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     license='BSD',
-    long_description='See https://github.com/torchbox/wagtailmedia for details',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
