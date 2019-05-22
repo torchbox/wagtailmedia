@@ -11,10 +11,9 @@ but for audio and video files.
 
 Install using pip:
 
-```
+```sh
 pip install wagtailmedia
 ```
-
 
 ### Settings
 
@@ -27,7 +26,6 @@ INSTALLED_APPS = [
     # ...
 ]
 ```
-
 
 ### URL configuration
 
@@ -50,7 +48,6 @@ and [Deploying static files](https://docs.djangoproject.com/en/stable/howto/stat
 
 With this configuration in place, you are ready to run `./manage.py migrate` to create the database tables used by wagtailmedia.
 
-
 ### Custom `Media` model
 
 The `Media` model can be customised. To do this, you need
@@ -61,7 +58,6 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 ```python
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
-
 
 ## How to use
 
@@ -168,18 +164,27 @@ class BlogPageWithMedia(Page):
     ]
 ```
 
+## Contributing
 
-## How to run tests
+### Install
 
-To run tests you need to clone this repository:
+To make changes to this project, first clone this repository:
 
-    git clone https://github.com/torchbox/wagtailmedia.git
-    cd wagtailmedia
+```sh
+git clone git@github.com:torchbox/wagtailmedia.git
+cd wagtailmedia
+```
 
 With your preferred virtualenv activated, install testing dependencies:
 
-    pip install -e .[testing] -U
+```sh
+pip install -e .[testing] -U
+```
+
+### How to run tests
 
 Now you can run tests as shown below:
 
-    python runtests.py
+```sh
+python runtests.py
+```
