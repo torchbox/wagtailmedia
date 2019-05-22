@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.3.1] - 2019-05-22
+
 ### Changed
 
 - Update edit handler `AdminMediaChooser` API to be compatible with Wagtail 2.0 and above ([#34](https://github.com/torchbox/wagtailmedia/issues/34), [#40](https://github.com/torchbox/wagtailmedia/pull/40)). Thanks to [@pahacofome](https://github.com/pahacofome)
