@@ -61,6 +61,42 @@ WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 
 ## How to use
 
+### As a regular Django field
+
+You can use `Media` as a regular Django field. Here’s an example:
+
+```python
+from __future__ import unicode_literals
+
+from django.db import models
+
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.fields import RichTextField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+
+from wagtailmedia.edit_handlers import MediaChooserPanel
+
+
+class BlogPageWithMedia(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = RichTextField(blank=False)
+    media = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('body'),
+        MediaChooserPanel('media'),
+    ]
+```
+
 ### In StreamField
 
 You can use `Media` in StreamField. To do this, you need
@@ -123,44 +159,6 @@ class BlogPage(Page):
         FieldPanel('author'),
         FieldPanel('date'),
         StreamFieldPanel('body'),
-    ]
-```
-
-### As a regular Django field
-
-Also, you can use `Media` as a regular Django field.
-
-Example
-
-```python
-from __future__ import unicode_literals
-
-from django.db import models
-
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
-
-from wagtailmedia.edit_handlers import MediaChooserPanel
-
-
-class BlogPageWithMedia(Page):
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post date")
-    body = RichTextField(blank=False)
-    media = models.ForeignKey(
-        'wagtailmedia.Media',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
-        FieldPanel('body'),
-        MediaChooserPanel('media'),
     ]
 ```
 
