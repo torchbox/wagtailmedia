@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Update edit handler `AdminMediaChooser` API to be compatible with Wagtail 2.0 and above ([#34](https://github.com/torchbox/wagtailmedia/issues/34), [#40](https://github.com/torchbox/wagtailmedia/pull/40)). Thanks to [@pahacofome](https://github.com/pahacofome)
+
+### Upgrade considerations
+
+`BaseMediaChooserPanel` is deprecated, and will be removed in a future release. Please use `AdminMediaChooser` instead ([#40](https://github.com/torchbox/wagtailmedia/pull/40)):
+
+```diff
+- from wagtailmedia.edit_handlers import BaseMediaChooserPanel
++ from wagtailmedia.edit_handlers import MediaChooserPanel
+
+# [...]
+
+content_panels = Page.content_panels + [
+    # [...]
+-    BaseMediaChooserPanel('video_media'),
++    MediaChooserPanel('video_media'),
+    # [...]
+```
+
 ## [0.3.0] - 2019-05-08
 
 ### Added

@@ -6,18 +6,18 @@ from wagtailmedia.widgets import AdminMediaChooser
 
 
 class BaseMediaChooserPanel(BaseChooserPanel):
+    """
+    DEPRECATED – This undocumented API will be removed in a future release. Please use MediaChooserPanel instead.
+    Note: When removing this deprecated code, just remove the whole class.
+    """
     object_type_name = 'media'
 
     def widget_overrides(self):
         return {self.field_name: AdminMediaChooser}
 
 
-class MediaChooserPanel(object):
-    def __init__(self, field_name):
-        self.field_name = field_name
+class MediaChooserPanel(BaseChooserPanel):
+    object_type_name = 'media'
 
-    def bind_to_model(self, model):
-        return type(str('_MediaChooserPanel'), (BaseMediaChooserPanel,), {
-            'model': model,
-            'field_name': self.field_name,
-        })
+    def widget_overrides(self):
+        return {self.field_name: AdminMediaChooser}
