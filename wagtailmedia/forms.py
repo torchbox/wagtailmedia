@@ -8,8 +8,7 @@ from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import widgets
 
 from wagtailmedia.models import Media
-from wagtailmedia.permissions import \
-    permission_policy as media_permission_policy
+from wagtailmedia.permissions import permission_policy as media_permission_policy
 
 if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import (
