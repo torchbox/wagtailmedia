@@ -81,7 +81,7 @@ class BlogPageWithMedia(Page):
     author = models.CharField(max_length=255)
     date = models.DateField("Post date")
     body = RichTextField(blank=False)
-    media = models.ForeignKey(
+    featured_media = models.ForeignKey(
         'wagtailmedia.Media',
         null=True,
         blank=True,
@@ -93,9 +93,13 @@ class BlogPageWithMedia(Page):
         FieldPanel('author'),
         FieldPanel('date'),
         FieldPanel('body'),
-        MediaChooserPanel('media'),
+        MediaChooserPanel('featured_media'),
     ]
 ```
+
+#### Name clash with Wagtail
+
+Do not name the field `media`. When rendering the admin UI, Wagtail uses a `media` property for its fields’ CSS & JS assets loading. Using `media` as a field name breaks the admin UI ([#54](https://github.com/torchbox/wagtailmedia/issues/54)).
 
 ### In StreamField
 
