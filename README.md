@@ -11,10 +11,9 @@ but for audio and video files.
 
 Install using pip:
 
-```
+```sh
 pip install wagtailmedia
 ```
-
 
 ### Settings
 
@@ -27,7 +26,6 @@ INSTALLED_APPS = [
     # ...
 ]
 ```
-
 
 ### URL configuration
 
@@ -50,7 +48,6 @@ and [Deploying static files](https://docs.djangoproject.com/en/stable/howto/stat
 
 With this configuration in place, you are ready to run `./manage.py migrate` to create the database tables used by wagtailmedia.
 
-
 ### Custom `Media` model
 
 The `Media` model can be customised. To do this, you need
@@ -62,8 +59,47 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
 
-
 ## How to use
+
+### As a regular Django field
+
+You can use `Media` as a regular Django field. Here’s an example:
+
+```python
+from __future__ import unicode_literals
+
+from django.db import models
+
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.fields import RichTextField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+
+from wagtailmedia.edit_handlers import MediaChooserPanel
+
+
+class BlogPageWithMedia(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = RichTextField(blank=False)
+    featured_media = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('body'),
+        MediaChooserPanel('featured_media'),
+    ]
+```
+
+#### Name clash with Wagtail
+
+Do not name the field `media`. When rendering the admin UI, Wagtail uses a `media` property for its fields’ CSS & JS assets loading. Using `media` as a field name breaks the admin UI ([#54](https://github.com/torchbox/wagtailmedia/issues/54)).
 
 ### In StreamField
 
@@ -130,56 +166,27 @@ class BlogPage(Page):
     ]
 ```
 
-### As a regular Django field
+## Contributing
 
-Also, you can use `Media` as a regular Django field.
+### Install
 
-Example
+To make changes to this project, first clone this repository:
 
-```python
-from __future__ import unicode_literals
-
-from django.db import models
-
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
-
-from wagtailmedia.edit_handlers import MediaChooserPanel
-
-
-class BlogPageWithMedia(Page):
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post date")
-    body = RichTextField(blank=False)
-    media = models.ForeignKey(
-        'wagtailmedia.Media',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
-        FieldPanel('body'),
-        MediaChooserPanel('media'),
-    ]
+```sh
+git clone git@github.com:torchbox/wagtailmedia.git
+cd wagtailmedia
 ```
-
-
-## How to run tests
-
-To run tests you need to clone this repository:
-
-    git clone https://github.com/torchbox/wagtailmedia.git
-    cd wagtailmedia
 
 With your preferred virtualenv activated, install testing dependencies:
 
-    pip install -e .[testing] -U
+```sh
+pip install -e .[testing] -U
+```
+
+### How to run tests
 
 Now you can run tests as shown below:
 
-    python runtests.py
+```sh
+python runtests.py
+```
