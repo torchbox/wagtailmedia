@@ -59,6 +59,24 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
 
+### Hooks
+
+#### `construct_media_chooser_queryset`
+
+Called when rendering the media chooser view, to allow the media listing QuerySet to be customised.
+The callable passed into the hook will receive the current media QuerySet and the request object, and must return a Media QuerySet (either the original one, or a new one).
+
+```python
+from wagtail.core import hooks
+
+@hooks.register('construct_media_chooser_queryset')
+def show_my_uploaded_media_only(media, request):
+    # Only show uploaded media
+    media = media.filter(uploaded_by_user=request.user)
+
+    return media
+```
+
 ## How to use
 
 ### As a regular Django field

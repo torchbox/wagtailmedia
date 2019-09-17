@@ -468,7 +468,7 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
 
 class TestMediaChooserView(TestCase, WagtailTestUtils):
     def setUp(self):
-        self.login()
+        self.user = self.login()
 
     def test_simple(self):
         response = self.client.get(reverse('wagtailmedia:chooser'))
@@ -536,6 +536,48 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check that we got the last page
         self.assertEqual(response.context['media_files'].number, response.context['media_files'].paginator.num_pages)
+
+    def test_construct_queryset_hook_browse(self):
+        media = models.Media.objects.create(
+            title="Test media shown",
+            duration=100,
+            type='audio',
+            uploaded_by_user=self.user,
+        )
+        models.Media.objects.create(
+            title="Test media not shown",
+            duration=100,
+            type='audio',
+        )
+
+        def filter_media(media, request):
+            return media.filter(uploaded_by_user=self.user)
+
+        with self.register_hook('construct_media_chooser_queryset', filter_media):
+            response = self.client.get(reverse('wagtailmedia:chooser'))
+        self.assertEqual(len(response.context['media_files']), 1)
+        self.assertEqual(response.context['media_files'][0], media)
+
+    def test_construct_queryset_hook_search(self):
+        media = models.Media.objects.create(
+            title="Test media shown",
+            duration=100,
+            type='audio',
+            uploaded_by_user=self.user,
+        )
+        models.Media.objects.create(
+            title="Test media not shown",
+            duration=100,
+            type='audio',
+        )
+
+        def filter_media(media, request):
+            return media.filter(uploaded_by_user=self.user)
+
+        with self.register_hook('construct_media_chooser_queryset', filter_media):
+            response = self.client.get(reverse('wagtailmedia:chooser'), {'q': 'Test'})
+        self.assertEqual(len(response.context['media_files']), 1)
+        self.assertEqual(response.context['media_files'][0], media)
 
 
 class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
