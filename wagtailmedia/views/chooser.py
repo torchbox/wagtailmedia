@@ -5,10 +5,10 @@ from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import PermissionPolicyChecker
 from wagtail.core.models import Collection
-from wagtail.utils.pagination import paginate
 
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
+from wagtailmedia.utils import paginate
 
 if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
