@@ -6,6 +6,7 @@ import sys
 import warnings
 
 from django.core.management import execute_from_command_line
+from wagtail.utils.deprecation import RemovedInWagtail27Warning
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'wagtailmedia.tests.settings'
 
@@ -19,7 +20,13 @@ def runtests():
     args = sys.argv[1:]
     argv = sys.argv[:1] + ['test'] + args
     try:
-        execute_from_command_line(argv)
+        # adding an assert to catch RemovedInWagtail27Warning warnings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            execute_from_command_line(argv)
+            for warning in w:
+                assert not isinstance(warning.message, RemovedInWagtail27Warning), \
+                    'These tests raised a RemovedInWagtail27Warning.'
     finally:
         from wagtailmedia.tests.settings import STATIC_ROOT, MEDIA_ROOT
         shutil.rmtree(STATIC_ROOT, ignore_errors=True)
