@@ -26,7 +26,7 @@ def runtests():
             execute_from_command_line(argv)
             for warning in w:
                 assert not isinstance(warning.message, RemovedInWagtail27Warning), \
-                    'These tests raised a RemovedInWagtail27Warning.'
+                    f'These tests raised a RemovedInWagtail27Warning. {warning.message}'
     finally:
         from wagtailmedia.tests.settings import STATIC_ROOT, MEDIA_ROOT
         shutil.rmtree(STATIC_ROOT, ignore_errors=True)
