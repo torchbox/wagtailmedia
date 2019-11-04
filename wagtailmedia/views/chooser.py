@@ -12,8 +12,10 @@ from wagtailmedia.utils import paginate
 
 if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
+    pagination_template = "wagtailadmin/shared/pagination_nav.html"
 else:
     from wagtail.admin.forms.search import SearchForm
+    pagination_template = "wagtailadmin/shared/ajax_pagination_nav.html"
 
 permission_checker = PermissionPolicyChecker(permission_policy)
 
@@ -62,6 +64,7 @@ def chooser(request):
             'media_files': media_files,
             'query_string': q,
             'is_searching': is_searching,
+            'pagination_template': pagination_template,
         })
     else:
         searchform = SearchForm()
