@@ -16,7 +16,6 @@ from wagtail.tests.utils import WagtailTestUtils
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
-
 class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
@@ -558,6 +557,100 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
             }
         })
 
+
+class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
+    def setUp(self):
+        self.login()
+
+    def test_simple_audio(self):
+        response = self.client.get(reverse(
+            'wagtailmedia:chooser_upload', args=('audio', )))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
+        response_json = json.loads(response.content.decode())
+        self.assertEqual(response_json['step'], 'chooser')
+
+    def test_simple_video(self):
+        response = self.client.get(reverse(
+            'wagtailmedia:chooser_upload', args=('video', )))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
+        response_json = json.loads(response.content.decode())
+        self.assertEqual(response_json['step'], 'chooser')
+
+    def test_upload_audio(self):
+        response = self.client.post(
+            reverse('wagtailmedia:chooser_upload', args=('audio', )), {
+                'media-chooser-upload-title': 'Test audio',
+                'media-chooser-upload-file': ContentFile(b('A boring example')),
+                'media-chooser-upload-duration': '100',
+            })
+
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the audio was created
+        media_files = models.Media.objects.filter(title='Test audio')
+        self.assertEqual(media_files.count(), 1)
+
+        # Test that fields are populated correctly
+        media = media_files.first()
+        self.assertEqual(media.type, 'audio')
+        self.assertEqual(media.duration, 100)
+
+    def test_upload_video(self):
+        response = self.client.post(
+            reverse('wagtailmedia:chooser_upload', args=('video', )), {
+                'media-chooser-upload-title': 'Test video',
+                'media-chooser-upload-file': ContentFile(b('A boring example')),
+                'media-chooser-upload-duration': '100',
+                'media-chooser-upload-width': '640',
+                'media-chooser-upload-height': '480',
+            })
+
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the video was created
+        media_files = models.Media.objects.filter(title='Test video')
+        self.assertEqual(media_files.count(), 1)
+
+        # Test that fields are populated correctly
+        media = media_files.first()
+        self.assertEqual(media.type, 'video')
+        self.assertEqual(media.duration, 100)
+        self.assertEqual(media.width, 640)
+        self.assertEqual(media.height, 480)
+
+    def test_upload_no_file_selected(self):
+        response = self.client.post(
+            reverse('wagtailmedia:chooser_upload', args=('video', )), {
+                'media-chooser-upload-title': 'Test video',
+            })
+
+        # Shouldn't redirect anywhere
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
+
+        # The form should have an error
+        self.assertFormError(
+            response, 'uploadform', 'file', 'This field is required.')
+
+    @override_settings(DEFAULT_FILE_STORAGE='wagtail.tests.dummy_external_storage.DummyExternalStorage')
+    def test_upload_with_external_storage(self):
+        response = self.client.post(
+            reverse('wagtailmedia:chooser_upload', args=('video', )), {
+                'media-chooser-upload-title': 'Test video',
+                'media-chooser-upload-file': ContentFile(b('A boring example')),
+                'media-chooser-upload-duration': '100',
+            })
+
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the video was created
+        self.assertTrue(
+            models.Media.objects.filter(title='Test video').exists())
 
 class TestMediaFilenameProperties(TestCase):
     def setUp(self):
