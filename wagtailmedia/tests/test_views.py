@@ -16,6 +16,7 @@ from wagtail.tests.utils import WagtailTestUtils
 from wagtailmedia import models
 from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
+
 class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
@@ -651,6 +652,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         # Check that the video was created
         self.assertTrue(
             models.Media.objects.filter(title='Test video').exists())
+
 
 class TestMediaFilenameProperties(TestCase):
     def setUp(self):
