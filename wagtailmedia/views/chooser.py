@@ -6,6 +6,7 @@ from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.utils import PermissionPolicyChecker
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
+
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
