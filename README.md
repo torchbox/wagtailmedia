@@ -190,3 +190,6 @@ Now you can run tests as shown below:
 ```sh
 python runtests.py
 ```
+
+You can also use the provided vagrant box for running tests with tox.
+[Reference for testing with vagrant.](vagrant/README) 
