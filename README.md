@@ -113,7 +113,8 @@ Here is an example:
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils.html import format_html
+from django.forms.utils import flatatt
+from django.utils.html import format_html, format_html_join
 
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
@@ -132,7 +133,7 @@ class TestMediaBlock(AbstractMediaChooserBlock):
             player_code = '''
             <div>
                 <video width="320" height="240" controls>
-                    <source src="{0}" type="video/mp4">
+                    {0}
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -141,13 +142,16 @@ class TestMediaBlock(AbstractMediaChooserBlock):
             player_code = '''
             <div>
                 <audio controls>
-                    <source src="{0}" type="audio/mpeg">
+                    {0}
                     Your browser does not support the audio element.
                 </audio>
             </div>
             '''
 
-        return format_html(player_code, value.file.url)
+        return format_html(player_code, format_html_join(
+            '\n', "<source{0}>",
+            [[flatatt(s)] for s in value.sources]
+        ))
 
 
 class BlogPage(Page):
