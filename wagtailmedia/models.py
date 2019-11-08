@@ -80,7 +80,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     @property
     def url(self):
         return self.file.url
-    
+
     @property
     def sources(self):
         return [{
