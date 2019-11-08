@@ -5,6 +5,7 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 
 from six import b
+
 from wagtailmedia import models
 from wagtailmedia.forms import get_media_form
 
