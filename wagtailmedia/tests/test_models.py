@@ -59,7 +59,7 @@ class TestMediaQuerySet(TestCase):
 
 
 class TestAbstractMediaInterfaceModel(TestCase):
-    def test_sources(self):
+    def test_sources_mp4_type(self):
         fake_file = ContentFile(b("A boring example movie"))
         fake_file.name = 'movie.mp4'
         media = models.Media()
@@ -67,4 +67,14 @@ class TestAbstractMediaInterfaceModel(TestCase):
         self.assertEqual(media.sources, [{
             'src': '/media/movie.mp4',
             'type': 'video/mp4',
+        }])
+
+    def test_sources_unknown_type(self):
+        fake_file = ContentFile(b("A boring example movie"))
+        fake_file.name = 'movie'
+        media = models.Media()
+        media.file = File(fake_file)
+        self.assertEqual(media.sources, [{
+            'src': '/media/movie',
+            'type': None,
         }])
