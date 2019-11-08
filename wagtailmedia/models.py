@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import mimetypes
 import os.path
 
 from django.conf import settings
@@ -79,6 +80,13 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     @property
     def url(self):
         return self.file.url
+    
+    @property
+    def sources(self):
+        return [{
+            'src': self.url,
+            'type': mimetypes.guess_type(self.filename)[0],
+        }]
 
     def get_usage(self):
         return get_object_usage(self)

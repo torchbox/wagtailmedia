@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
+from django.core.files import File
+from django.core.files.base import ContentFile
 from django.test import TestCase
 
+from six import b
 from wagtailmedia import models
 from wagtailmedia.forms import get_media_form
 
@@ -53,3 +56,15 @@ class TestMediaQuerySet(TestCase):
         MediaForm = get_media_form(models.Media)
         media = models.Media.objects.create(title="Test media file", type='audio', duration=100)
         self.assertIn('thumbnail', MediaForm(instance=media).fields.keys())
+
+
+class TestAbstractMediaInterfaceModel(TestCase):
+    def test_sources(self):
+        fake_file = ContentFile(b("A boring example movie"))
+        fake_file.name = 'movie.mp4'
+        media = models.Media()
+        media.file = File(fake_file)
+        self.assertEqual(media.sources, [{
+            'src': '/media/movie.mp4',
+            'type': 'video/mp4',
+        }])
