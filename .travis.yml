@@ -9,6 +9,10 @@ sudo: false
 
 matrix:
   include:
+   - env: TOXENV=py37-dj22-wag27
+     python: 3.7
+   - env: TOXENV=py37-dj22-wag26
+     python: 3.7
    - env: TOXENV=py37-dj22-wag25
      python: 3.7
    - env: TOXENV=py36-dj21-wag24
