@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -14,7 +15,6 @@ from wagtail.search.backends import get_search_backends
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
-from wagtailmedia.utils import paginate
 
 if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
@@ -63,7 +63,8 @@ def index(request):
         form = SearchForm(placeholder=_("Search media"))
 
     # Pagination
-    paginator, media = paginate(request, media)
+    paginator = Paginator(media, per_page=20)
+    media = paginator.get_page(request.GET.get('p'))
 
     collections = permission_policy.collections_user_has_any_permission_for(
         request.user, ['add', 'change']
@@ -208,7 +209,8 @@ def usage(request, media_id):
     Media = get_media_model()
     media = get_object_or_404(Media, id=media_id)
 
-    paginator, used_by = paginate(request, media.get_usage())
+    paginator = Paginator(media.get_usage(), per_page=20)
+    used_by = paginator.get_page(request.GET.get('p'))
 
     return render(request, "wagtailmedia/media/usage.html", {
         'media': media,
