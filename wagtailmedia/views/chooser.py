@@ -81,6 +81,7 @@ def chooser(request):
         'searchform': searchform,
         'collections': collections,
         'is_searching': False,
+        'pagination_template': pagination_template,
     }, json_data={
         'step': 'chooser',
         'error_label': "Server Error",
