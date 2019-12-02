@@ -4,8 +4,10 @@
 {% block titletag %}
     {% if media_type == 'audio' %}
         {% trans "Add audio" %}
-    {% else %}
+    {% elif media_type == 'video' %}
         {% trans "Add video" %}
+    {% else %}
+        {% trans "Add audio or video" %}
     {% endif %}
 {% endblock %}
 
@@ -25,8 +27,10 @@
 {% block content %}
     {% if media_type == 'audio' %}
         {% trans "Add audio" as add_str %}
-    {% else %}
+    {% elif media_type == 'video' %}
         {% trans "Add video" as add_str %}
+    {% else %}
+        {% trans "Add audio or video" as add_str %}
     {% endif %}
     {% include "wagtailadmin/shared/header.html" with title=add_str icon="media" %}
 
