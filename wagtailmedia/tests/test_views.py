@@ -114,6 +114,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
         self.assertContains(response, 'Add audio')
+        self.assertNotContains(response, 'Add audio or video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
@@ -127,6 +128,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
         self.assertContains(response, 'Add video')
+        self.assertNotContains(response, 'Add audio or video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
@@ -138,6 +140,14 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         # as standard, only the root collection exists and so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
+
+    def test_get_audio_or_video(self):
+        response = self.client.get(reverse('wagtailmedia:add', args=('media', )))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
+
+        self.assertNotContains(response, 'Add video')
+        self.assertContains(response, 'Add audio or video')
 
     def test_get_audio_with_collections(self):
         root_collection = Collection.get_first_root_node()
