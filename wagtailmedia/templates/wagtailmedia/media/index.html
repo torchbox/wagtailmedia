@@ -38,18 +38,20 @@
                 </form>
             </div>
             {% if user_can_add %}
-                <div class="right">
-                    <div class="addbutton">
-                        <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button bicolor icon icon-plus">{% trans "Add audio" %}</a>
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="col">
+                {% block add_actions %}
+                    <div class="right">
                         <div class="addbutton">
-                            <a href="{% url 'wagtailmedia:add' 'video' %}" class="button bicolor icon icon-plus">{% trans "Add video" %}</a>
+                            <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button bicolor icon icon-plus">{% trans "Add audio" %}</a>
                         </div>
                     </div>
-                </div>
+                    <div class="right">
+                        <div class="col">
+                            <div class="addbutton">
+                                <a href="{% url 'wagtailmedia:add' 'video' %}" class="button bicolor icon icon-plus">{% trans "Add video" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
             {% endif %}
         </div>
     </header>

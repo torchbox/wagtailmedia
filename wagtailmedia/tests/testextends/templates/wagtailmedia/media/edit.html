@@ -1,0 +1,18 @@
+{% extends "wagtailmedia/media/edit.html" %}
+
+{% block extra_css %}
+    <style>.sweet-style {}</style>
+{% endblock %}
+
+{% block extra_js %}
+    <script>var data = 'sweet-code';</script>
+{% endblock %}
+
+{% block form_row %}
+    {{ block.super }}
+    sweet-form-row
+{% endblock %}
+
+{% block media_stats %}
+    sweet-stats
+{% endblock %}

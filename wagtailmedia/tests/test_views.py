@@ -5,7 +5,7 @@ import json
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
-from django.test import TestCase
+from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import reverse
 
@@ -27,6 +27,17 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertTemplateUsed(response, 'wagtailmedia/media/index.html')
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
+
+    @modify_settings(INSTALLED_APPS={
+        'prepend': 'wagtailmedia.tests.testextends',
+    })
+    def test_extends(self):
+        response = self.client.get(reverse('wagtailmedia:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/index.html')
+        self.assertNotContains(response, "Add audio")
+        self.assertNotContains(response, "Add video")
+        self.assertContains(response, "You shan't act")
 
     def test_search(self):
         response = self.client.get(reverse('wagtailmedia:index'), {'q': "Hello"})
@@ -103,6 +114,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
         self.assertContains(response, 'Add audio')
+        self.assertNotContains(response, 'Add audio or video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
@@ -116,6 +128,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
         self.assertContains(response, 'Add video')
+        self.assertNotContains(response, 'Add audio or video')
         self.assertContains(
             response,
             '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
@@ -127,6 +140,14 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         # as standard, only the root collection exists and so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, '<label for="id_collection">')
+
+    def test_get_audio_or_video(self):
+        response = self.client.get(reverse('wagtailmedia:add', args=('media', )))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
+
+        self.assertNotContains(response, 'Add video')
+        self.assertContains(response, 'Add audio or video')
 
     def test_get_audio_with_collections(self):
         root_collection = Collection.get_first_root_node()
@@ -397,6 +418,20 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:edit', args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/edit.html')
+        self.assertContains(response, "Filesize")
+
+    @modify_settings(INSTALLED_APPS={
+        'prepend': 'wagtailmedia.tests.testextends',
+    })
+    def test_extends(self):
+        response = self.client.get(reverse('wagtailmedia:edit', args=(self.media.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/edit.html')
+        self.assertNotContains(response, "Filesize")
+        self.assertContains(response, "sweet-style")
+        self.assertContains(response, "sweet-code")
+        self.assertContains(response, "sweet-form-row")
+        self.assertContains(response, "sweet-stats")
 
     def test_post(self):
         # Build a fake file
