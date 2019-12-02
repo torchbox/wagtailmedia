@@ -20,6 +20,7 @@
     {% trans "Editing" as editing_str %}
     {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=media.title icon="media" usage_object=media %}
 
+    {% block form_row %}
     <div class="row row-flush nice-padding">
 
         <div class="col10 divider-after">
@@ -46,6 +47,7 @@
         </div>
         <div class="col2">
             <dl>
+                {% block media_stats %}
                 {% if media.file %}
                     <dt>{% trans "Filesize" %}</dt>
                     <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
@@ -58,10 +60,11 @@
                         <a href="{{ media.usage_url }}">{% blocktrans count usage_count=media.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>
                     </dd>
                 {% endif %}
+                {% endblock %}
             </dl>
         </div>
     </div>
-
+    {% endblock %}
 
     </div>
 {% endblock %}
