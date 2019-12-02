@@ -408,6 +408,20 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse('wagtailmedia:edit', args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/edit.html')
+        self.assertContains(response, "Filesize")
+    
+    @modify_settings(INSTALLED_APPS={
+        'prepend': 'wagtailmedia.tests.testextends',
+    })
+    def test_extends(self):
+        response = self.client.get(reverse('wagtailmedia:edit', args=(self.media.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wagtailmedia/media/edit.html')
+        self.assertNotContains(response, "Filesize")
+        self.assertContains(response, "sweet-style")
+        self.assertContains(response, "sweet-code")
+        self.assertContains(response, "sweet-form-row")
+        self.assertContains(response, "sweet-stats")
 
     def test_post(self):
         # Build a fake file
