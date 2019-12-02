@@ -85,7 +85,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     def sources(self):
         return [{
             'src': self.url,
-            'type': mimetypes.guess_type(self.filename)[0],
+            'type': mimetypes.guess_type(self.filename)[0] or 'application/octet-stream',
         }]
 
     def get_usage(self):
