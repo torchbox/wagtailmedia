@@ -38,6 +38,7 @@
                 </form>
             </div>
             {% if user_can_add %}
+                {% block add_actions %}
                 <div class="right">
                     <div class="addbutton">
                         <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button bicolor icon icon-plus">{% trans "Add audio" %}</a>
@@ -50,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                {% endblock %}
             {% endif %}
         </div>
     </header>
