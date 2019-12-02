@@ -27,7 +27,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertTemplateUsed(response, 'wagtailmedia/media/index.html')
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
-    
+
     @modify_settings(INSTALLED_APPS={
         'prepend': 'wagtailmedia.tests.testextends',
     })
@@ -419,7 +419,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wagtailmedia/media/edit.html')
         self.assertContains(response, "Filesize")
-    
+
     @modify_settings(INSTALLED_APPS={
         'prepend': 'wagtailmedia.tests.testextends',
     })
