@@ -77,5 +77,5 @@ class TestAbstractMediaInterfaceModel(TestCase):
         media.file = File(fake_file)
         self.assertEqual(media.sources, [{
             'src': '/media/movie',
-            'type': None,
+            'type': 'application/octet-stream',
         }])
