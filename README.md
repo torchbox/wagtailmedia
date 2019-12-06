@@ -59,7 +59,7 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
 
-### Hooks
+### Hooks
 
 #### `construct_media_chooser_queryset`
 
