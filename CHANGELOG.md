@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## [0.4.0] - 2019-12-06
+
+- Added `construct_media_chooser_queryset` hook ([#60](https://github.com/torchbox/wagtailmedia/pull/60)). Thanks to [@jeromelebleu](https://github.com/jeromelebleu) 
+- Added further template blocks ([#79](https://github.com/torchbox/wagtailmedia/pull/79)). Thanks to [@thenewguy](https://github.com/thenewguy)
+- Added support for media renditions ([#67](https://github.com/torchbox/wagtailmedia/pull/67)). Thanks to [@thenewguy](https://github.com/thenewguy)
+- Fixed Wagtail 2.7 compatibility ([#63](https://github.com/torchbox/wagtailmedia/pull/63)). Thanks to [@Chris-May](https://github.com/Chris-May)
+
+### New template blocks
+
+- [wagtailmedia/media/edit.html](https://github.com/torchbox/wagtailmedia/blob/master/wagtailmedia/templates/wagtailmedia/media/edit.html) has the new `form_row` and `media_stats` blocks
+- [wagtailmedia/media/index.htm](https://github.com/torchbox/wagtailmedia/blob/master/wagtailmedia/templates/wagtailmedia/media/index.html) has the new `add_actions` block
+
 ## [0.3.1] - 2019-05-22
 
 ### Changed
