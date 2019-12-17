@@ -194,3 +194,5 @@ Now you can run tests as shown below:
 ```sh
 python runtests.py
 ```
+
+[You can also use the preconfigured vagrant environment for local testing.](vagrant/README)
