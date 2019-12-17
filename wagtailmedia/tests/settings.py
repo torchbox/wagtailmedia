@@ -27,7 +27,7 @@ else:
             'USER': os.environ.get('DATABASE_USER', None),
             'PASSWORD': os.environ.get('DATABASE_PASS', None),
             'HOST': os.environ.get('DATABASE_HOST', None),
-    
+
             'TEST': {
                 'NAME': os.environ.get('DATABASE_NAME', None),
             }
@@ -133,7 +133,8 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
-# must be set for interactive demo, copied per https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
+# must be set for interactive demo, copied per
+# https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
 
 WAGTAIL_SITE_NAME = "Test Site"
