@@ -24,3 +24,9 @@ To run interactive demo inside the vagrant guest:
     log in credentials:
         username: super
         password: super
+
+To run flake8 inside the vagrant guest:
+    bash /vagrant/vagrant/runtox.sh -vv -e flake -- flake8 wagtailmedia
+
+To run isort inside the vagrant guest:
+    bash /vagrant/vagrant/runtox.sh -vv -e isort -- isort --check-only --diff --recursive wagtailmedia
