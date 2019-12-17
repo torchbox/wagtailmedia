@@ -29,4 +29,4 @@ To run flake8 inside the vagrant guest:
     bash /vagrant/vagrant/runtox.sh -vv -e flake
 
 To run isort inside the vagrant guest:
-    bash /vagrant/vagrant/runtox.sh -vv -e isort -- isort --check-only --diff --recursive wagtailmedia
+    bash /vagrant/vagrant/runtox.sh -vv -e isort
