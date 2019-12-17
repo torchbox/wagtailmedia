@@ -26,7 +26,7 @@ To run interactive demo inside the vagrant guest:
         password: super
 
 To run flake8 inside the vagrant guest:
-    bash /vagrant/vagrant/runtox.sh -vv -e flake
+    bash /vagrant/vagrant/runtox.sh -e flake
 
 To run isort inside the vagrant guest:
-    bash /vagrant/vagrant/runtox.sh -vv -e isort
+    bash /vagrant/vagrant/runtox.sh -e isort
