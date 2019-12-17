@@ -9,7 +9,7 @@ To run tests:
         vagrant ssh
     
     then:
-        bash /vagrant/vagrant/runtox.sh -vv -e py35-dj20-wag22
+        bash /vagrant/vagrant/runtox.sh -e py35-dj20-wag22
 
 To run interactive demo inside the vagrant guest:
     ** note: you might need to manually pull the docker images in tox.ini manually on the first run! it hangs for me occasionally **
