@@ -195,4 +195,5 @@ Now you can run tests as shown below:
 python runtests.py
 ```
 
-[You can also use the provided vagrant environment for local testing.](vagrant/README)
+Alternately, you can skip local configuration and use the provided vagrant environment for testing.
+[Reference its README for further details.](vagrant/README)
