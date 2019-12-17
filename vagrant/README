@@ -1,0 +1,12 @@
+CREATES A VAGRANT ENVIRONMENT TO FACILITATE LOCAL TESTING
+
+========
+USAGE:
+========
+To run tests:
+    cd to this directory on the host machine and issue the following commands:
+        vagrant up
+        vagrant ssh
+    
+    then:
+        bash /vagrant/vagrant/runtox.sh -e py35-dj20-wag22
