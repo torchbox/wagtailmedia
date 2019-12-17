@@ -1,12 +1,11 @@
 import re
 
 from django.conf import settings
-from django.conf.urls import include, url, re_path
+from django.conf.urls import include, re_path, url
 from django.views.static import serve
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
-
 
 urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
