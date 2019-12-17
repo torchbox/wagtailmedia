@@ -1,5 +1,7 @@
 import os
 
+DEBUG = 'INTERACTIVE' in os.environ
+
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-static')
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-media')
