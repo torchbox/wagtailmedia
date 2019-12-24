@@ -23,6 +23,13 @@ else:
 
 
 class BaseMediaForm(BaseCollectionMemberForm):
+    class Meta:
+        widgets={
+            'tags': widgets.AdminTagWidget,
+            'file': forms.FileInput,
+            'thumbnail': forms.ClearableFileInput,
+        }
+    
     permission_policy = media_permission_policy
 
     def __init__(self, *args, **kwargs):
@@ -61,11 +68,7 @@ def get_media_form(model):
         model,
         form=media_base_form,
         fields=fields,
-        widgets={
-            'tags': widgets.AdminTagWidget,
-            'file': forms.FileInput(),
-            'thumbnail': forms.ClearableFileInput(),
-        })
+    )
 
 
 GroupMediaPermissionFormSet = collection_member_permission_formset_factory(
