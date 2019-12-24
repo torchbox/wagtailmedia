@@ -18,9 +18,14 @@ testing_extras = [
     # For coverage and PEP8 linting
     'coverage>=3.7.0',
     'flake8>=2.2.0',
+    'isort',
 
     # Required for matrix build on Travis
     'tox==3.9.0',
+    
+    # Required for interactive testing via tox
+    'psycopg2-binary',
+    'django-redis-cache',
 ]
 
 with io.open('README.md', encoding='utf-8') as readme_file:

@@ -1,23 +1,38 @@
 import os
 
+DEBUG = 'INTERACTIVE' in os.environ
+
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-static')
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, 'test-media')
 MEDIA_URL = '/media/'
 
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('DATABASE_NAME', 'wagtailmedia'),
-        'USER': os.environ.get('DATABASE_USER', None),
-        'PASSWORD': os.environ.get('DATABASE_PASS', None),
-        'HOST': os.environ.get('DATABASE_HOST', None),
-
-        'TEST': {
-            'NAME': os.environ.get('DATABASE_NAME', None),
+POSTGRES_PORT = os.getenv('POSTGRES_5432_TCP_PORT', '')
+if POSTGRES_PORT:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'pgdb',
+            'USER': 'pguser',
+            'PASSWORD': 'pgpass',
+            'HOST': 'localhost',
+            'PORT': POSTGRES_PORT,
         }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': os.environ.get('DATABASE_NAME', 'wagtailmedia'),
+            'USER': os.environ.get('DATABASE_USER', None),
+            'PASSWORD': os.environ.get('DATABASE_PASS', None),
+            'HOST': os.environ.get('DATABASE_HOST', None),
+
+            'TEST': {
+                'NAME': os.environ.get('DATABASE_NAME', None),
+            }
+        }
+    }
 
 
 SECRET_KEY = 'not needed'
@@ -89,12 +104,23 @@ INSTALLED_APPS = [
 # Using DatabaseCache to make sure THAT the cache is cleared between tests.
 # This prevents false-positives in some wagtail core tests where we are
 # changing the 'wagtail_root_paths' key which may cause future tests to fail.
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cache',
+
+REDIS_PORT = os.getenv('REDIS_6379_TCP_PORT', '')
+
+if REDIS_PORT:
+    CACHES = {
+        "default": {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': 'localhost:%s' % REDIS_PORT,
+        },
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'cache',
+        }
+    }
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',  # don't use the intentionally slow default password hasher
@@ -107,5 +133,8 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
+# must be set for interactive demo, copied per
+# https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
 
 WAGTAIL_SITE_NAME = "Test Site"

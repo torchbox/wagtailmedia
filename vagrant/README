@@ -1,0 +1,35 @@
+CREATES A VAGRANT ENVIRONMENT TO FACILITATE LOCAL TESTING
+
+** VAGRANT MUST BE INSTALLED FOR THIS TO WORK! **
+IF YOU ARE NOT FAMILIAR WITH VAGRANT, [FOLLOW THE INSTALLATION INSTRUCTIONS BEFORE CONTINUING](https://www.vagrantup.com/docs/installation/).
+
+========
+USAGE:
+========
+To run tests:
+    cd to this directory on the host machine and issue the following commands:
+        vagrant up
+        vagrant ssh
+    
+    then:
+        bash /vagrant/vagrant/runtox.sh -e py35-dj20-wag22
+
+To run interactive demo inside the vagrant guest:
+    ** note: you might need to manually pull the docker images in tox.ini manually on the first run! it hangs for me occasionally **
+    docker pull redis:5.0
+    docker pull postgres:12.0
+    
+    bash /vagrant/vagrant/runtox.sh -e interactive
+    
+    then:
+        open your browser on the host and navigate to http://localhost:8020/admin/
+    
+    log in credentials:
+        username: super
+        password: super
+
+To run flake8 inside the vagrant guest:
+    bash /vagrant/vagrant/runtox.sh -e flake
+
+To run isort inside the vagrant guest:
+    bash /vagrant/vagrant/runtox.sh -e isort
