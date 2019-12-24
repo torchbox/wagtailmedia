@@ -1,13 +1,15 @@
 from django.forms import ModelForm
-from django.forms.widgets import ClearableFileInput
+from django.forms.widgets import Widget
 
 
-class AlternateFileInput(ClearableFileInput):
+class OverridenWidget(Widget):
     pass
 
 
 class AlternateMediaForm(ModelForm):
     class Meta:
         widgets = {
-            'file': AlternateFileInput
+            'tags': OverridenWidget,
+            'file': OverridenWidget,
+            'thumbnail': OverridenWidget,
         }
