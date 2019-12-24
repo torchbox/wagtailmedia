@@ -24,7 +24,7 @@ else:
 
 class BaseMediaForm(BaseCollectionMemberForm):
     class Meta:
-        widgets={
+        widgets = {
             'tags': widgets.AdminTagWidget,
             'file': forms.FileInput,
             'thumbnail': forms.ClearableFileInput,
