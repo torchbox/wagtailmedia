@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.conf import settings
 from django.forms.models import modelform_factory
+from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail import VERSION as WAGTAIL_VERSION
@@ -36,6 +38,16 @@ class BaseMediaForm(BaseCollectionMemberForm):
                     del self.fields[name]
 
 
+def get_media_base_form():
+    base_form_override = getattr(settings, 'WAGTAILMEDIA_MEDIA_FORM', '')
+    if base_form_override:
+        base_form = import_string(base_form_override)
+    else:
+        base_form = BaseMediaForm
+    return base_form
+
+media_base_form = get_media_base_form()
+
 def get_media_form(model):
     fields = model.admin_form_fields
     if 'collection' not in fields:
@@ -47,7 +59,7 @@ def get_media_form(model):
 
     return modelform_factory(
         model,
-        form=BaseMediaForm,
+        form=media_base_form,
         fields=fields,
         widgets={
             'tags': widgets.AdminTagWidget,

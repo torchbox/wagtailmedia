@@ -59,6 +59,8 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
 
+You can customize the model form used with your `Media` model with the `WAGTAILMEDIA_MEDIA_FORM` setting.  It should be the dotted path to the form.
+
 ### Hooks
 
 #### `construct_media_chooser_queryset`
