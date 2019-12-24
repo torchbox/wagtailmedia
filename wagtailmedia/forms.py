@@ -43,7 +43,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
 
 
 def get_media_base_form():
-    base_form_override = getattr(settings, 'WAGTAILMEDIA_MEDIA_FORM', '')
+    base_form_override = getattr(settings, 'WAGTAILMEDIA_MEDIA_FORM_BASE', '')
     if base_form_override:
         base_form = import_string(base_form_override)
     else:
