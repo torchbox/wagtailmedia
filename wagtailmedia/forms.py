@@ -35,9 +35,6 @@ class BaseMediaForm(BaseCollectionMemberForm):
     def __init__(self, *args, **kwargs):
         super(BaseMediaForm, self).__init__(*args, **kwargs)
 
-        # We will need to exclude duration, width, height, thumbnail
-        # if we would get this information from files metadata
-
         if self.instance.type == 'audio':
             for name in ('width', 'height'):
                 # these fields might be editable=False so verify before accessing
