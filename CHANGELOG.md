@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added interactive demo ([#82](https://github.com/torchbox/wagtailmedia/pull/82)). Thanks to [@thenewguy](https://github.com/thenewguy)
+- Added setting `WAGTAILMEDIA_MEDIA_FORM_BASE` to simplify customization of the media form ([#83](https://github.com/torchbox/wagtailmedia/pull/83)). Thanks to [@thenewguy](https://github.com/thenewguy)
+
 ## [0.4.0] - 2019-12-06
 
 - Added `construct_media_chooser_queryset` hook ([#60](https://github.com/torchbox/wagtailmedia/pull/60)). Thanks to [@jeromelebleu](https://github.com/jeromelebleu) 
