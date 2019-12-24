@@ -29,7 +29,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
             'file': forms.FileInput,
             'thumbnail': forms.ClearableFileInput,
         }
-    
+
     permission_policy = media_permission_policy
 
     def __init__(self, *args, **kwargs):
@@ -50,7 +50,9 @@ def get_media_base_form():
         base_form = BaseMediaForm
     return base_form
 
+
 media_base_form = get_media_base_form()
+
 
 def get_media_form(model):
     fields = model.admin_form_fields

@@ -11,15 +11,15 @@ from wagtailmedia.tests.testapp.forms import AlternateMediaForm, OverridenWidget
 class TestFormOverride(TestCase):
     def test_media_base_form(self):
         self.assertIs(media_base_form, BaseMediaForm)
-    
+
     def test_get_media_base_form(self):
         self.assertIs(get_media_base_form(), BaseMediaForm)
-    
+
     def test_get_media_form(self):
         bases = get_media_form(models.Media).__bases__
         self.assertIn(BaseMediaForm, bases)
         self.assertNotIn(AlternateMediaForm, bases)
-    
+
     def test_get_media_form_widgets(self):
         Form = get_media_form(models.Media)
         form = Form()
@@ -30,13 +30,13 @@ class TestFormOverride(TestCase):
     @override_settings(WAGTAILMEDIA_MEDIA_FORM='wagtailmedia.tests.testapp.forms.AlternateMediaForm')
     def test_overridden_base_form(self):
         self.assertIs(get_media_base_form(), AlternateMediaForm)
-    
+
     @patch('wagtailmedia.forms.media_base_form', AlternateMediaForm)
     def test_get_overridden_media_form(self):
         bases = get_media_form(models.Media).__bases__
         self.assertNotIn(BaseMediaForm, bases)
         self.assertIn(AlternateMediaForm, bases)
-    
+
     @patch('wagtailmedia.forms.media_base_form', AlternateMediaForm)
     def test_get_overridden_media_form_widgets(self):
         Form = get_media_form(models.Media)
