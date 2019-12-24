@@ -2,9 +2,11 @@ from unittest.mock import patch
 
 from django import forms
 from django.test import TestCase, override_settings
+
 from wagtail.admin import widgets
+
 from wagtailmedia import models
-from wagtailmedia.forms import BaseMediaForm, get_media_form, get_media_base_form, media_base_form
+from wagtailmedia.forms import BaseMediaForm, get_media_base_form, get_media_form, media_base_form
 from wagtailmedia.tests.testapp.forms import AlternateMediaForm, OverridenWidget
 
 
