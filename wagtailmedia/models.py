@@ -14,7 +14,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
-
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
