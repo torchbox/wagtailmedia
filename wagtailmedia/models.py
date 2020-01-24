@@ -14,10 +14,16 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
-from wagtail.admin.utils import get_object_usage
+
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
+
+if WAGTAIL_VERSION < (2, 9):
+    from wagtail.admin.utils import get_object_usage
+else:
+    from wagtail.admin.models import get_object_usage
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
