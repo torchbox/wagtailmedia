@@ -29,7 +29,8 @@ else:
 try:
     from django.utils.encoding import python_2_unicode_compatible
 except ImportError:
-    python_2_unicode_compatible = lambda x: x
+    def python_2_unicode_compatible(x):
+        return x
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
