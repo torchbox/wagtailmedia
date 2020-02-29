@@ -78,3 +78,13 @@ GroupMediaPermissionFormSet = collection_member_permission_formset_factory(
     ],
     'wagtailmedia/permissions/includes/media_permissions_formset.html'
 )
+
+
+class MediaInsertionForm(forms.Form):
+    """
+    Form for customizing media player behavior (e.g. autoplay by default)
+    prior to insertion into a rich text area
+    """
+    autoplay = forms.BooleanField(required=False)
+    mute = forms.BooleanField(required=False)
+    loop = forms.BooleanField(required=False)

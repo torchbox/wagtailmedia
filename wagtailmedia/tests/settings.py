@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.users',
     'wagtail.documents',
+    'wagtail.embeds',
     'wagtail.admin',
     'wagtail.core',
 ]

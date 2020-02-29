@@ -1,0 +1,10 @@
+{% block video %}
+	<video class="wagtailmedia-video"
+		controls
+		{% if mute %}muted{% endif %}
+		{% if autoplay %}autoplay{% endif %}
+		{% if loop %}loop{% endif %}
+		{% if thumbnail %}poster="{{thumbnail}}"{% endif %}>
+		<source src="{{file}}" data-title={{title}}>
+	</video>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load wagtailimages_tags %}
+{% load i18n %}
+{% trans "Media Player Options" as choose_str %}
+{% include "wagtailadmin/shared/header.html" with title=choose_str %}
+
+<div class="row row-flush nice-padding">
+	<div class="col5">
+		{% if media.thumbnail %}
+			<img src="{{media.thumbnail.url}}" alt="{{media.title}}">
+		{% elif media.type == 'video' %}
+			<div class="media-thumbnail-placeholder video">
+				<i class="icon icon-fa-video-camera"></i>
+			</div>
+		{% elif media.type == 'audio' %}
+			<div class="media-thumbnail-placeholder audio">
+				<i class="icon icon-fa-music"></i>
+			</div>
+		{% endif %}
+	</div>
+	<div class="col7">
+		<form action="{% url 'wagtailmedia:chooser_select_format' media.id %}" class="media-player-settings" method="POST" novalidate>
+			{% csrf_token %}
+			<ul class="fields">
+				{% for field in form %}
+					{% include "wagtailadmin/shared/field_as_li.html" with field=field %}
+				{% endfor %}
+				<li><input type="submit" value="{% trans 'Insert media' %}"  class="button" /></li>
+			</ul>
+		</form>
+	</div>
+</div>
