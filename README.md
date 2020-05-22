@@ -1,4 +1,4 @@
-# [wagtailmedia](https://pypi.org/project/wagtailmedia/) [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)  [![PyPI downloads](https://img.shields.io/pypi/dm/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://travis-ci.org/torchbox/wagtailmedia.svg?branch=master)](https://travis-ci.org/torchbox/wagtailmedia)
+# [wagtailmedia](https://pypi.org/project/wagtailmedia/) [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)  [![PyPI downloads](https://img.shields.io/pypi/dm/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://travis-ci.org/torchbox/wagtailmedia.svg?branch=master)](https://travis-ci.org/torchbox/wagtailmedia) [![Coverage](https://codecov.io/github/torchbox/wagtailmedia/coverage.svg?branch=master)](https://codecov.io/github/torchbox/wagtailmedia?branch=master)
 
 A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
