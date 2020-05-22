@@ -1,14 +1,13 @@
+version: ~> 1.0
+os: linux
+dist: bionic
 language: python
 cache:
   pip: true
   directories:
     - .tox
 
-# Use container-based infrastructure
-dist: xenial
-sudo: false
-
-matrix:
+jobs:
   include:
    - env: TOXENV=py37-dj22-wag27
      python: 3.7
