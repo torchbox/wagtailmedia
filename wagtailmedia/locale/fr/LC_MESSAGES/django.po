@@ -1,0 +1,362 @@
+# Translations for wagtailmedia
+# Copyright (C) 2014 Torchbox Ltd and individual contributors.
+# This file is distributed under the same license as the wagtailmedia package.
+#
+# Translators:
+# Jérôme Lebleu, 2019
+msgid ""
+msgstr ""
+"Project-Id-Version: wagtailmedia\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-22 16:23-0500\n"
+"PO-Revision-Date: 2020-05-22 16:23-0500\n"
+"Last-Translator: Jérôme Lebleu\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.3\n"
+
+#: forms.py:76
+msgid "Add"
+msgstr "Ajouter"
+
+#: forms.py:76
+msgid "Add/edit media you own"
+msgstr "Ajouter/modifier vos médias"
+
+#: forms.py:77 views/media.py:118 views/media.py:159
+msgid "Edit"
+msgstr "Modifier"
+
+#: forms.py:77
+msgid "Edit any media"
+msgstr "Modifier n’importe quel média"
+
+#: models.py:43
+msgid "Audio file"
+msgstr "Fichier audio"
+
+#: models.py:44
+msgid "Video file"
+msgstr "Fichier vidéo"
+
+#: models.py:47
+msgid "title"
+msgstr "titre"
+
+#: models.py:48
+msgid "file"
+msgstr "fichier"
+
+#: models.py:51
+msgid "duration"
+msgstr "durée"
+
+#: models.py:51
+msgid "Duration in seconds"
+msgstr "Durée en secondes"
+
+#: models.py:52
+msgid "width"
+msgstr "largeur"
+
+#: models.py:53
+msgid "height"
+msgstr "hauteur"
+
+#: models.py:54
+msgid "thumbnail"
+msgstr "vignette"
+
+#: models.py:56
+msgid "created at"
+msgstr "créé le"
+
+#: models.py:59
+msgid "uploaded by user"
+msgstr "transféré par l’utilisateur"
+
+#: models.py:66
+msgid "tags"
+msgstr "mots-clés"
+
+#: models.py:118
+msgid "media"
+msgstr "média"
+
+#: templates/wagtailmedia/chooser/chooser.html:2
+msgid "Choose a media file"
+msgstr "Choisir un fichier multimédia"
+
+#: templates/wagtailmedia/chooser/results.html:5
+#: templates/wagtailmedia/media/results.html:5
+#, python-format
+msgid ""
+"\n"
+"            There is one match\n"
+"        "
+msgid_plural ""
+"\n"
+"            There are %(counter)s matches\n"
+"        "
+msgstr[0] ""
+"\n"
+"            Il y a une correspondance\n"
+"        "
+msgstr[1] ""
+"\n"
+"            Il y a %(counter)s correspondances\n"
+"        "
+
+#: templates/wagtailmedia/chooser/results.html:12
+msgid "Latest media"
+msgstr "Derniers médias"
+
+#: templates/wagtailmedia/chooser/results.html:19
+#: templates/wagtailmedia/media/results.html:20
+#, python-format
+msgid "Sorry, no media files match \"<em>%(query_string)s</em>\""
+msgstr "Désolé, aucun média ne correspond à \"<em>%(query_string)s</em>\""
+
+#: templates/wagtailmedia/homepage/site_summary_media.html:5
+#, python-format
+msgid ""
+"\n"
+"        <span>%(total)s</span> Media file\n"
+"    "
+msgid_plural ""
+"\n"
+"        <span>%(total)s</span> Media files\n"
+"    "
+msgstr[0] ""
+"\n"
+"        <span>%(total)s</span> média\n"
+"    "
+msgstr[1] ""
+"\n"
+"        <span>%(total)s</span> médias\n"
+"    "
+
+#: templates/wagtailmedia/media/_file_field.html:5
+msgid "Change media file:"
+msgstr "Modifier le fichier multimédia :"
+
+#: templates/wagtailmedia/media/_thumbnail_field.html:9
+msgid "Change thumbnail file:"
+msgstr "Modifier la vignette :"
+
+#: templates/wagtailmedia/media/add.html:6
+#: templates/wagtailmedia/media/add.html:29
+#: templates/wagtailmedia/media/index.html:44
+msgid "Add audio"
+msgstr "Ajouter un son"
+
+#: templates/wagtailmedia/media/add.html:8
+#: templates/wagtailmedia/media/add.html:31
+#: templates/wagtailmedia/media/index.html:50
+msgid "Add video"
+msgstr "Ajouter une vidéo"
+
+#: templates/wagtailmedia/media/add.html:10
+#: templates/wagtailmedia/media/add.html:33
+msgid "Add audio or video"
+msgstr "Ajouter un son ou une vidéo"
+
+#: templates/wagtailmedia/media/add.html:45
+msgid "Uploading..."
+msgstr "Transfert…"
+
+#: templates/wagtailmedia/media/add.html:45
+msgid "Upload"
+msgstr "Transférer"
+
+#: templates/wagtailmedia/media/confirm_delete.html:3
+#, python-format
+msgid "Delete %(title)s"
+msgstr "Supprimer %(title)s"
+
+#: templates/wagtailmedia/media/confirm_delete.html:5
+msgid "Delete media file"
+msgstr "Supprime le média"
+
+#: templates/wagtailmedia/media/confirm_delete.html:12
+#: templates/wagtailmedia/media/edit.html:60
+#, python-format
+msgid "Used %(usage_count)s time"
+msgid_plural "Used %(usage_count)s times"
+msgstr[0] "Utilisé %(usage_count)s fois"
+msgstr[1] "Utilisé %(usage_count)s fois"
+
+#: templates/wagtailmedia/media/confirm_delete.html:16
+msgid "Are you sure you want to delete this media file?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer ce média ?"
+
+#: templates/wagtailmedia/media/confirm_delete.html:19
+msgid "Yes, delete"
+msgstr "Oui, supprimer"
+
+#: templates/wagtailmedia/media/edit.html:4
+#, python-format
+msgid "Editing %(title)s"
+msgstr "Édition de %(title)s"
+
+#: templates/wagtailmedia/media/edit.html:20
+msgid "Editing"
+msgstr "Modification"
+
+#: templates/wagtailmedia/media/edit.html:40
+msgid "Save"
+msgstr "Enregistrer"
+
+#: templates/wagtailmedia/media/edit.html:42 views/media.py:181
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/wagtailmedia/media/edit.html:52
+msgid "Filesize"
+msgstr "Taille du fichier"
+
+#: templates/wagtailmedia/media/edit.html:53
+msgid "File not found"
+msgstr "Fichier non trouvé"
+
+#: templates/wagtailmedia/media/edit.html:58
+msgid "Usage"
+msgstr "Utilisation"
+
+#: templates/wagtailmedia/media/index.html:22 wagtail_hooks.py:35
+#: wagtail_hooks.py:80
+msgid "Media"
+msgstr "Média"
+
+#: templates/wagtailmedia/media/list.html:11
+#: templates/wagtailmedia/media/list.html:14
+#: templates/wagtailmedia/media/usage.html:16
+msgid "Title"
+msgstr "Titre"
+
+#: templates/wagtailmedia/media/list.html:17
+msgid "File"
+msgstr "Fichier"
+
+#: templates/wagtailmedia/media/list.html:18
+#: templates/wagtailmedia/media/usage.html:18
+msgid "Type"
+msgstr "Type"
+
+#: templates/wagtailmedia/media/list.html:22
+#: templates/wagtailmedia/media/list.html:25
+msgid "Uploaded"
+msgstr "Transféré"
+
+#: templates/wagtailmedia/media/results.html:27
+#, python-format
+msgid ""
+"You haven't uploaded any media files in this collection. You can upload <a "
+"href=\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+"Vous n’avez pas encore transféré de média dans cette collection. Vous pouvez "
+"ajouter un fichier <a href=\"%(wagtailmedia_add_audio_url)s\">audio</a> ou "
+"<a href=\"%(wagtailmedia_add_video_url)s\">vidéo</a>."
+
+#: templates/wagtailmedia/media/results.html:29
+#, python-format
+msgid ""
+"You haven't uploaded any media files. You can upload <a href="
+"\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+"Vous n’avez pas encore transféré de média. Vous pouvez ajouter un fichier <a "
+"href=\"%(wagtailmedia_add_audio_url)s\">audio</a> ou <a href="
+"\"%(wagtailmedia_add_video_url)s\">vidéo</a>."
+
+#: templates/wagtailmedia/media/usage.html:3
+#, python-format
+msgid "Usage of %(title)s"
+msgstr "Utilisation de %(title)s"
+
+#: templates/wagtailmedia/media/usage.html:5
+msgid "Usage of"
+msgstr "Utilisation de"
+
+#: templates/wagtailmedia/media/usage.html:17
+msgid "Parent"
+msgstr "Parent"
+
+#: templates/wagtailmedia/media/usage.html:19
+msgid "Status"
+msgstr "Statut"
+
+#: templates/wagtailmedia/media/usage.html:26
+msgid "Edit this page"
+msgstr "Modifier cette page"
+
+#: templates/wagtailmedia/permissions/includes/media_permissions_formset.html:4
+msgid "Media permissions"
+msgstr "Permissions de média"
+
+#: templates/wagtailmedia/permissions/includes/media_permissions_formset.html:5
+msgid "Add a media permission"
+msgstr "Ajouter une permission de média"
+
+#: views/media.py:63
+msgid "Search media files"
+msgstr "Rechercher des médias"
+
+#: views/media.py:68
+msgid "Search media"
+msgstr "Rechercher des médias"
+
+#: views/media.py:117
+#, python-brace-format
+msgid "Media file '{0}' added."
+msgstr "Média '{0}' ajouté."
+
+#: views/media.py:122
+msgid "The media file could not be saved due to errors."
+msgstr "Le média ne peut être enregistré du fait d’erreurs."
+
+#: views/media.py:158
+#, python-brace-format
+msgid "Media file '{0}' updated"
+msgstr "Média '{0}' mis à jour"
+
+#: views/media.py:163
+msgid "The media could not be saved due to errors."
+msgstr "Le média ne peut être enregistré du fait d’erreurs."
+
+#: views/media.py:180
+msgid ""
+"The file could not be found. Please change the source or delete the media "
+"file"
+msgstr ""
+"Le fichier n’a pas été trouvé. Veuillez changer la source ou supprimer le "
+"média"
+
+#: views/media.py:204
+#, python-brace-format
+msgid "Media file '{0}' deleted."
+msgstr "Média '{0}' supprimé."
+
+#: wagtail_hooks.py:100
+#, python-format
+msgid "%(count)s media file"
+msgid_plural "%(count)s media files"
+msgstr[0] "%(count)s média"
+msgstr[1] "%(count)s médias"
+
+#: widgets.py:14
+msgid "Choose a media item"
+msgstr "Choisir un média"
+
+#: widgets.py:15
+msgid "Choose another media item"
+msgstr "Choisir un autre média"
+
+#: widgets.py:16
+msgid "Edit this media item"
+msgstr "Modifier ce média"

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added filtering of media files by user permission in chooser panel ([#25](https://github.com/torchbox/wagtailmedia/pull/25)). Thanks to [@snj](https://github.com/snj)
+- Added French translations ([#61](https://github.com/torchbox/wagtailmedia/pull/61)). Thanks to [@jeromelebleu](https://github.com/jeromelebleu).
 
 ## [0.5.0] - 2020-02-20
 
