@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- TBC
+- Added filtering of media files by user permission in chooser panel ([#25](https://github.com/torchbox/wagtailmedia/pull/25)). Thanks to [@snj](https://github.com/snj)
 
 ## [0.5.0] - 2020-02-20
 
