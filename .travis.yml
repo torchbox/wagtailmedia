@@ -1,7 +1,8 @@
 language: python
-python: "3.6"
 cache:
   pip: true
+  directories:
+    - .tox
 
 # Use container-based infrastructure
 dist: xenial
