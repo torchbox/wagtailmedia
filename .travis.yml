@@ -1,40 +1,43 @@
+version: ~> 1.0
+os: linux
+dist: bionic
 language: python
-python: "3.6"
 cache:
   pip: true
+  directories:
+    - .tox
 
-# Use container-based infrastructure
-dist: xenial
-sudo: false
-
-matrix:
+jobs:
   include:
-   - env: TOXENV=py37-dj22-wag27
-     python: 3.7
-   - env: TOXENV=py37-dj22-wag26
-     python: 3.7
-   - env: TOXENV=py37-dj22-wag25
-     python: 3.7
-   - env: TOXENV=py36-dj21-wag24
-     python: 3.6
-   - env: TOXENV=py36-dj21-wag23
-     python: 3.6
-   - env: TOXENV=py36-dj20-wag22
-     python: 3.6
-   - env: TOXENV=py35-dj20-wag22
-     python: 3.5
-   # Current Django LTS + current Wagtail LTS, with latest compatible Python.
-   # See https://docs.wagtail.io/en/v2.5.1/releases/upgrading.html
-   - env: TOXENV=py36-dj111-wag23
-     python: 3.6
+    - env: TOXENV=py37-dj22-wag27
+      python: 3.7
+      install:
+        - pip install tox==3.9.0 flake8 isort
+      script:
+        - flake8 wagtailmedia
+        - isort --check-only --diff --recursive wagtailmedia
+        - tox
+    - env: TOXENV=py37-dj22-wag26
+      python: 3.7
+    - env: TOXENV=py37-dj22-wag25
+      python: 3.7
+    - env: TOXENV=py36-dj21-wag24
+      python: 3.6
+    - env: TOXENV=py36-dj21-wag23
+      python: 3.6
+    - env: TOXENV=py36-dj20-wag22
+      python: 3.6
+    - env: TOXENV=py35-dj20-wag22
+      python: 3.5
+      # Current Django LTS + current Wagtail LTS, with latest compatible Python.
+      # See https://docs.wagtail.io/en/v2.5.1/releases/upgrading.html
+    - env: TOXENV=py36-dj111-wag23
+      python: 3.6
 
 install:
-  - pip install wheel flake8 isort
-  - pip install -e .[testing,docs]
+  - pip install tox==3.9.0
 
 script:
-  - flake8 wagtailmedia
-  - isort --check-only --diff --recursive wagtailmedia
   - tox
 
 after_success:
