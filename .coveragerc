@@ -6,6 +6,7 @@ source = wagtailmedia
 
 omit =
     */migrations/*
+    */tests/*
 
 
 [report]
