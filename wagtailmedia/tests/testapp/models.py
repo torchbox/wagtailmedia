@@ -4,7 +4,8 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
-from wagtail.documents.edit_handlers import DocumentChooserPanel
+
+from wagtailmedia.edit_handlers import MediaChooserPanel
 
 
 class EventPageRelatedMedia(Orderable):
@@ -24,7 +25,7 @@ class EventPageRelatedMedia(Orderable):
 
     panels = [
         FieldPanel('title'),
-        DocumentChooserPanel('link_media'),
+        MediaChooserPanel('link_media'),
     ]
 
 
