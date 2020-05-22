@@ -615,6 +615,56 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(response.context['media_files'][0], media)
 
 
+class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
+    def setUp(self):
+        add_media_permission = Permission.objects.get(
+            content_type__app_label='wagtailmedia', codename='add_media'
+        )
+        admin_permission = Permission.objects.get(
+            content_type__app_label='wagtailadmin', codename='access_admin'
+        )
+
+        self.root_collection = Collection.get_first_root_node()
+        self.evil_plans_collection = self.root_collection.add_child(name="Evil plans")
+
+        conspirators_group = Group.objects.create(name="Evil conspirators")
+        conspirators_group.permissions.add(admin_permission)
+        GroupCollectionPermission.objects.create(
+            group=conspirators_group,
+            collection=self.evil_plans_collection,
+            permission=add_media_permission
+        )
+
+        user = get_user_model().objects.create_user(
+            username='moriarty',
+            email='moriarty@example.com',
+            password='password'
+        )
+        user.groups.add(conspirators_group)
+
+        fake_file = ContentFile(b("A boring song"))
+        fake_file.name = 'test-song.mp3'
+        media = models.Media(
+                title="Test",
+                duration=100,
+                file=fake_file,
+                type='audio',
+                collection=self.root_collection,
+            )
+        media.save()
+
+    def test_all_permissions_views_root_media(self):
+        self.login()
+
+        response = self.client.get(reverse('wagtailmedia:chooser'), {'collection_id': self.root_collection.id})
+        self.assertIn('test-song.mp3', str(response.content))
+
+    def test_single_collection_permissions_views_nothing(self):
+        self.client.login(username='moriarty', password='password')
+        response = self.client.get(reverse('wagtailmedia:chooser'), {'collection_id': self.root_collection.id})
+        self.assertIn('Sorry, no media files', str(response.content))
+
+
 class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
