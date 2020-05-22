@@ -9,6 +9,12 @@ cache:
 
 jobs:
   include:
+    - python: 3.8
+      install:
+        - pip install flake8 isort
+      script:
+        - flake8 wagtailmedia
+        - isort --check-only --diff --recursive wagtailmedia
     - env: TOXENV=py37-dj22-wag27
       python: 3.7
     - env: TOXENV=py37-dj22-wag26
@@ -29,12 +35,9 @@ jobs:
       python: 3.6
 
 install:
-  - pip install wheel flake8 isort
-  - pip install -e .[testing,docs]
+  - pip install tox==3.9.0
 
 script:
-  - flake8 wagtailmedia
-  - isort --check-only --diff --recursive wagtailmedia
   - tox
 
 after_success:
