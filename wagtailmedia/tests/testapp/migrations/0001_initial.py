@@ -23,10 +23,10 @@ class Migration(migrations.Migration):
             name='EventPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('date_from', models.DateField(null=True, verbose_name=b'Start date')),
-                ('date_to', models.DateField(blank=True, help_text=b'Not required if event is on a single day', null=True, verbose_name=b'End date')),
-                ('time_from', models.TimeField(blank=True, null=True, verbose_name=b'Start time')),
-                ('time_to', models.TimeField(blank=True, null=True, verbose_name=b'End time')),
+                ('date_from', models.DateField(null=True, verbose_name='Start date')),
+                ('date_to', models.DateField(blank=True, help_text='Not required if event is on a single day', null=True, verbose_name='End date')),
+                ('time_from', models.TimeField(blank=True, null=True, verbose_name='Start time')),
+                ('time_to', models.TimeField(blank=True, null=True, verbose_name='End time')),
                 ('location', models.CharField(max_length=255)),
                 ('body', fields.RichTextField(blank=True)),
                 ('cost', models.CharField(max_length=255)),
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
-                ('title', models.CharField(help_text=b'Link title', max_length=255)),
+                ('title', models.CharField(help_text='Link title', max_length=255)),
                 ('link_media', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wagtailmedia.Media')),
                 ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='related_media', to='wagtailmedia_tests.EventPage')),
             ],
