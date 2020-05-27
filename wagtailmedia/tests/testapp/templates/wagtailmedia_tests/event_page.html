@@ -1,0 +1,18 @@
+{% load wagtailcore_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <h1>{{ page.title }}</h1>
+        <p>From <time>{{ page.date_from }}</time> to <time>{{ page.date_to }}</time>, in {{ page.location }}.</p>
+        {{ page.body|richtext }}
+    </main>
+</body>
+</html>
