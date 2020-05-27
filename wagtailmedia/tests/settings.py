@@ -135,6 +135,6 @@ WAGTAILSEARCH_BACKENDS = {
 
 # must be set for interactive demo, copied per
 # https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = '*'
 
 WAGTAIL_SITE_NAME = "Test Site"
