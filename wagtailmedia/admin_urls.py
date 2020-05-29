@@ -10,5 +10,6 @@ urlpatterns = [
 
     url(r'^chooser/$', chooser.chooser, name='chooser'),
     url(r'^chooser/(\d+)/$', chooser.media_chosen, name='media_chosen'),
+    url(r'^(\w+)/chooser/upload/$', chooser.chooser_upload, name='chooser_upload'),
     url(r'^usage/(\d+)/$', media.usage, name='media_usage'),
 ]
