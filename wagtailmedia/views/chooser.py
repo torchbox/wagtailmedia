@@ -145,6 +145,14 @@ def chooser_upload(request, media_type):
         form = MediaForm(
             instance=media, user=request.user, prefix='media-chooser-upload')
 
+    media_files = permission_policy.instances_user_has_any_permission_for(
+        request.user, ['change', 'delete']
+    )
+
+    # allow hooks to modify the queryset
+    for hook in hooks.get_hooks('construct_media_chooser_queryset'):
+        media_files = hook(media_files, request)
+
     media_files = Media.objects.order_by('-created_at')
     paginator, media_files = paginate(request, media_files, per_page=10)
 
