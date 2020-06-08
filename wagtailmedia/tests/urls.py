@@ -6,9 +6,11 @@ from django.views.static import serve
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
 
 urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
+    url(r'^documents/', include(wagtaildocs_urls)),
     url(r'', include(wagtail_urls)),
 ] + [
     url(r'^%s(?P<path>.*)$' % re.escape(prefix.lstrip('/')), serve, kwargs={'document_root': document_root})
