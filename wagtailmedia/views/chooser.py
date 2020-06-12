@@ -153,6 +153,12 @@ def chooser_upload(request, media_type):
     for hook in hooks.get_hooks('construct_media_chooser_queryset'):
         media_files = hook(media_files, request)
 
+    searchform = SearchForm()
+
+    collections = Collection.objects.all()
+    if len(collections) < 2:
+        collections = None
+
     media_files = Media.objects.order_by('-created_at')
     paginator, media_files = paginate(request, media_files, per_page=10)
 
@@ -160,6 +166,10 @@ def chooser_upload(request, media_type):
         'media_files': media_files,
         'uploadform': form,
         'media_type': media_type,
+        'searchform': searchform,
+        'collections': collections,
+        'is_searching': False,
+        'pagination_template': pagination_template,
     }
     return render_modal_workflow(
         request, 'wagtailmedia/chooser/chooser.html', None, context,
