@@ -140,10 +140,6 @@ def chooser_upload(request, media_type):
                 json_data={'step': 'media_chosen',
                            'result': get_media_json(media)}
             )
-    else:
-        media = Media(uploaded_by_user=request.user, type=media_type)
-        form = MediaForm(
-            instance=media, user=request.user, prefix='media-chooser-upload')
 
     media_files = permission_policy.instances_user_has_any_permission_for(
         request.user, ['change', 'delete']

@@ -720,22 +720,6 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
-    def test_simple_audio(self):
-        response = self.client.get(reverse(
-            'wagtailmedia:chooser_upload', args=('audio', )))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
-        response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['step'], 'chooser')
-
-    def test_simple_video(self):
-        response = self.client.get(reverse(
-            'wagtailmedia:chooser_upload', args=('video', )))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'wagtailmedia/chooser/chooser.html')
-        response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['step'], 'chooser')
-
     def test_upload_audio(self):
         response = self.client.post(
             reverse('wagtailmedia:chooser_upload', args=('audio', )), {
