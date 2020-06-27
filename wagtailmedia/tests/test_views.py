@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import json
+import os
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
@@ -104,6 +105,35 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 class TestMediaAddView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
+
+    def test_action_block(self):
+        with self.settings(TEMPLATES=[
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [
+                    os.path.join(os.path.dirname(__file__), 'templates')
+                ],
+                'APP_DIRS': True,
+                'OPTIONS': {
+                    'context_processors': [
+                        'django.template.context_processors.debug',
+                        'django.template.context_processors.request',
+                        'django.contrib.auth.context_processors.auth',
+                        'django.contrib.messages.context_processors.messages',
+                        'django.template.context_processors.request',
+                        'wagtail.contrib.settings.context_processors.settings',
+                    ],
+                    'debug': True,
+                },
+            }
+        ]):
+            response = self.client.get(reverse('wagtailmedia:add', args=('audio', )))
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
+            self.assertContains(
+                response,
+                '<form action="/somewhere/else" method="POST" enctype="multipart/form-data" novalidate>'
+            )
 
     def test_get_audio(self):
         response = self.client.get(reverse('wagtailmedia:add', args=('audio', )))
