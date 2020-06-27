@@ -105,9 +105,9 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 class TestMediaAddView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
-    
+
     def test_action_block(self):
-        with self.settings(TEMPLATES = [
+        with self.settings(TEMPLATES=[
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
                 'DIRS': [
@@ -130,7 +130,10 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
             response = self.client.get(reverse('wagtailmedia:add', args=('audio', )))
             self.assertEqual(response.status_code, 200)
             self.assertTemplateUsed(response, 'wagtailmedia/media/add.html')
-            self.assertContains(response, '<form action="/somewhere/else" method="POST" enctype="multipart/form-data" novalidate>')
+            self.assertContains(
+                response,
+                '<form action="/somewhere/else" method="POST" enctype="multipart/form-data" novalidate>'
+            )
 
     def test_get_audio(self):
         response = self.client.get(reverse('wagtailmedia:add', args=('audio', )))
