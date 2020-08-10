@@ -21,7 +21,9 @@ else:
     from wagtail.admin.forms.search import SearchForm
 
 if WAGTAIL_VERSION < (2, 9):
-    from wagtail.admin.utils import PermissionPolicyChecker, permission_denied, popular_tags_for_model
+    from wagtail.admin.utils import (
+        PermissionPolicyChecker, permission_denied, popular_tags_for_model
+    )
 else:
     from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
     from wagtail.admin.models import popular_tags_for_model

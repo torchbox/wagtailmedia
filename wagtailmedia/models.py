@@ -132,8 +132,8 @@ class Media(AbstractMedia):
 
 
 def get_media_model():
-    from django.conf import settings
     from django.apps import apps
+    from django.conf import settings
 
     try:
         app_label, model_name = settings.WAGTAILMEDIA_MEDIA_MODEL.split('.')

@@ -15,7 +15,7 @@ jobs:
         - pip install tox==3.9.0 flake8 isort
       script:
         - flake8 wagtailmedia
-        - isort --check-only --diff --recursive wagtailmedia
+        - isort --check-only --diff wagtailmedia
         - tox
     - env: TOXENV=py37-dj22-wag26
       python: 3.7
