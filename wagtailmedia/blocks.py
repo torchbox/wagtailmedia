@@ -16,5 +16,5 @@ class AbstractMediaChooserBlock(ChooserBlock):
         from wagtailmedia.widgets import AdminMediaChooser
         return AdminMediaChooser
 
-    def render_basic(self, value):
+    def render_basic(self, value, context=None):
         raise NotImplementedError('You need to implement %s.render_basic' % self.__class__.__name__)
