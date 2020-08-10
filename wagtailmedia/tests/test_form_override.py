@@ -6,8 +6,12 @@ from django.test import TestCase, override_settings
 from wagtail.admin import widgets
 
 from wagtailmedia import models
-from wagtailmedia.forms import BaseMediaForm, get_media_base_form, get_media_form, media_base_form
-from wagtailmedia.tests.testapp.forms import AlternateMediaForm, OverridenWidget
+from wagtailmedia.forms import (
+    BaseMediaForm, get_media_base_form, get_media_form, media_base_form
+)
+from wagtailmedia.tests.testapp.forms import (
+    AlternateMediaForm, OverridenWidget
+)
 
 
 class TestFormOverride(TestCase):
