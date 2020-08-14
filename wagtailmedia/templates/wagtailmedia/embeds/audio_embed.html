@@ -1,0 +1,10 @@
+{% block audio %}
+	<audio
+		class="wagtailmedia-audio"
+		src="{{file}}" 
+		{% if mute %}muted{% endif %}
+		{% if autoplay %}autoplay{% endif %}
+		{% if loop %}loop{% endif %}
+		controls>
+	</audio>
+{% endblock %}

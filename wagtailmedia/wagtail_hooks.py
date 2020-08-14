@@ -4,12 +4,16 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
+from wagtail.admin.rich_text.editors.draftail import features as draftail_features
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.core import hooks
 
 from wagtailmedia import admin_urls
+from wagtailmedia.contentstate import ContentstateMediaConversionRule
+from wagtailmedia.embed_handlers import MediaEmbedHandler
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
@@ -103,3 +107,39 @@ def describe_collection_media(collection):
             ) % {'count': media_count},
             'url': url,
         }
+
+
+@hooks.register('register_rich_text_features')
+def register_custom_media_feature(features):
+    # Register a handler for converting <embed type="customimage"> to frontend HTML
+    if WAGTAIL_VERSION < (2, 5):
+        features.register_embed_type(embed_type='media', handler=MediaEmbedHandler)
+    else:
+        features.register_embed_type(MediaEmbedHandler)
+
+    feature_name = 'wagtailmedia'
+
+    control = {
+        'type': 'MEDIA',
+        'icon': 'media',
+        'description': 'Media',
+    }
+
+    plugin_js = [
+        'wagtailmedia/js/media-chooser-modal.js',
+        'wagtailmedia/js/WagtailMediaBlock.js',
+    ]
+
+    features.register_editor_plugin(
+        'draftail',
+        feature_name,
+        draftail_features.EntityFeature(control, js=plugin_js)
+    )
+
+    features.register_converter_rule(
+        'contentstate',
+        feature_name,
+        ContentstateMediaConversionRule
+    )
+
+    features.default_features.append(feature_name)

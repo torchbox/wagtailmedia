@@ -6,6 +6,7 @@ from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.core import hooks
 from wagtail.core.models import Collection
 
+from wagtailmedia.forms import MediaInsertionForm
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
@@ -25,16 +26,23 @@ else:
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 
-def get_media_json(media):
+def get_media_json(media, player_options={}):
     """
     helper function: given a media, return the json to pass back to the
     chooser panel
     """
-
     return {
         'id': media.id,
         'title': media.title,
-        'edit_link': reverse('wagtailmedia:edit', args=(media.id,))
+        'edit_link': reverse('wagtailmedia:edit', args=(media.id,)),
+        'type': media.type,
+
+        'thumbnail': media.thumbnail.url if media.thumbnail else '',
+        'file': media.file.url if media.file else '',
+
+        'autoplay': player_options.get('autoplay', False),
+        'loop': player_options.get('loop', False),
+        'mute': player_options.get('mute', False)
     }
 
 
@@ -89,6 +97,7 @@ def chooser(request):
         'collections': collections,
         'is_searching': False,
         'pagination_template': pagination_template,
+        'will_select_format': request.GET.get('select_format')
     }, json_data={
         'step': 'chooser',
         'error_label': "Server Error",
@@ -104,4 +113,28 @@ def media_chosen(request, media_id):
         request, None, None,
         None,
         json_data={'step': 'media_chosen', 'result': get_media_json(media)}
+    )
+
+
+def chooser_select_format(request, media_id):
+    media = get_object_or_404(get_media_model(), id=media_id)
+
+    # POST the completed form
+    if request.method == 'POST':
+        form = MediaInsertionForm(request.POST, prefix='media-chooser-insertion')
+        if form.is_valid():
+            media_data = get_media_json(media, form.cleaned_data)
+            return render_modal_workflow(
+                request, None, None,
+                None, json_data={'step': 'media_chosen', 'result': media_data}
+            )
+    # GET the empty form for the user to fill out
+    else:
+        initial = {}
+        initial.update(request.GET.dict())
+        form = MediaInsertionForm(request.POST, prefix='media-chooser-insertion')
+
+    return render_modal_workflow(
+        request, 'wagtailmedia/chooser/select_format.html', None,
+        {'media': media, 'form': form}, json_data={'step': 'select_format'}
     )

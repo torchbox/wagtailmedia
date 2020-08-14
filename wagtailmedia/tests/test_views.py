@@ -711,7 +711,15 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
             'result': {
                 'id': self.media.id,
                 'title': self.media.title,
-                'edit_link': reverse('wagtailmedia:edit', args=[self.media.id],)
+                'type': self.media.type,
+                'edit_link': reverse('wagtailmedia:edit', args=[self.media.id],),
+
+                'file': '',
+                'thumbnail': '',
+
+                'autoplay': False,
+                'loop': False,
+                'mute': False,
             }
         })
 

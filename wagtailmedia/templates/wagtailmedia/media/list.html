@@ -30,20 +30,30 @@
     <tbody>
         {% for media_file in media_files %}
             <tr>
-                <td class="title">
-                    {% if choosing %}
-                        <h2><a href="{% url 'wagtailmedia:media_chosen' media_file.id %}" class="media-choice">{{ media_file.title }}</a></h2>
-                    {% else %}
-                        <h2><a href="{% url 'wagtailmedia:edit' media_file.id %}">{{ media_file.title }}</a></h2>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if choosing %}
-                        {{ media_file.filename }}
-                    {% else %}
-                        <a href="{{ media_file.url }}" class="nolink">{{ media_file.filename }}</a>
-                    {% endif %}
-                </td>
+				<td class="title">
+					{% if choosing %}
+						<h2>
+							{% if will_select_format %}
+								<a class="media-choice" href="{% url 'wagtailmedia:chooser_select_format' media_file.id %}">
+									{{ media_file.title }}
+								</a>
+							{% else %}
+								<a class="media-choice" href="{% url 'wagtailmedia:media_chosen' media_file.id %}">
+									{{ media_file.title }}
+								</a>
+							{% endif %}
+						</h2>
+					{% else %}
+						<h2><a href="{% url 'wagtailmedia:edit' media_file.id %}">{{ media_file.title }}</a></h2>
+					{% endif %}
+				</td>
+				<td>
+					{% if choosing %}
+						{{ media_file.filename }}
+					{% else %}
+						<a href="{{ media_file.url }}" class="nolink">{{ media_file.filename }}</a>
+					{% endif %}
+				</td>
                 <td>{{ media_file.get_type_display }}</td>
                 <td><div class="human-readable-date" title="{{ media_file.created_at|date:"d M Y H:i" }}">{{ media_file.created_at|timesince }} ago</div></td>
             </tr>
