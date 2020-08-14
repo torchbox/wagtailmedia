@@ -2,8 +2,13 @@
 
 ## Unreleased
 
+## [0.6.0] - 2020-08-14
+
 - Added filtering of media files by user permission in chooser panel ([#25](https://github.com/torchbox/wagtailmedia/pull/25)). Thanks to [@snj](https://github.com/snj)
 - Added French translations ([#61](https://github.com/torchbox/wagtailmedia/pull/61)). Thanks to [@jeromelebleu](https://github.com/jeromelebleu).
+- Add `{% block action %}` template block to allow overriding of form action in `add.html` template ([#102](https://github.com/torchbox/wagtailmedia/pull/102)). Thanks to [@thenewguy](https://github.com/thenewguy)
+- Fix expected NotImplementedError in Wagtail 1.6+ ([#104](https://github.com/torchbox/wagtailmedia/pull/104)). Thanks to [@chosak](https://github.com/chosak) and [@Scotchester](https://github.com/Scotchester).
+- Add support for uploading media files via the media chooser, just like images and documents ([#22](https://github.com/torchbox/wagtailmedia/issues/22), [#97](https://github.com/torchbox/wagtailmedia/pull/97)). Thanks to [@teixas](https://github.com/teixas)! 🎉
 
 ## [0.5.0] - 2020-02-20
 
