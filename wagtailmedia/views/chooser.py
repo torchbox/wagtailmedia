@@ -155,7 +155,7 @@ def chooser_upload(request, media_type):
     if len(collections) < 2:
         collections = None
 
-    media_files = Media.objects.order_by('-created_at')
+    media_files = media_files.order_by('-created_at')
     paginator, media_files = paginate(request, media_files, per_page=10)
 
     context = {
