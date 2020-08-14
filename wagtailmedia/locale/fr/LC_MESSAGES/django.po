@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wagtailmedia\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-22 16:23-0500\n"
+"POT-Creation-Date: 2020-08-14 07:29-0500\n"
 "PO-Revision-Date: 2020-05-22 16:23-0500\n"
 "Last-Translator: Jérôme Lebleu\n"
 "Language-Team: \n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: forms.py:76
+#: forms.py:77
 msgid "Add"
 msgstr "Ajouter"
 
-#: forms.py:76
+#: forms.py:77
 msgid "Add/edit media you own"
 msgstr "Ajouter/modifier vos médias"
 
-#: forms.py:77 views/media.py:118 views/media.py:159
+#: forms.py:78 views/media.py:120 views/media.py:161
 msgid "Edit"
 msgstr "Modifier"
 
-#: forms.py:77
+#: forms.py:78
 msgid "Edit any media"
 msgstr "Modifier n’importe quel média"
 
@@ -90,6 +90,30 @@ msgstr "média"
 #: templates/wagtailmedia/chooser/chooser.html:2
 msgid "Choose a media file"
 msgstr "Choisir un fichier multimédia"
+
+#: templates/wagtailmedia/chooser/chooser.html:7
+msgid "Search"
+msgstr "Rechercher"
+
+#: templates/wagtailmedia/chooser/chooser.html:8
+msgid "Upload Audio"
+msgstr "Transférer un son"
+
+#: templates/wagtailmedia/chooser/chooser.html:9
+msgid "Upload Video"
+msgstr "Transférer une vidéo"
+
+#: templates/wagtailmedia/chooser/chooser.html:42
+#: templates/wagtailmedia/chooser/chooser.html:59
+#: templates/wagtailmedia/media/add.html:45
+msgid "Uploading…"
+msgstr "Transfert…"
+
+#: templates/wagtailmedia/chooser/chooser.html:42
+#: templates/wagtailmedia/chooser/chooser.html:59
+#: templates/wagtailmedia/media/add.html:45
+msgid "Upload"
+msgstr "Transférer"
 
 #: templates/wagtailmedia/chooser/results.html:5
 #: templates/wagtailmedia/media/results.html:5
@@ -165,14 +189,6 @@ msgstr "Ajouter une vidéo"
 msgid "Add audio or video"
 msgstr "Ajouter un son ou une vidéo"
 
-#: templates/wagtailmedia/media/add.html:45
-msgid "Uploading..."
-msgstr "Transfert…"
-
-#: templates/wagtailmedia/media/add.html:45
-msgid "Upload"
-msgstr "Transférer"
-
 #: templates/wagtailmedia/media/confirm_delete.html:3
 #, python-format
 msgid "Delete %(title)s"
@@ -211,7 +227,7 @@ msgstr "Modification"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: templates/wagtailmedia/media/edit.html:42 views/media.py:181
+#: templates/wagtailmedia/media/edit.html:42 views/media.py:183
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -303,33 +319,33 @@ msgstr "Permissions de média"
 msgid "Add a media permission"
 msgstr "Ajouter une permission de média"
 
-#: views/media.py:63
+#: views/media.py:65
 msgid "Search media files"
 msgstr "Rechercher des médias"
 
-#: views/media.py:68
+#: views/media.py:70
 msgid "Search media"
 msgstr "Rechercher des médias"
 
-#: views/media.py:117
+#: views/media.py:119
 #, python-brace-format
 msgid "Media file '{0}' added."
 msgstr "Média '{0}' ajouté."
 
-#: views/media.py:122
+#: views/media.py:124
 msgid "The media file could not be saved due to errors."
 msgstr "Le média ne peut être enregistré du fait d’erreurs."
 
-#: views/media.py:158
+#: views/media.py:160
 #, python-brace-format
 msgid "Media file '{0}' updated"
 msgstr "Média '{0}' mis à jour"
 
-#: views/media.py:163
+#: views/media.py:165
 msgid "The media could not be saved due to errors."
 msgstr "Le média ne peut être enregistré du fait d’erreurs."
 
-#: views/media.py:180
+#: views/media.py:182
 msgid ""
 "The file could not be found. Please change the source or delete the media "
 "file"
@@ -337,7 +353,7 @@ msgstr ""
 "Le fichier n’a pas été trouvé. Veuillez changer la source ou supprimer le "
 "média"
 
-#: views/media.py:204
+#: views/media.py:206
 #, python-brace-format
 msgid "Media file '{0}' deleted."
 msgstr "Média '{0}' supprimé."
