@@ -160,12 +160,12 @@ def chooser_upload(request, media_type):
 
     context = {
         'media_files': media_files,
-        'uploadform': form,
-        'media_type': media_type,
         'searchform': searchform,
         'collections': collections,
+        'uploadform': form,
         'is_searching': False,
         'pagination_template': pagination_template,
+        'media_type': media_type,
     }
     return render_modal_workflow(
         request, 'wagtailmedia/chooser/chooser.html', None, context,
