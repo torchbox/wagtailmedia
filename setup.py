@@ -22,7 +22,7 @@ testing_extras = [
 
     # Required for matrix build on Travis
     'tox==3.9.0',
-    
+
     # Required for interactive testing via tox
     'psycopg2-binary',
     'django-redis-cache',
@@ -55,15 +55,17 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Framework :: Django',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
         'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.0',
         'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     install_requires=[
-        'wagtail>=2.2',
+        'wagtail>=2.7',
     ],
     extras_require={
         'testing': testing_extras,
