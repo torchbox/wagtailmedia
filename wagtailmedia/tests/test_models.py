@@ -22,25 +22,26 @@ class TestMediaValidation(TestCase):
             type='video',
         )
         media.full_clean()
-        
+
         # ensure cannot be negative
         media.duration = -100
         with self.assertRaises(ValidationError):
             media.full_clean()
-        
+
         # ensure cannot be None
         media.duration = None
         with self.assertRaises(ValidationError):
             media.full_clean()
-        
+
         # ensure zero is a valid value
         media.duration = 0
         media.full_clean()
-        
+
         # ensure fractional durations are preserved
         media.duration = 100.5
         media.full_clean()
         self.assertEqual(media.duration, 100.5)
+
 
 class TestMediaQuerySet(TestCase):
     def test_search_method(self):
