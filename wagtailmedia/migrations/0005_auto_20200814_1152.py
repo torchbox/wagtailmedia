@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='media',
             name='duration',
-            field=models.FloatField(default=0, help_text='Duration in seconds', verbose_name='duration'),
+            field=models.FloatField(default=0, help_text='Duration in seconds', validators=[django.core.validators.MinValueValidator(0)], verbose_name='duration'),
         ),
     ]
