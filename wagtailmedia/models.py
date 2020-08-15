@@ -5,6 +5,7 @@ import os.path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import Signal
@@ -48,7 +49,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
-    duration = models.FloatField(default=0, verbose_name=_('duration'), help_text=_('Duration in seconds'))
+    duration = models.FloatField(default=0, validators=[MinValueValidator(0)], verbose_name=_('duration'), help_text=_('Duration in seconds'))
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
     thumbnail = models.FileField(upload_to='media_thumbnails', blank=True, verbose_name=_('thumbnail'))
