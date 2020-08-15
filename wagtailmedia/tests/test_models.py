@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.test import TestCase
@@ -9,6 +10,37 @@ from six import b
 from wagtailmedia import models
 from wagtailmedia.forms import get_media_form
 
+
+class TestMediaValidation(TestCase):
+    def test_duration_validation(self):
+        # ensure duration is optional
+        fake_file = ContentFile(b("A boring example movie"))
+        fake_file.name = 'movie.mp4'
+        media = models.Media(
+            title="Test media file",
+            file=File(fake_file),
+            type='video',
+        )
+        media.full_clean()
+        
+        # ensure cannot be negative
+        media.duration = -100
+        with self.assertRaises(ValidationError):
+            media.full_clean()
+        
+        # ensure cannot be None
+        media.duration = None
+        with self.assertRaises(ValidationError):
+            media.full_clean()
+        
+        # ensure zero is a valid value
+        media.duration = 0
+        media.full_clean()
+        
+        # ensure fractional durations are preserved
+        media.duration = 100.5
+        media.full_clean()
+        self.assertEqual(media.duration, 100.5)
 
 class TestMediaQuerySet(TestCase):
     def test_search_method(self):
