@@ -117,6 +117,11 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         abstract = True
         verbose_name = _('media')
 
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        if not self.duration:
+            self.duration = 0
+
 
 class Media(AbstractMedia):
     admin_form_fields = (
