@@ -48,7 +48,9 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
-    duration = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('duration'), help_text=_('Duration in seconds'))
+    duration = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name=_('duration'), help_text=_('Duration in seconds')
+    )
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
     thumbnail = models.FileField(upload_to='media_thumbnails', blank=True, verbose_name=_('thumbnail'))
