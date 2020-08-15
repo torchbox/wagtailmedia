@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-from wagtailmedia import __version__
-
 import io
 
+from wagtailmedia import __version__
+
 try:
-    from setuptools import setup, find_packages
+    from setuptools import find_packages, setup
 except ImportError:
     from distutils.core import setup
 

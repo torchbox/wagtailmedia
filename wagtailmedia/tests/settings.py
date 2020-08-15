@@ -2,7 +2,6 @@ import os
 
 from wagtail import VERSION as WAGTAIL_VERSION
 
-
 DEBUG = 'INTERACTIVE' in os.environ
 
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
@@ -80,7 +79,7 @@ MIDDLEWARE = [
 ]
 
 if WAGTAIL_VERSION < (2, 9):
-    MIDDLEWARE += ['wagtail.core.middleware.SiteMiddleware',]
+    MIDDLEWARE += ['wagtail.core.middleware.SiteMiddleware']
 
 MIDDLEWARE += [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
