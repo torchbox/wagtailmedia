@@ -28,14 +28,12 @@ class TestMediaValidation(TestCase):
         with self.assertRaises(ValidationError):
             media.full_clean()
 
-        # ensure cannot be None
-        media.duration = None
-        with self.assertRaises(ValidationError):
-            media.full_clean()
-
-        # ensure zero is a valid value
-        media.duration = 0
-        media.full_clean()
+        # ensure empty values are valid
+        for value in (0, 0.0, None, '', False):
+            with self.subTest(value=value):
+                media.duration = value
+                media.full_clean()
+                self.assertEqual(media.duration, 0)
 
         # ensure fractional durations are preserved
         media.duration = 100.5
