@@ -48,6 +48,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
     duration = models.FloatField(
+        blank=True,
         default=0,
         validators=[MinValueValidator(0)],
         verbose_name=_('duration'),
@@ -116,6 +117,11 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     def is_editable_by_user(self, user):
         from wagtailmedia.permissions import permission_policy
         return permission_policy.user_has_permission_for_instance(user, 'change', self)
+
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        if not self.duration:
+            self.duration = 0
 
     class Meta:
         abstract = True
