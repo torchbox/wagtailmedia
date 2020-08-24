@@ -30,7 +30,7 @@ class TestMediaValidation(TestCase):
             media.full_clean()
 
         # ensure empty values are valid
-        for value in (0, 0.0, None, '', False):
+        for value in (0, 0.0, None, ''):
             with self.subTest(value=value):
                 media.duration = value
                 media.full_clean()
