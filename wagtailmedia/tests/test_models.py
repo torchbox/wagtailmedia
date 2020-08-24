@@ -5,6 +5,7 @@ from django.core.files import File
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.test import TestCase, TransactionTestCase, override_settings
+from django.template import Context, Template
 
 from six import b
 from wagtail.core.models import Collection
@@ -42,6 +43,32 @@ class TestMediaValidation(TestCase):
         media.duration = 100.5
         media.full_clean()
         self.assertEqual(media.duration, 100.5)
+
+
+class TestMediaTemplating(TestCase):
+    def test_duration_rendering(self):
+        template = Template('{{ media.duration }}')
+        for value, result in (
+            (None, '0.0'),
+            ('', '0.0'),
+            (0, '0.0'),
+            (0.1, '0.1'),
+            (1, '1.0'),
+            (1234567.7654321, '1234567.7654321'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
 
 
 class TestMediaQuerySet(TestCase):
