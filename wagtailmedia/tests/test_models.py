@@ -69,6 +69,54 @@ class TestMediaTemplating(TestCase):
             media.refresh_from_db()
             actual = template.render(Context({'media': media}))
             self.assertEqual(actual, result)
+    
+    def test_duration_display_as_int(self):
+        template = Template('{{ media.duration|floatformat:"0" }}')
+        for value, result in (
+            (None, '0'),
+            ('', '0'),
+            (0, '0'),
+            (0.1, '0'),
+            (1, '1'),
+            (1234567.7654321, '1234568'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
+    
+    def test_duration_display_as_tenths(self):
+        template = Template('{{ media.duration|floatformat }}')
+        for value, result in (
+            (None, '0'),
+            ('', '0'),
+            (0, '0'),
+            (0.1, '0.1'),
+            (1, '1'),
+            (1234567.7654321, '1234567.8'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
 
 
 class TestMediaQuerySet(TestCase):
