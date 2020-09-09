@@ -66,7 +66,7 @@ class TestMediaTemplating(TestCase):
             media.refresh_from_db()
             actual = template.render(Context({'media': media}))
             self.assertEqual(actual, result)
-    
+
     def test_duration_display_as_int(self):
         template = Template('{{ media.duration|floatformat:"0" }}')
         for value, result in (
@@ -90,7 +90,7 @@ class TestMediaTemplating(TestCase):
             media.refresh_from_db()
             actual = template.render(Context({'media': media}))
             self.assertEqual(actual, result)
-    
+
     def test_duration_display_as_tenths(self):
         template = Template('{{ media.duration|floatformat }}')
         for value, result in (
