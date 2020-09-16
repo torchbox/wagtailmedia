@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import widgets

@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ungettext
 
 from wagtail.admin.menu import MenuItem
