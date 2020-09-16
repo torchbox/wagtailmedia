@@ -17,7 +17,7 @@ jobs:
         - flake8 wagtailmedia
         - isort --check-only --diff wagtailmedia
         - tox
-    - env: TOXENV=py38-dj22-wag10
+    - env: TOXENV=py38-dj22-wag210
       python: 3.8
     - env: TOXENV=py38-dj30-wag29
       python: 3.8
@@ -27,6 +27,12 @@ jobs:
       # See https://docs.wagtail.io/en/v2.10/releases/upgrading.html
     - env: TOXENV=py38-dj22-wag27
       python: 3.8
+    - env: TOXENV=py37-dj22-wag27
+      python: 3.7
+    - env: TOXENV=py36-dj22-wag27
+      python: 3.6
+    - env: TOXENV=py35-dj22-wag27
+      python: 3.5
 
 install:
   - pip install tox==3.9.0
