@@ -795,27 +795,6 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             models.Media.objects.filter(title='Test video').exists())
 
 
-class TestMediaFilenameProperties(TestCase):
-    def setUp(self):
-        self.media = models.Media(title="Test media", duration=100)
-        self.media.file.save('example.mp4', ContentFile("A amazing example music video"))
-
-        self.extensionless_media = models.Media(title="Test media", duration=101)
-        self.extensionless_media.file.save('example', ContentFile("A boring example music video"))
-
-    def test_filename(self):
-        self.assertEqual('example.mp4', self.media.filename)
-        self.assertEqual('example', self.extensionless_media.filename)
-
-    def test_file_extension(self):
-        self.assertEqual('mp4', self.media.file_extension)
-        self.assertEqual('', self.extensionless_media.file_extension)
-
-    def tearDown(self):
-        self.media.delete()
-        self.extensionless_media.delete()
-
-
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ['test.json']
 
