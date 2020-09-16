@@ -5,7 +5,12 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
 
+from wagtailmedia.models import AbstractMedia
 from wagtailmedia.edit_handlers import MediaChooserPanel
+
+
+class CustomMedia(AbstractMedia):
+    pass
 
 
 class EventPageRelatedMedia(Orderable):
