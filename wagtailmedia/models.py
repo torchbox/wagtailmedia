@@ -6,9 +6,7 @@ import os.path
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.db.models.signals import pre_delete
 from django.dispatch import Signal
-from django.dispatch.dispatcher import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -149,14 +147,6 @@ def get_media_model():
             settings.WAGTAILMEDIA_MEDIA_MODEL
         )
     return media_model
-
-
-# Receive the pre_delete signal and delete the file associated with the model instance.
-@receiver(pre_delete, sender=Media)
-def media_delete(sender, instance, **kwargs):
-    # Pass false so FileField doesn't save the model.
-    instance.file.delete(False)
-    instance.thumbnail.delete(False)
 
 
 media_served = Signal(providing_args=['request'])
