@@ -5,6 +5,7 @@ import os.path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.dispatch import Signal
 from django.urls import reverse
@@ -46,7 +47,13 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     file = models.FileField(upload_to='media', verbose_name=_('file'))
 
     type = models.CharField(choices=MEDIA_TYPES, max_length=255, blank=False, null=False)
-    duration = models.PositiveIntegerField(verbose_name=_('duration'), help_text=_('Duration in seconds'))
+    duration = models.FloatField(
+        blank=True,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name=_('duration'),
+        help_text=_('Duration in seconds'),
+    )
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('width'))
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('height'))
     thumbnail = models.FileField(upload_to='media_thumbnails', blank=True, verbose_name=_('thumbnail'))
@@ -110,6 +117,11 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     def is_editable_by_user(self, user):
         from wagtailmedia.permissions import permission_policy
         return permission_policy.user_has_permission_for_instance(user, 'change', self)
+
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        if not self.duration:
+            self.duration = 0
 
     class Meta:
         abstract = True

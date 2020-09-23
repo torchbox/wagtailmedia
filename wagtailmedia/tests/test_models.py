@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
 
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.test import TestCase, TransactionTestCase, override_settings
+from django.template import Context, Template
 
 from six import b
 from wagtail.core.models import Collection
@@ -11,6 +13,110 @@ from wagtail.core.models import Collection
 from wagtailmedia import signal_handlers
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import Media, get_media_model
+
+
+class TestMediaValidation(TestCase):
+    def test_duration_validation(self):
+        # ensure duration is optional
+        fake_file = ContentFile(b("A boring example movie"))
+        fake_file.name = 'movie.mp4'
+        media = models.Media(
+            title="Test media file",
+            file=File(fake_file),
+            type='video',
+        )
+        media.full_clean()
+
+        # ensure cannot be negative
+        media.duration = -100
+        with self.assertRaises(ValidationError):
+            media.full_clean()
+
+        # ensure empty values are valid
+        for value in (0, 0.0, None, ''):
+            with self.subTest(value=value):
+                media.duration = value
+                media.full_clean()
+                self.assertEqual(media.duration, 0)
+
+        # ensure fractional durations are preserved
+        media.duration = 100.5
+        media.full_clean()
+        self.assertEqual(media.duration, 100.5)
+
+
+class TestMediaTemplating(TestCase):
+    def test_duration_rendering(self):
+        template = Template('{{ media.duration }}')
+        for value, result in (
+            (None, '0.0'),
+            ('', '0.0'),
+            (0, '0.0'),
+            (0.1, '0.1'),
+            (1, '1.0'),
+            (1234567.7654321, '1234567.7654321'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
+
+    def test_duration_display_as_int(self):
+        template = Template('{{ media.duration|floatformat:"0" }}')
+        for value, result in (
+            (None, '0'),
+            ('', '0'),
+            (0, '0'),
+            (0.1, '0'),
+            (1, '1'),
+            (1234567.7654321, '1234568'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
+
+    def test_duration_display_as_tenths(self):
+        template = Template('{{ media.duration|floatformat }}')
+        for value, result in (
+            (None, '0'),
+            ('', '0'),
+            (0, '0'),
+            (0.1, '0.1'),
+            (1, '1'),
+            (1234567.7654321, '1234567.8'),
+        ):
+            fake_file = ContentFile(b("A boring example movie"))
+            fake_file.name = 'movie.mp4'
+            media = models.Media(
+                title="Test media file",
+                file=File(fake_file),
+                type='video',
+            )
+            media.duration = value
+            media.full_clean()
+            media.save()
+            media.refresh_from_db()
+            actual = template.render(Context({'media': media}))
+            self.assertEqual(actual, result)
 
 
 class TestMediaQuerySet(TestCase):
