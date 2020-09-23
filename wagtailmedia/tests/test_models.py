@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.test import TestCase, TransactionTestCase, override_settings
 from django.template import Context, Template
+from django.test import TestCase, TransactionTestCase, override_settings
 
 from six import b
 from wagtail.core.models import Collection
@@ -20,7 +20,7 @@ class TestMediaValidation(TestCase):
         # ensure duration is optional
         fake_file = ContentFile(b("A boring example movie"))
         fake_file.name = 'movie.mp4'
-        media = models.Media(
+        media = Media(
             title="Test media file",
             file=File(fake_file),
             type='video',
@@ -58,7 +58,7 @@ class TestMediaTemplating(TestCase):
         ):
             fake_file = ContentFile(b("A boring example movie"))
             fake_file.name = 'movie.mp4'
-            media = models.Media(
+            media = Media(
                 title="Test media file",
                 file=File(fake_file),
                 type='video',
@@ -82,7 +82,7 @@ class TestMediaTemplating(TestCase):
         ):
             fake_file = ContentFile(b("A boring example movie"))
             fake_file.name = 'movie.mp4'
-            media = models.Media(
+            media = Media(
                 title="Test media file",
                 file=File(fake_file),
                 type='video',
@@ -106,7 +106,7 @@ class TestMediaTemplating(TestCase):
         ):
             fake_file = ContentFile(b("A boring example movie"))
             fake_file.name = 'movie.mp4'
-            media = models.Media(
+            media = Media(
                 title="Test media file",
                 file=File(fake_file),
                 type='video',
