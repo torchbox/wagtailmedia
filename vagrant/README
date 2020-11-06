@@ -10,20 +10,20 @@ To run tests:
     cd to this directory on the host machine and issue the following commands:
         vagrant up
         vagrant ssh
-    
+
     then:
-        bash /vagrant/vagrant/runtox.sh -e py35-dj20-wag22
+        bash /vagrant/vagrant/runtox.sh -e py36-dj20-wag22
 
 To run interactive demo inside the vagrant guest:
     ** note: you might need to manually pull the docker images in tox.ini manually on the first run! it hangs for me occasionally **
     docker pull redis:5.0
     docker pull postgres:12.0
-    
+
     bash /vagrant/vagrant/runtox.sh -e interactive
-    
+
     then:
         open your browser on the host and navigate to http://localhost:8020/admin/
-    
+
     log in credentials:
         username: super
         password: super
