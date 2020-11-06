@@ -16,11 +16,10 @@ testing_extras = [
     'mock>=1.0.0',
 
     # For coverage and PEP8 linting
-    'coverage>=3.7.0',
-    'flake8>=2.2.0',
-    'isort',
-
-    # Required for matrix build on Travis
+    "coverage>=3.7.0",
+    "flake8>=3.6.0",
+    "isort==5.6.4",  # leave this pinned - it tends to change rules between patch releases
+    # Required for running tests in Vagrant
     'tox==3.9.0',
 
     # Required for interactive testing via tox
