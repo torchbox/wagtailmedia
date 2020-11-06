@@ -17,10 +17,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ("wagtailmedia", "0001_initial"),
-        ("wagtailcore", "0028_merge"),
-    ]
+    dependencies = [("wagtailmedia", "0001_initial"), ("wagtailcore", "0028_merge")]
 
     operations = [
         migrations.CreateModel(
@@ -60,9 +57,7 @@ class Migration(migrations.Migration):
                 ("cost", models.CharField(max_length=255)),
                 ("signup_link", models.URLField(blank=True)),
             ],
-            options={
-                "abstract": False,
-            },
+            options={"abstract": False},
             bases=("wagtailcore.page",),
         ),
         migrations.CreateModel(
@@ -101,10 +96,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "ordering": ["sort_order"],
-                "abstract": False,
-            },
+            options={"ordering": ["sort_order"], "abstract": False},
         ),
         migrations.CreateModel(
             name="CustomMedia",
@@ -188,11 +180,9 @@ class Migration(migrations.Migration):
                         verbose_name="uploaded by user",
                     ),
                 ),
+                ("fancy_caption", wagtail.core.fields.RichTextField(blank=True)),
             ],
-            options={
-                "verbose_name": "media",
-                "abstract": False,
-            },
+            options={"verbose_name": "media", "abstract": False},
             bases=(wagtail.search.index.Indexed, models.Model),
         ),
     ]
