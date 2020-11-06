@@ -15,6 +15,7 @@ from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
 
+
 if WAGTAIL_VERSION < (2, 5):
     from wagtail.admin.forms import SearchForm
 else:
@@ -22,7 +23,9 @@ else:
 
 if WAGTAIL_VERSION < (2, 9):
     from wagtail.admin.utils import (
-        PermissionPolicyChecker, permission_denied, popular_tags_for_model
+        PermissionPolicyChecker,
+        permission_denied,
+        popular_tags_for_model,
     )
 else:
     from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
@@ -32,26 +35,29 @@ else:
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 
-@permission_checker.require_any('add', 'change', 'delete')
-@vary_on_headers('X-Requested-With')
+@permission_checker.require_any("add", "change", "delete")
+@vary_on_headers("X-Requested-With")
 def index(request):
     Media = get_media_model()
 
     # Get media files (filtered by user permission)
     media = permission_policy.instances_user_has_any_permission_for(
-        request.user, ['change', 'delete']
+        request.user, ["change", "delete"]
     )
 
     # Ordering
-    if 'ordering' in request.GET and request.GET['ordering'] in ['title', '-created_at']:
-        ordering = request.GET['ordering']
+    if "ordering" in request.GET and request.GET["ordering"] in [
+        "title",
+        "-created_at",
+    ]:
+        ordering = request.GET["ordering"]
     else:
-        ordering = '-created_at'
+        ordering = "-created_at"
     media = media.order_by(ordering)
 
     # Filter by collection
     current_collection = None
-    collection_id = request.GET.get('collection_id')
+    collection_id = request.GET.get("collection_id")
     if collection_id:
         try:
             current_collection = Collection.objects.get(id=collection_id)
@@ -61,10 +67,10 @@ def index(request):
 
     # Search
     query_string = None
-    if 'q' in request.GET:
+    if "q" in request.GET:
         form = SearchForm(request.GET, placeholder=_("Search media files"))
         if form.is_valid():
-            query_string = form.cleaned_data['q']
+            query_string = form.cleaned_data["q"]
             media = media.search(query_string)
     else:
         form = SearchForm(placeholder=_("Search media"))
@@ -73,35 +79,44 @@ def index(request):
     paginator, media = paginate(request, media)
 
     collections = permission_policy.collections_user_has_any_permission_for(
-        request.user, ['add', 'change']
+        request.user, ["add", "change"]
     )
     if len(collections) < 2:
         collections = None
 
     # Create response
     if request.is_ajax():
-        return render(request, 'wagtailmedia/media/results.html', {
-            'ordering': ordering,
-            'media_files': media,
-            'query_string': query_string,
-            'is_searching': bool(query_string),
-        })
+        return render(
+            request,
+            "wagtailmedia/media/results.html",
+            {
+                "ordering": ordering,
+                "media_files": media,
+                "query_string": query_string,
+                "is_searching": bool(query_string),
+            },
+        )
     else:
-        return render(request, 'wagtailmedia/media/index.html', {
-            'ordering': ordering,
-            'media_files': media,
-            'query_string': query_string,
-            'is_searching': bool(query_string),
+        return render(
+            request,
+            "wagtailmedia/media/index.html",
+            {
+                "ordering": ordering,
+                "media_files": media,
+                "query_string": query_string,
+                "is_searching": bool(query_string),
+                "search_form": form,
+                "popular_tags": popular_tags_for_model(Media),
+                "user_can_add": permission_policy.user_has_permission(
+                    request.user, "add"
+                ),
+                "collections": collections,
+                "current_collection": current_collection,
+            },
+        )
 
-            'search_form': form,
-            'popular_tags': popular_tags_for_model(Media),
-            'user_can_add': permission_policy.user_has_permission(request.user, 'add'),
-            'collections': collections,
-            'current_collection': current_collection,
-        })
 
-
-@permission_checker.require('add')
+@permission_checker.require("add")
 def add(request, media_type):
     Media = get_media_model()
     MediaForm = get_media_form(Media)
@@ -116,37 +131,51 @@ def add(request, media_type):
             for backend in get_search_backends():
                 backend.add(media)
 
-            messages.success(request, _("Media file '{0}' added.").format(media.title), buttons=[
-                messages.button(reverse('wagtailmedia:edit', args=(media.id,)), _('Edit'))
-            ])
-            return redirect('wagtailmedia:index')
+            messages.success(
+                request,
+                _("Media file '{0}' added.").format(media.title),
+                buttons=[
+                    messages.button(
+                        reverse("wagtailmedia:edit", args=(media.id,)), _("Edit")
+                    )
+                ],
+            )
+            return redirect("wagtailmedia:index")
         else:
-            messages.error(request, _("The media file could not be saved due to errors."))
+            messages.error(
+                request, _("The media file could not be saved due to errors.")
+            )
     else:
         media = Media(uploaded_by_user=request.user, type=media_type)
         form = MediaForm(user=request.user, instance=media)
 
-    return render(request, "wagtailmedia/media/add.html", {
-        'form': form,
-        'media_type': media_type,
-    })
+    return render(
+        request,
+        "wagtailmedia/media/add.html",
+        {
+            "form": form,
+            "media_type": media_type,
+        },
+    )
 
 
-@permission_checker.require('change')
+@permission_checker.require("change")
 def edit(request, media_id):
     Media = get_media_model()
     MediaForm = get_media_form(Media)
 
     media = get_object_or_404(Media, id=media_id)
 
-    if not permission_policy.user_has_permission_for_instance(request.user, 'change', media):
+    if not permission_policy.user_has_permission_for_instance(
+        request.user, "change", media
+    ):
         return permission_denied(request)
 
     if request.POST:
         original_file = media.file
         form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
-            if 'file' in form.changed_data:
+            if "file" in form.changed_data:
                 # if providing a new media file, delete the old one.
                 # NB Doing this via original_file.delete() clears the file field,
                 # which definitely isn't what we want...
@@ -157,10 +186,16 @@ def edit(request, media_id):
             for backend in get_search_backends():
                 backend.add(media)
 
-            messages.success(request, _("Media file '{0}' updated").format(media.title), buttons=[
-                messages.button(reverse('wagtailmedia:edit', args=(media.id,)), _('Edit'))
-            ])
-            return redirect('wagtailmedia:index')
+            messages.success(
+                request,
+                _("Media file '{0}' updated").format(media.title),
+                buttons=[
+                    messages.button(
+                        reverse("wagtailmedia:edit", args=(media.id,)), _("Edit")
+                    )
+                ],
+            )
+            return redirect("wagtailmedia:index")
         else:
             messages.error(request, _("The media could not be saved due to errors."))
     else:
@@ -179,36 +214,52 @@ def edit(request, media_id):
     if not filesize:
         messages.error(
             request,
-            _("The file could not be found. Please change the source or delete the media file"),
-            buttons=[messages.button(reverse('wagtailmedia:delete', args=(media.id,)), _('Delete'))]
+            _(
+                "The file could not be found. Please change the source or delete the media file"
+            ),
+            buttons=[
+                messages.button(
+                    reverse("wagtailmedia:delete", args=(media.id,)), _("Delete")
+                )
+            ],
         )
 
-    return render(request, "wagtailmedia/media/edit.html", {
-        'media': media,
-        'filesize': filesize,
-        'form': form,
-        'user_can_delete': permission_policy.user_has_permission_for_instance(
-            request.user, 'delete', media
-        ),
-    })
+    return render(
+        request,
+        "wagtailmedia/media/edit.html",
+        {
+            "media": media,
+            "filesize": filesize,
+            "form": form,
+            "user_can_delete": permission_policy.user_has_permission_for_instance(
+                request.user, "delete", media
+            ),
+        },
+    )
 
 
-@permission_checker.require('delete')
+@permission_checker.require("delete")
 def delete(request, media_id):
     Media = get_media_model()
     media = get_object_or_404(Media, id=media_id)
 
-    if not permission_policy.user_has_permission_for_instance(request.user, 'delete', media):
+    if not permission_policy.user_has_permission_for_instance(
+        request.user, "delete", media
+    ):
         return permission_denied(request)
 
     if request.POST:
         media.delete()
         messages.success(request, _("Media file '{0}' deleted.").format(media.title))
-        return redirect('wagtailmedia:index')
+        return redirect("wagtailmedia:index")
 
-    return render(request, "wagtailmedia/media/confirm_delete.html", {
-        'media': media,
-    })
+    return render(
+        request,
+        "wagtailmedia/media/confirm_delete.html",
+        {
+            "media": media,
+        },
+    )
 
 
 def usage(request, media_id):
@@ -217,7 +268,6 @@ def usage(request, media_id):
 
     paginator, used_by = paginate(request, media.get_usage())
 
-    return render(request, "wagtailmedia/media/usage.html", {
-        'media': media,
-        'used_by': used_by
-    })
+    return render(
+        request, "wagtailmedia/media/usage.html", {"media": media, "used_by": used_by}
+    )

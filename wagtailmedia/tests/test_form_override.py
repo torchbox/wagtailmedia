@@ -7,11 +7,12 @@ from wagtail.admin import widgets
 
 from wagtailmedia import models
 from wagtailmedia.forms import (
-    BaseMediaForm, get_media_base_form, get_media_form, media_base_form
+    BaseMediaForm,
+    get_media_base_form,
+    get_media_form,
+    media_base_form,
 )
-from wagtailmedia.tests.testapp.forms import (
-    AlternateMediaForm, OverridenWidget
-)
+from wagtailmedia.tests.testapp.forms import AlternateMediaForm, OverridenWidget
 
 
 class TestFormOverride(TestCase):
@@ -29,24 +30,26 @@ class TestFormOverride(TestCase):
     def test_get_media_form_widgets(self):
         Form = get_media_form(models.Media)
         form = Form()
-        self.assertIsInstance(form.fields['tags'].widget, widgets.AdminTagWidget)
-        self.assertIsInstance(form.fields['file'].widget, forms.FileInput)
-        self.assertIsInstance(form.fields['thumbnail'].widget, forms.ClearableFileInput)
+        self.assertIsInstance(form.fields["tags"].widget, widgets.AdminTagWidget)
+        self.assertIsInstance(form.fields["file"].widget, forms.FileInput)
+        self.assertIsInstance(form.fields["thumbnail"].widget, forms.ClearableFileInput)
 
-    @override_settings(WAGTAILMEDIA_MEDIA_FORM_BASE='wagtailmedia.tests.testapp.forms.AlternateMediaForm')
+    @override_settings(
+        WAGTAILMEDIA_MEDIA_FORM_BASE="wagtailmedia.tests.testapp.forms.AlternateMediaForm"
+    )
     def test_overridden_base_form(self):
         self.assertIs(get_media_base_form(), AlternateMediaForm)
 
-    @patch('wagtailmedia.forms.media_base_form', AlternateMediaForm)
+    @patch("wagtailmedia.forms.media_base_form", AlternateMediaForm)
     def test_get_overridden_media_form(self):
         bases = get_media_form(models.Media).__bases__
         self.assertNotIn(BaseMediaForm, bases)
         self.assertIn(AlternateMediaForm, bases)
 
-    @patch('wagtailmedia.forms.media_base_form', AlternateMediaForm)
+    @patch("wagtailmedia.forms.media_base_form", AlternateMediaForm)
     def test_get_overridden_media_form_widgets(self):
         Form = get_media_form(models.Media)
         form = Form()
-        self.assertIsInstance(form.fields['tags'].widget, OverridenWidget)
-        self.assertIsInstance(form.fields['file'].widget, OverridenWidget)
-        self.assertIsInstance(form.fields['thumbnail'].widget, OverridenWidget)
+        self.assertIsInstance(form.fields["tags"].widget, OverridenWidget)
+        self.assertIsInstance(form.fields["file"].widget, OverridenWidget)
+        self.assertIsInstance(form.fields["thumbnail"].widget, OverridenWidget)

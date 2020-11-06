@@ -8,14 +8,11 @@ from wagtailmedia.models import Media
 class BlockTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        fake_file = ContentFile('Test')
-        fake_file.name = 'test.mp3'
+        fake_file = ContentFile("Test")
+        fake_file.name = "test.mp3"
 
         cls.media = Media.objects.create(
-            title='Test',
-            duration=1000,
-            file=fake_file,
-            type='audio'
+            title="Test", duration=1000, file=fake_file, type="audio"
         )
 
     def test_abstract_render_raises_not_implemented_error(self):
@@ -29,4 +26,4 @@ class BlockTests(TestCase):
                 return value.file.name
 
         block = TestMediaChooserBlock()
-        self.assertEqual(block.render(self.media), 'media/test.mp3')
+        self.assertEqual(block.render(self.media), "media/test.mp3")

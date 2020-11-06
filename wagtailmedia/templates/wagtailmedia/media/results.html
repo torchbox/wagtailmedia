@@ -8,7 +8,7 @@
             There are {{ counter }} matches
         {% endblocktrans %}
         </h2>
-        
+
         {% search_other %}
     {% endif %}
 
@@ -18,7 +18,7 @@
 {% else %}
     {% if is_searching %}
          <h2>{% blocktrans %}Sorry, no media files match "<em>{{ query_string }}</em>"{% endblocktrans %}</h2>
-         
+
          {% search_other %}
     {% else %}
         {% url 'wagtailmedia:add' 'audio' as wagtailmedia_add_audio_url %}
