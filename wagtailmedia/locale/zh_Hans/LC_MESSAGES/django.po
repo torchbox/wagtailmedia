@@ -241,7 +241,7 @@ msgstr "未找到文件"
 
 #: templates/wagtailmedia/media/edit.html:58
 msgid "Usage"
-msgstr "使用"
+msgstr "用途"
 
 #: templates/wagtailmedia/media/index.html:22 wagtail_hooks.py:35
 #: wagtail_hooks.py:80
@@ -266,7 +266,7 @@ msgstr "类型"
 #: templates/wagtailmedia/media/list.html:22
 #: templates/wagtailmedia/media/list.html:25
 msgid "Uploaded"
-msgstr "上传"
+msgstr "已上传"
 
 #: templates/wagtailmedia/media/results.html:27
 #, python-format
@@ -293,11 +293,11 @@ msgstr ""
 #: templates/wagtailmedia/media/usage.html:3
 #, python-format
 msgid "Usage of %(title)s"
-msgstr "使用 %(title)s"
+msgstr "用途 %(title)s"
 
 #: templates/wagtailmedia/media/usage.html:5
 msgid "Usage of"
-msgstr "使用"
+msgstr "用途"
 
 #: templates/wagtailmedia/media/usage.html:17
 msgid "Parent"
@@ -330,7 +330,7 @@ msgstr "搜索媒体"
 #: views/media.py:119
 #, python-brace-format
 msgid "Media file '{0}' added."
-msgstr "媒体文件 '{0}' 添加"
+msgstr "媒体文件 '{0}' 已添加"
 
 #: views/media.py:124
 msgid "The media file could not be saved due to errors."
