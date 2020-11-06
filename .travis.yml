@@ -9,22 +9,24 @@ cache:
 
 jobs:
   include:
-    - env: TOXENV=py38-dj30-wag210
-      python: 3.8
+    - env: TOXENV=py39-dj30-wag210
+      python: 3.9
       install:
         - pip install tox==3.9.0 flake8 isort
       script:
         - flake8 wagtailmedia
         - isort --check-only --diff wagtailmedia
         - tox
-    - env: TOXENV=py38-dj22-wag210
-      python: 3.8
-    - env: TOXENV=py38-dj30-wag29
-      python: 3.8
-    - env: TOXENV=py36-dj22-wag28
-      python: 3.8
+    - env: TOXENV=py39-dj22-wag210
+      python: 3.9
+    - env: TOXENV=py39-dj30-wag29
+      python: 3.9
+    - env: TOXENV=py39-dj22-wag28
+      python: 3.9
       # Current Wagtail LTS, with latest compatible Python.
       # See https://docs.wagtail.io/en/v2.10/releases/upgrading.html
+    - env: TOXENV=py39-dj22-wag27
+      python: 3.9
     - env: TOXENV=py38-dj22-wag27
       python: 3.8
     - env: TOXENV=py37-dj22-wag27
