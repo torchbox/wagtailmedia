@@ -68,4 +68,5 @@ jobs:
           DATABASE_PASS: postgres
       - name: Upload coverage reports to Codecov
         run: |
+          pip install codecov
           codecov
