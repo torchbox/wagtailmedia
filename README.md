@@ -3,17 +3,15 @@
 A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
 
-## Compatibility
-
-`wagtailmedia` is compatible with Wagtail 2.2 and above. For compatibility with Wagtail 2.1 and 2.0, use the [v0.2.0 release](https://pypi.org/project/wagtailmedia/0.2.0/).
-
-## How to install
+## Install
 
 Install using pip:
 
 ```sh
 pip install wagtailmedia
 ```
+
+`wagtailmedia` is compatible with Wagtail 2.7 and above. Check out older releases for compatibility with older versions of Wagtail.
 
 ### Settings
 
@@ -189,6 +187,10 @@ class BlogPage(Page):
         StreamFieldPanel('body'),
     ]
 ```
+
+## Translations
+
+wagtailmedia has translations in French and Chinese. More translations welcome!
 
 ## Contributing
 
