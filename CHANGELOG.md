@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-- Altered duration field from PositiveIntegerField to FloatField. If you rely on integer output of duration in templates use `{{ media.duration|floatformat:"0" }}` instead of `{{ media.duration }}` to restore the previous behavior
+- Made the duration field optional, and altered it from PositiveIntegerField to FloatField. If you rely on integer output of duration in templates use `{{ media.duration|floatformat:"0" }}` instead of `{{ media.duration }}` to restore the previous behavior ([#100](https://github.com/torchbox/wagtailmedia/issues/100), [#106](https://github.com/torchbox/wagtailmedia/issues/106), [#108](https://github.com/torchbox/wagtailmedia/pull/108), [#110](https://github.com/torchbox/wagtailmedia/pull/110)). Thanks to [@thenewguy](https://github.com/thenewguy)!
+- Fixed deprecation warnings with Django 3.0 ([#94](https://github.com/torchbox/wagtailmedia/issues/94), [#109](https://github.com/torchbox/wagtailmedia/pull/109)).
+- Excluded tests folder from published package’s sdist ([#107](https://github.com/torchbox/wagtailmedia/pull/107))).
+- Added Chinese (China) translations ([#114](https://github.com/torchbox/wagtailmedia/pull/114)). Thanks to [@Dannykey](https://github.com/Dannykey) and [@BrianXu20](https://github.com/BrianXu20)
+- Removed declared support for Python 3.5, Wagtail 2.8, Wagtail 2.9 ([#116](https://github.com/torchbox/wagtailmedia/pull/116))
+- Added declared support for Python 3.9, Wagtail 2.11, Django 3.1 ([#116](https://github.com/torchbox/wagtailmedia/pull/116))
 
 ## [0.6.0] - 2020-08-14
 
