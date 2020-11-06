@@ -6,6 +6,11 @@ from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
 
 from wagtailmedia.edit_handlers import MediaChooserPanel
+from wagtailmedia.models import AbstractMedia
+
+
+class CustomMedia(AbstractMedia):
+    pass
 
 
 class EventPageRelatedMedia(Orderable):

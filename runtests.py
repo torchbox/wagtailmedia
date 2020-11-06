@@ -29,7 +29,7 @@ def runtests():
         warnings.filterwarnings('error', category=RemovedInWagtail27Warning)
         execute_from_command_line(argv)
     finally:
-        from wagtailmedia.tests.settings import STATIC_ROOT, MEDIA_ROOT
+        from wagtailmedia.tests.settings import MEDIA_ROOT, STATIC_ROOT
         shutil.rmtree(STATIC_ROOT, ignore_errors=True)
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
 

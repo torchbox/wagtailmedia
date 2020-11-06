@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Altered duration field from PositiveIntegerField to FloatField. If you rely on integer output of duration in templates use `{{ media.duration|floatformat:"0" }}` instead of `{{ media.duration }}` to restore the previous behavior
+
 ## [0.6.0] - 2020-08-14
 
 - Added filtering of media files by user permission in chooser panel ([#25](https://github.com/torchbox/wagtailmedia/pull/25)). Thanks to [@snj](https://github.com/snj)
