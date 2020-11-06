@@ -1,5 +1,5 @@
-from django.conf.urls import include, url
-from django.urls import reverse
+from django.conf.urls import include
+from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ungettext
@@ -18,9 +18,7 @@ from wagtailmedia.permissions import permission_policy
 @hooks.register("register_admin_urls")
 def register_admin_urls():
     return [
-        url(
-            r"^media/", include((admin_urls, "wagtailmedia"), namespace="wagtailmedia")
-        ),
+        path("media/", include((admin_urls, "wagtailmedia"), namespace="wagtailmedia")),
     ]
 
 
