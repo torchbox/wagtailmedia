@@ -25,21 +25,10 @@ else:
     from wagtail.admin.models import get_object_usage
 
 
-# Python 2.x compability apis are removed from Django 3
-# https://docs.djangoproject.com/en/3.0/releases/3.0/#removed-private-python-2-compatibility-apis
-try:
-    from django.utils.encoding import python_2_unicode_compatible
-except ImportError:
-
-    def python_2_unicode_compatible(x):
-        return x
-
-
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
     pass
 
 
-@python_2_unicode_compatible
 class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     MEDIA_TYPES = (
         ("audio", _("Audio file")),
