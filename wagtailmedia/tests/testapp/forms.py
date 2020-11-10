@@ -9,7 +9,7 @@ class OverridenWidget(Widget):
 class AlternateMediaForm(ModelForm):
     class Meta:
         widgets = {
-            'tags': OverridenWidget,
-            'file': OverridenWidget,
-            'thumbnail': OverridenWidget,
+            "tags": OverridenWidget,
+            "file": OverridenWidget,
+            "thumbnail": OverridenWidget,
         }

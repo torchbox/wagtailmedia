@@ -14,14 +14,18 @@ class CustomMedia(AbstractMedia):
 
 
 class EventPageRelatedMedia(Orderable):
-    page = ParentalKey('wagtailmedia_tests.EventPage', related_name='related_media', on_delete=models.CASCADE)
+    page = ParentalKey(
+        "wagtailmedia_tests.EventPage",
+        related_name="related_media",
+        on_delete=models.CASCADE,
+    )
     title = models.CharField(max_length=255, help_text="Link title")
     link_media = models.ForeignKey(
-        'wagtailmedia.Media',
+        "wagtailmedia.Media",
         null=True,
         blank=True,
-        related_name='+',
-        on_delete=models.CASCADE
+        related_name="+",
+        on_delete=models.CASCADE,
     )
 
     @property
@@ -29,8 +33,8 @@ class EventPageRelatedMedia(Orderable):
         return self.link_media.url
 
     panels = [
-        FieldPanel('title'),
-        MediaChooserPanel('link_media'),
+        FieldPanel("title"),
+        MediaChooserPanel("link_media"),
     ]
 
 
@@ -40,7 +44,7 @@ class EventPage(Page):
         "End date",
         null=True,
         blank=True,
-        help_text="Not required if event is on a single day"
+        help_text="Not required if event is on a single day",
     )
     time_from = models.TimeField("Start time", null=True, blank=True)
     time_to = models.TimeField("End time", null=True, blank=True)
@@ -51,14 +55,14 @@ class EventPage(Page):
 
 
 EventPage.content_panels = [
-    FieldPanel('title', classname="full title"),
-    FieldPanel('date_from'),
-    FieldPanel('date_to'),
-    FieldPanel('time_from'),
-    FieldPanel('time_to'),
-    FieldPanel('location'),
-    FieldPanel('cost'),
-    FieldPanel('signup_link'),
-    FieldPanel('body', classname="full"),
-    InlinePanel('related_media', label="Related media"),
+    FieldPanel("title", classname="full title"),
+    FieldPanel("date_from"),
+    FieldPanel("date_to"),
+    FieldPanel("time_from"),
+    FieldPanel("time_to"),
+    FieldPanel("location"),
+    FieldPanel("cost"),
+    FieldPanel("signup_link"),
+    FieldPanel("body", classname="full"),
+    InlinePanel("related_media", label="Related media"),
 ]
