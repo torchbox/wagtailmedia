@@ -1,5 +1,15 @@
 # [wagtailmedia](https://pypi.org/project/wagtailmedia/) [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)  [![PyPI downloads](https://img.shields.io/pypi/dm/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://github.com/torchbox/wagtailmedia/workflows/CI/badge.svg)](https://github.com/torchbox/wagtailmedia/actions) [![Coverage](https://codecov.io/github/torchbox/wagtailmedia/coverage.svg?branch=master)](https://codecov.io/github/torchbox/wagtailmedia?branch=master)
 
+## CCA fork of wagtailmedia for customized animated gif support
+This module will allow users to upload an animated gif and have it converted to an `.mp4`, 
+
+To use:
+1. pip install from this repo url
+1. install ffmpeg
+1. set up a streamfield using the below instructions
+
+## --- original repo README below ---
+
 A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
 
