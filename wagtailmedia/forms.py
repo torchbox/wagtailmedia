@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
+import magic
+
 from django import forms
 from django.conf import settings
+from django.forms import ValidationError
 from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -43,6 +46,13 @@ class BaseMediaForm(BaseCollectionMemberForm):
                 # these fields might be editable=False so verify before accessing
                 if name in self.fields:
                     del self.fields[name]
+
+    def clean_file(self):
+        file = self.cleaned_data.get("file", False)
+        filetype = magic.from_buffer(file.read(2048), mime=True)
+        if filetype != 'image/gif':
+            raise ValidationError("File is not a gif.")
+        return file
 
 
 def get_media_base_form():

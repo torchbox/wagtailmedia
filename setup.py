@@ -65,6 +65,7 @@ setup(
     ],
     install_requires=[
         "wagtail>=2.7",
+        "python-magic>=0.4.18"
     ],
     extras_require={
         "testing": testing_extras,
