@@ -5,8 +5,8 @@
 {% if uploadform %}
     <ul class="tab-nav merged">
         <li class="{% if not uploadform.errors %}active{% endif %}"><a href="#search" >{% trans "Search" %}</a></li>
-        {% comment %} <li class="{% if uploadform.errors and media_type == 'audio' %}active{% endif %}"><a href="#upload-audio">{% trans "Upload Audio" %}</a></li> {% endcomment %}
-        <li class="{% if uploadform.errors and media_type == 'video' %}active{% endif %}"><a href="#upload-video">{% trans "Upload Animated Gif" %}</a></li>
+        <li class="{% if uploadform.errors and media_type == 'audio' %}active{% endif %}"><a href="#upload-audio">{% trans "Upload Audio" %}</a></li>
+        <li class="{% if uploadform.errors and media_type == 'video' %}active{% endif %}"><a href="#upload-video">{% trans "Upload Video" %}</a></li>
     </ul>
 {% endif %}
 
@@ -27,7 +27,7 @@
         </div>
     </section>
     {% if uploadform %}
-        {% comment %} <section id="upload-audio" class="{% if uploadform.errors and media_type == 'audio' %}active{% endif %} nice-padding">
+        <section id="upload-audio" class="{% if uploadform.errors and media_type == 'audio' %}active{% endif %} nice-padding">
             <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' 'audio' %}" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <ul class="fields">
@@ -43,7 +43,7 @@
                     </li>
                 </ul>
             </form>
-        </section> {% endcomment %}
+        </section>
         <section id="upload-video" class="{% if uploadform.errors and media_type == 'video' %}active{% endif %} nice-padding">
             <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' 'video' %}" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
