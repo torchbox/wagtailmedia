@@ -1,13 +1,10 @@
 from __future__ import unicode_literals
 
 import mimetypes
-import os
 import os.path
-import subprocess
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.files import File
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.dispatch import Signal
@@ -20,6 +17,8 @@ from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
+
+from wagtailmedia.utils import convert_gif
 
 
 if WAGTAIL_VERSION < (2, 9):
@@ -148,37 +147,9 @@ class Media(AbstractMedia):
     )
 
     def save(self, *args, **kwargs):
-        '''
-        If the file is a gif, convert it an .mp4.
-
-        https://web.dev/replace-gifs-with-videos/
-        '''
-        t = mimetypes.guess_type(self.filename)[0]
-
-        if t == 'image/gif':
-            # 1) save the FieldFile data as a temp file for ffmpeg
-            tmp_src_path = os.path.join(settings.WAGTAILMEDIA_TMP_DIRECTORY, self.filename)
-            with open(tmp_src_path, 'wb+') as tmp_src_file:
-                for chunk in self.file.chunks():
-                    tmp_src_file.write(chunk)
-
-            # 2) run ffmpeg to convert the .gif into an .mp4 temp video file
-            basename = os.path.splitext(self.filename)[0]
-            mp4_name = basename + '.mp4'
-            tmp_dest_path = os.path.join(settings.WAGTAILMEDIA_TMP_DIRECTORY, mp4_name)
-            process = ['ffmpeg', '-y', '-i', tmp_src_path, '-b:v', '500k', '-crf', '25', '-f', 'mp4', '-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', tmp_dest_path]
-            subprocess.run(process)
-
-            # 3) save a copy of the temp video file in the correct django storage location,
-            #    and associate it with the model
-            storage_file = File(open(tmp_dest_path, 'rb'))
-            storage_file.name = mp4_name
-            self.file = storage_file
-
-            # 4) delete temp files
-            os.unlink(tmp_src_path)
-            os.unlink(tmp_dest_path)
-
+        # If the file is a gif, convert it an .mp4
+        if mimetypes.guess_type(self.filename)[0] == 'image/gif':
+            convert_gif(self)
         return super().save(*args, **kwargs)
 
 

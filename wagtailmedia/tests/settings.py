@@ -5,6 +5,7 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 DEBUG = "INTERACTIVE" in os.environ
 
+WAGTAILMEDIA_TMP_DIRECTORY = '/tmp'
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-static")
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-media")
