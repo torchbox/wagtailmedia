@@ -39,11 +39,13 @@
             </div>
             {% if user_can_add %}
                 {% block add_actions %}
+                    {% comment %}                     
                     <div class="right">
                         <div class="addbutton">
                             <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button bicolor icon icon-plus">{% trans "Add audio" %}</a>
                         </div>
                     </div>
+                    {% endcomment %}
                     <div class="right">
                         <div class="col">
                             <div class="addbutton">
