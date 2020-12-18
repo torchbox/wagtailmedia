@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: wagtailmedia\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-17 17:07+0100\n"
-"PO-Revision-Date: 2020-12-17 17:33+0100\n"
+"PO-Revision-Date: 2020-12-18 11:56+0100\n"
 "Last-Translator: Henrik Kröger <hedwig@riseup.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr "Hinzufügen"
 
 #: forms.py:79
 msgid "Add/edit media you own"
-msgstr "Hinzufügen/Editieren Ihrer Medien"
+msgstr "Eigene Medien hinzufügen/bearbeiten"
 
 #: forms.py:80 views/media.py:139 views/media.py:194
 msgid "Edit"
@@ -33,7 +33,7 @@ msgstr "Bearbeiten"
 
 #: forms.py:80
 msgid "Edit any media"
-msgstr "Alle Medien bearbeiten"
+msgstr "Beliebige Medien bearbeiten"
 
 #: models.py:34
 msgid "Audio file"
@@ -302,7 +302,7 @@ msgstr "Benutzung von"
 
 #: templates/wagtailmedia/media/usage.html:17
 msgid "Parent"
-msgstr "Elternteil"
+msgstr "Übergeordnetes Element"
 
 #: templates/wagtailmedia/media/usage.html:19
 msgid "Status"
@@ -335,8 +335,7 @@ msgstr "Medien-Datei '{0}' hinzugefügt."
 
 #: views/media.py:146
 msgid "The media file could not be saved due to errors."
-msgstr ""
-"Die Medien-Datei konnte wegen Formular-Fehlern nicht gespeichert werden."
+msgstr "Die Medien-Datei konnte wegen Fehlern nicht gespeichert werden."
 
 #: views/media.py:191
 #, python-brace-format
@@ -345,7 +344,7 @@ msgstr "Medien-Datei '{0}' aktualisiert"
 
 #: views/media.py:200
 msgid "The media could not be saved due to errors."
-msgstr "Die Medien konnten wegen Formular-Fehlern nicht gespeichert werden."
+msgstr "Die Medien konnten wegen Fehlern nicht gespeichert werden."
 
 #: views/media.py:218
 msgid ""
