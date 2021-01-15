@@ -100,7 +100,7 @@ msgid "Upload Audio"
 msgstr "Transférer un son"
 
 #: templates/wagtailmedia/chooser/chooser.html:9
-msgid "Upload Video"
+msgid "Upload Media"
 msgstr "Transférer une vidéo"
 
 #: templates/wagtailmedia/chooser/chooser.html:42
@@ -181,7 +181,7 @@ msgstr "Ajouter un son"
 #: templates/wagtailmedia/media/add.html:8
 #: templates/wagtailmedia/media/add.html:31
 #: templates/wagtailmedia/media/index.html:50
-msgid "Add video"
+msgid "Add Media"
 msgstr "Ajouter une vidéo"
 
 #: templates/wagtailmedia/media/add.html:10
