@@ -85,7 +85,7 @@ def index(request):
         collections = None
 
     # Create response
-    if request.is_ajax():
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return render(
             request,
             "wagtailmedia/media/results.html",

@@ -167,4 +167,5 @@ def get_media_model():
     return media_model
 
 
-media_served = Signal(providing_args=["request"])
+# Provides `request` as an argument
+media_served = Signal()
