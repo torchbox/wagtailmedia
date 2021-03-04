@@ -6,11 +6,13 @@ from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
 
 from wagtailmedia.edit_handlers import MediaChooserPanel
-from wagtailmedia.models import AbstractMedia
+from wagtailmedia.models import AbstractMedia, Media
 
 
 class CustomMedia(AbstractMedia):
-    pass
+    fancy_caption = RichTextField(blank=True)
+
+    admin_form_fields = Media.admin_form_fields + ("fancy_caption",)
 
 
 class EventPageRelatedMedia(Orderable):
