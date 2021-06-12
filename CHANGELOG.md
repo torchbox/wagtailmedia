@@ -1,6 +1,11 @@
+
 # Changelog
 
 ## Unreleased
+
+## [0.7.1] - 2021-06-12
+
+- Fixes chooser tabs with Wagtail 2.13 ([#130](https://github.com/torchbox/wagtailmedia/pull/130)). Thanks to [@jams2](https://github.com/jams2)
 
 ## [0.7.0] - 2020-11-06
 
