@@ -23,6 +23,14 @@
                 {% if collections %}
                     {% include "wagtailadmin/shared/collection_chooser.html" %}
                 {% endif %}
+                {% if popular_tags %}
+                    <li class="taglist">
+                        <h3>{% trans 'Popular tags' %}</h3>
+                        {% for tag in popular_tags %}
+                            <a class="suggested-tag tag" href="{% url 'wagtailmedia:index' %}?tag={{ tag.name|urlencode }}">{{ tag.name }}</a>
+                        {% endfor %}
+                    </li>
+                {% endif %}
             </ul>
         </form>
         <div id="search-results" class="listing media">

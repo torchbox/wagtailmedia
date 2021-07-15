@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.modal_workflow import render_modal_workflow
+from wagtail.admin.models import popular_tags_for_model
 from wagtail.core import hooks
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
@@ -44,6 +45,8 @@ def get_media_json(media):
 
 
 def chooser(request):
+    Media = get_media_model()
+
     media_files = permission_policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
@@ -53,15 +56,15 @@ def chooser(request):
         media_files = hook(media_files, request)
 
     if permission_policy.user_has_permission(request.user, "add"):
-        Media = get_media_model()
         MediaForm = get_media_form(Media)
         uploadform = MediaForm(user=request.user, prefix="media-chooser-upload")
     else:
         uploadform = None
 
-    q = None
-    is_searching = False
-    if "q" in request.GET or "p" in request.GET or "collection_id" in request.GET:
+    if (
+        "q" in request.GET or "p" in request.GET or "tag" in request.GET
+        or "collection_id" in request.GET
+    ):
         collection_id = request.GET.get("collection_id")
         if collection_id:
             media_files = media_files.filter(collection=collection_id)
@@ -75,6 +78,11 @@ def chooser(request):
         else:
             media_files = media_files.order_by("-created_at")
             is_searching = False
+            q = None
+
+            tag_name = request.GET.get("tag")
+            if tag_name:
+                media_files = media_files.filter(tags__name=tag_name)
 
         # Pagination
         paginator, media_files = paginate(request, media_files, per_page=10)
@@ -110,6 +118,7 @@ def chooser(request):
             "uploadform": uploadform,
             "is_searching": False,
             "pagination_template": pagination_template,
+            "popular_tags": popular_tags_for_model(Media),
         },
         json_data={
             "step": "chooser",
