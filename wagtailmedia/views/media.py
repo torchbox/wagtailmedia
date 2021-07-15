@@ -55,6 +55,16 @@ def index(request):
         ordering = "-created_at"
     media = media.order_by(ordering)
 
+    # Search
+    query_string = None
+    if "q" in request.GET:
+        form = SearchForm(request.GET, placeholder=_("Search media files"))
+        if form.is_valid():
+            query_string = form.cleaned_data["q"]
+            media = media.search(query_string)
+    else:
+        form = SearchForm(placeholder=_("Search media"))
+
     # Filter by collection
     current_collection = None
     collection_id = request.GET.get("collection_id")
@@ -65,15 +75,13 @@ def index(request):
         except (ValueError, Collection.DoesNotExist):
             pass
 
-    # Search
-    query_string = None
-    if "q" in request.GET:
-        form = SearchForm(request.GET, placeholder=_("Search media files"))
-        if form.is_valid():
-            query_string = form.cleaned_data["q"]
-            media = media.search(query_string)
-    else:
-        form = SearchForm(placeholder=_("Search media"))
+    # Filter by tag
+    current_tag = request.GET.get("tag")
+    if current_tag:
+        try:
+            media = media.filter(tags__name=current_tag)
+        except (AttributeError):
+            current_tag = None
 
     # Pagination
     paginator, media = paginate(request, media)
@@ -107,6 +115,7 @@ def index(request):
                 "is_searching": bool(query_string),
                 "search_form": form,
                 "popular_tags": popular_tags_for_model(Media),
+                "current_tag": current_tag,
                 "user_can_add": permission_policy.user_has_permission(
                     request.user, "add"
                 ),

@@ -1,4 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags %}
 {% load i18n %}
 {% block titletag %}Media{% endblock %}
 {% block extra_js %}
@@ -61,6 +62,23 @@
             <form class="image-search search-bar" action="{% url 'wagtailmedia:index' %}" method="GET" novalidate>
                 <ul class="fields">
                     {% include "wagtailadmin/shared/collection_chooser.html" %}
+                    {% if popular_tags %}
+                    <li>
+                        <fieldset class="tagfilter">
+                        <legend>{% trans 'Popular Tags:' %}</legend>
+                          {% for tag in popular_tags %}
+                              {% if tag.name != current_tag %}
+                                  <a class="button button-small button-secondary bicolor button--icon" href="{% url 'wagtailmedia:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                              {% else %}
+                                  <a class="button button-small bicolor button--icon" href="{% url 'wagtailmedia:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                              {% endif %}
+                          {% endfor %}
+                          {% if current_tag %}
+                              <a class="button button-small bicolor button-secondary button--icon" href="{% url 'wagtailmedia:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear choice' %}</a>
+                          {% endif %}
+                        </fieldset>
+                    </li>
+                    {% endif %}
                 </ul>
             </form>
         {% endif %}
