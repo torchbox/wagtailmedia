@@ -62,7 +62,9 @@ def chooser(request):
         uploadform = None
 
     if (
-        "q" in request.GET or "p" in request.GET or "tag" in request.GET
+        "q" in request.GET
+        or "p" in request.GET
+        or "tag" in request.GET
         or "collection_id" in request.GET
     ):
         collection_id = request.GET.get("collection_id")
