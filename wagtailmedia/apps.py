@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class WagtailMediaAppConfig(AppConfig):
-    default_auto_field = 'django.db.models.AutoField'
+    default_auto_field = "django.db.models.AutoField"
     name = "wagtailmedia"
     label = "wagtailmedia"
     verbose_name = "Wagtail media"
