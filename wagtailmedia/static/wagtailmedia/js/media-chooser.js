@@ -23,4 +23,24 @@ function createMediaChooser(id) {
         input.val('');
         chooserElement.addClass('blank');
     });
+
+    let state = null;
+    /* define public API functions for the chooser */
+    const chooser = {
+        getState: () => state,
+        getValue: () => state && state.id,
+        setState: (mediaData) => {
+            if (mediaData == null) {
+                // return early
+                return
+            }
+            input.val(mediaData.id);
+            mediaTitle.text(mediaData.title);
+            editLink.attr('href', mediaData.edit_link);
+            chooserElement.removeClass('blank');
+            state = mediaData;
+        },
+    };
+
+    return chooser;
 }

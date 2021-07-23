@@ -16,7 +16,12 @@ class AbstractMediaChooserBlock(ChooserBlock):
     def widget(self):
         from wagtailmedia.widgets import AdminMediaChooser
 
-        return AdminMediaChooser
+        return AdminMediaChooser()
+
+    def get_form_state(self, value):
+        """support telepath for wagtail > 2.12"""
+        value_data = self.widget.get_value_data(value)
+        return value_data
 
     def render_basic(self, value, context=None):
         raise NotImplementedError(
