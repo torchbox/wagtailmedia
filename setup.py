@@ -22,7 +22,7 @@ testing_extras = [
     # Required for running tests in Vagrant
     "tox==3.9.0",
     # Required for interactive testing via tox
-    "psycopg2-binary",
+    "psycopg2-binary<2.9",
     "django-redis-cache",
 ]
 
