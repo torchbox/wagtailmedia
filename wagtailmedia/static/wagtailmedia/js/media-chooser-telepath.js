@@ -1,10 +1,11 @@
-class MediaChooser {
-    constructor(html, idPattern) {
+window.telepath.register('wagtailmedia.MediaChooser', MediaChooser);
+(function() {
+    function MediaChooser(html, idPattern) {
         this.html = html;
         this.idPattern = idPattern;
-     }
+    }
 
-    render(placeholder, name, id, initialState) {
+    MediaChooser.prototype.render = function(placeholder, name, id, initialState) {
         const html = this.html.replace(/__NAME__/g, name).replace(/__ID__/g, id);
         // eslint-disable-next-line no-param-reassign
         placeholder.outerHTML = html;
@@ -13,6 +14,8 @@ class MediaChooser {
         const chooser = createMediaChooser(id);
         chooser.setState(initialState);
         return chooser;
-    }
-}
-window.telepath.register('wagtailmedia.MediaChooser', MediaChooser);
+    };
+
+    window.telepath.register('wagtailmedia.MediaChooser', MediaChooser);
+})();
+
