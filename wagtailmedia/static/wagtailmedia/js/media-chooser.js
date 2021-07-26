@@ -40,6 +40,18 @@ function createMediaChooser(id) {
             chooserElement.removeClass('blank');
             state = mediaData;
         },
+        getTextLabel: (opts) => {
+            if (!mediaTitle.text()) return '';
+            var maxLength = opts && opts.maxLength,
+                result = mediaTitle.text();
+            if (maxLength && result.length > maxLength) {
+                return result.substring(0, maxLength - 1) + '…';
+            }
+            return result;
+        },
+        focus: function() {
+            $('.action-choose', chooserElement).focus();
+        }
     };
 
     return chooser;
