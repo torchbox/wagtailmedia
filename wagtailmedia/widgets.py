@@ -10,13 +10,17 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.widgets import AdminChooser
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.staticfiles import versioned_static
 
-if WAGTAIL_VERSION > (2, 13):
+try:
     from wagtail.core.telepath import register
-    from wagtail.admin.staticfiles import versioned_static
     from wagtail.core.widget_adapters import WidgetAdapter
+except ImportError:  # do-nothing fallback for Wagtail <2.13
+    def register(adapter, cls):
+        pass
 
+    class WidgetAdapter:
+        pass
 from wagtailmedia.models import get_media_model
 
 
