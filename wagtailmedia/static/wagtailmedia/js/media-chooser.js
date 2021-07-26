@@ -24,9 +24,9 @@ function createMediaChooser(id) {
         chooserElement.addClass('blank');
     });
 
-    let state = null;
+    var state = null;
     /* define public API functions for the chooser */
-    const chooser = {
+    var chooser = {
         getState: () => state,
         getValue: () => state && state.id,
         setState: (mediaData) => {
