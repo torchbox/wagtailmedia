@@ -55,7 +55,6 @@ class AdminMediaChooser(AdminChooser):
             # return value of get_value_data
             value = self.get_value_data(value)
         value_data = value if value is not None else {}
-        print(value_data)
 
         original_field_html = super().render_html(name, value_data.get("id"), attrs)
 
