@@ -1,4 +1,3 @@
-window.telepath.register('wagtailmedia.MediaChooser', MediaChooser);
 (function() {
     function MediaChooser(html, idPattern) {
         this.html = html;
