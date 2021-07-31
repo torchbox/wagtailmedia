@@ -22,8 +22,7 @@ except ImportError:  # do-nothing fallback for Wagtail <2.13
         pass
 
     class WidgetAdapter:
-        fake = True  # to check in test
-
+        pass
 
 from wagtailmedia.models import get_media_model
 

@@ -13,7 +13,7 @@ class WidgetTests(TestCase):
     def test_import_telepath_older_wagtail_versions_workaround(self):
         importlib.reload(widgets)
         from wagtailmedia.widgets import WidgetAdapter
-        self.assertTrue(getattr(WidgetAdapter, "fake", False))
+        self.assertFalse(hasattr(WidgetAdapter, "js_constructor"))
 
     def test_get_value_data(self):
         class StubModelManager:
