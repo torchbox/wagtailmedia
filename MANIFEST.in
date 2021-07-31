@@ -7,4 +7,4 @@ graft wagtailmedia
 include LICENSE *.md
 include pyproject.toml .editorconfig
 exclude .pre-commit-config.yaml .coveragerc codecov.yml tox.ini
-exclude manage.py runtests.py db.sqlite3
+exclude manage.py runtests.py db.sqlite3 Makefile
