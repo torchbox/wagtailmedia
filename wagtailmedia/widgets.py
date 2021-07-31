@@ -3,15 +3,15 @@ from __future__ import absolute_import, unicode_literals
 import json
 
 from django import forms
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
-
-from wagtail.admin.widgets import AdminChooser
 
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.staticfiles import versioned_static
+from wagtail.admin.widgets import AdminChooser
+
 
 try:
     from wagtail.core.telepath import register
@@ -22,7 +22,7 @@ except ImportError:  # do-nothing fallback for Wagtail <2.13
         pass
 
     class WidgetAdapter:
-        pass
+        fake = True  # to check in test
 
 
 from wagtailmedia.models import get_media_model
