@@ -39,11 +39,12 @@
         </div>
     </section>
     {% if uploadforms %}
-        <section id="upload-audio" class="{% if uploadforms.audio.errors and media_type == 'audio' %}active{% endif %} nice-padding">
-            <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' 'audio' %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% for form_type, uploadform in uploadforms.items %}
+        <section id="upload-{{ form_type }}" class="{% if uploadform.errors and media_type == form_type %}active{% endif %} nice-padding">
+            <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' form_type %}" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <ul class="fields">
-                    {% for field in uploadforms.audio %}
+                    {% for field in uploadform %}
                         {% if field.is_hidden %}
                             {{ field }}
                         {% else %}
@@ -56,22 +57,6 @@
                 </ul>
             </form>
         </section>
-        <section id="upload-video" class="{% if uploadforms.video.errors and media_type == 'video' %}active{% endif %} nice-padding">
-            <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' 'video' %}" method="POST" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-                <ul class="fields">
-                    {% for field in uploadforms.video %}
-                        {% if field.is_hidden %}
-                            {{ field }}
-                        {% else %}
-                            {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
-                        {% endif %}
-                    {% endfor %}
-                    <li>
-                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Upload' %}</em></button>
-                    </li>
-                </ul>
-            </form>
-        </section>
+        {% endfor %}
     {% endif %}
 </div>
