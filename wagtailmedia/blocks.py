@@ -16,7 +16,10 @@ class AbstractMediaChooserBlock(ChooserBlock):
     def widget(self):
         from wagtailmedia.widgets import AdminMediaChooser
 
-        return AdminMediaChooser
+        return AdminMediaChooser()
+
+    def get_form_state(self, value):
+        return self.widget.get_value_data(value)
 
     def render_basic(self, value, context=None):
         raise NotImplementedError(

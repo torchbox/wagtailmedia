@@ -23,4 +23,36 @@ function createMediaChooser(id) {
         input.val('');
         chooserElement.addClass('blank');
     });
+
+    var state = null;
+    /* define public API functions for the chooser */
+    var chooser = {
+        getState: () => state,
+        getValue: () => state && state.id,
+        setState: (mediaData) => {
+            if (mediaData == null) {
+                // return early
+                return
+            }
+            input.val(mediaData.id);
+            mediaTitle.text(mediaData.title);
+            editLink.attr('href', mediaData.edit_link);
+            chooserElement.removeClass('blank');
+            state = mediaData;
+        },
+        getTextLabel: (opts) => {
+            if (!mediaTitle.text()) return '';
+            var maxLength = opts && opts.maxLength,
+                result = mediaTitle.text();
+            if (maxLength && result.length > maxLength) {
+                return result.substring(0, maxLength - 1) + '…';
+            }
+            return result;
+        },
+        focus: function() {
+            $('.action-choose', chooserElement).focus();
+        }
+    };
+
+    return chooser;
 }
