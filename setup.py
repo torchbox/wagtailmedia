@@ -2,13 +2,9 @@
 
 import io
 
+from setuptools import find_packages, setup
+
 from wagtailmedia import __version__
-
-
-try:
-    from setuptools import find_packages, setup
-except ImportError:
-    from distutils.core import setup
 
 
 # Testing dependencies
@@ -29,7 +25,12 @@ setup(
     description="A module for Wagtail that provides functionality "
     "similar to wagtail.documents module, but for audio and video files.",
     author="Mikalai Radchuk",
-    author_email="mikalai.radchuk@torchbox.com",
+    author_email="hello@torchbox.com",
+    maintainer="Dan Braghis",
+    maintainer_email="dan.braghis@torchbox.com",
+    project_urls={
+        "Changelog": "https://github.com/torchbox/wagtailmedia/blob/main/CHANGELOG.md",
+    },
     url="https://github.com/torchbox/wagtailmedia",
     packages=find_packages(),
     include_package_data=True,
@@ -49,11 +50,10 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Framework :: Django",
-        "Framework :: Django :: 2.0",
-        "Framework :: Django :: 2.1",
         "Framework :: Django :: 2.2",
-        "Framework :: Django :: 3.0",
         "Framework :: Django :: 3.1",
+        "Framework :: Django :: 3.2",
+        "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
     ],
