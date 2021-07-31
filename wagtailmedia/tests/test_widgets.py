@@ -3,7 +3,6 @@ import importlib
 from unittest.mock import patch
 
 from django.test import TestCase
-from django.urls import reverse
 
 from wagtailmedia import widgets
 
@@ -13,6 +12,7 @@ class WidgetTests(TestCase):
     def test_import_telepath_older_wagtail_versions_workaround(self):
         importlib.reload(widgets)
         from wagtailmedia.widgets import WidgetAdapter
+
         self.assertFalse(hasattr(WidgetAdapter, "js_constructor"))
 
     def test_get_value_data(self):
@@ -49,8 +49,8 @@ class WidgetTests(TestCase):
         """
         wagtail_versions = [
             # (wagtail_version, get_value_data.called)
-            ((2, 11, 8, 'final', 1), True),
-            ((2, 13, 4, 'final', 1), False),
+            ((2, 11, 8, "final", 1), True),
+            ((2, 13, 4, "final", 1), False),
         ]
         media_chooser = widgets.AdminMediaChooser()
 

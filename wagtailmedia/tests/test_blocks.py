@@ -36,5 +36,3 @@ class BlockTests(TestCase):
         self.assertEqual(self.media.title, form_state["title"])
         edit_link = reverse("wagtailmedia:edit", args=(self.media.id,))
         self.assertEqual(edit_link, form_state["edit_link"])
-
-

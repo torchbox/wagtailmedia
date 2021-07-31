@@ -11,26 +11,64 @@ import wagtailmedia.tests.testapp.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wagtailmedia_tests', '0001_initial'),
+        ("wagtailmedia_tests", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BlogStreamPage',
+            name="BlogStreamPage",
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('author', models.CharField(max_length=255)),
-                ('date', models.DateField(verbose_name='Post date')),
-                ('body', wagtail.core.fields.StreamField([('heading', wagtail.core.blocks.CharBlock(form_classname='full title', icon='title')), ('paragraph', wagtail.core.blocks.RichTextBlock(icon='pilcrow')), ('media', wagtailmedia.tests.testapp.models.TestMediaBlock(icon='media'))])),
+                (
+                    "page_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="wagtailcore.page",
+                    ),
+                ),
+                ("author", models.CharField(max_length=255)),
+                ("date", models.DateField(verbose_name="Post date")),
+                (
+                    "body",
+                    wagtail.core.fields.StreamField(
+                        [
+                            (
+                                "heading",
+                                wagtail.core.blocks.CharBlock(
+                                    form_classname="full title", icon="title"
+                                ),
+                            ),
+                            (
+                                "paragraph",
+                                wagtail.core.blocks.RichTextBlock(icon="pilcrow"),
+                            ),
+                            (
+                                "media",
+                                wagtailmedia.tests.testapp.models.TestMediaBlock(
+                                    icon="media"
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('wagtailcore.page',),
+            bases=("wagtailcore.page",),
         ),
         migrations.AlterField(
-            model_name='custommedia',
-            name='duration',
-            field=models.FloatField(blank=True, default=0, help_text='Duration in seconds', validators=[django.core.validators.MinValueValidator(0)], verbose_name='duration'),
+            model_name="custommedia",
+            name="duration",
+            field=models.FloatField(
+                blank=True,
+                default=0,
+                help_text="Duration in seconds",
+                validators=[django.core.validators.MinValueValidator(0)],
+                verbose_name="duration",
+            ),
         ),
     ]

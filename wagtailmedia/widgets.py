@@ -24,6 +24,7 @@ except ImportError:  # do-nothing fallback for Wagtail <2.13
     class WidgetAdapter:
         pass
 
+
 from wagtailmedia.models import get_media_model
 
 
@@ -91,7 +92,9 @@ class MediaChooserAdapter(WidgetAdapter):
     @cached_property
     def media(self):
         return forms.Media(
-            js=[versioned_static("wagtailmedia/js/media-chooser-telepath.js"),]
+            js=[
+                versioned_static("wagtailmedia/js/media-chooser-telepath.js"),
+            ]
         )
 
 

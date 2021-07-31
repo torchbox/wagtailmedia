@@ -17,4 +17,3 @@
 
     window.telepath.register('wagtailmedia.MediaChooser', MediaChooser);
 })();
-
