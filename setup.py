@@ -17,13 +17,7 @@ testing_extras = [
     "mock>=1.0.0",
     # For coverage and PEP8 linting
     "coverage>=3.7.0",
-    "flake8>=3.6.0",
-    "isort==5.6.4",  # leave this pinned - it tends to change rules between patch releases
-    # Required for running tests in Vagrant
-    "tox==3.9.0",
-    # Required for interactive testing via tox
-    "psycopg2-binary<2.9",
-    "django-redis-cache",
+    "tox==3.23.1",
 ]
 
 with io.open("README.md", encoding="utf-8") as readme_file:
@@ -64,7 +58,7 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Site Management",
     ],
     install_requires=[
-        "wagtail>=2.7",
+        "wagtail>=2.11",
     ],
     extras_require={
         "testing": testing_extras,
