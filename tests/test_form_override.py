@@ -5,6 +5,7 @@ from django.test import TestCase, override_settings
 
 from wagtail.admin import widgets
 
+from tests.testapp.forms import AlternateMediaForm, OverridenWidget
 from wagtailmedia import models
 from wagtailmedia.forms import (
     BaseMediaForm,
@@ -12,7 +13,6 @@ from wagtailmedia.forms import (
     get_media_form,
     media_base_form,
 )
-from wagtailmedia.tests.testapp.forms import AlternateMediaForm, OverridenWidget
 
 
 class TestFormOverride(TestCase):
@@ -35,7 +35,7 @@ class TestFormOverride(TestCase):
         self.assertIsInstance(form.fields["thumbnail"].widget, forms.ClearableFileInput)
 
     @override_settings(
-        WAGTAILMEDIA_MEDIA_FORM_BASE="wagtailmedia.tests.testapp.forms.AlternateMediaForm"
+        WAGTAILMEDIA_MEDIA_FORM_BASE="tests.testapp.forms.AlternateMediaForm"
     )
     def test_overridden_base_form(self):
         self.assertIs(get_media_base_form(), AlternateMediaForm)

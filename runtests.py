@@ -7,16 +7,10 @@ import warnings
 
 from django.core.management import execute_from_command_line
 
-
-try:
-    from wagtail.utils.deprecation import RemovedInWagtail27Warning
-except ImportError:
-
-    class RemovedInWagtail27Warning(Warning):
-        pass
+from tests.settings import MEDIA_ROOT, STATIC_ROOT
 
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "wagtailmedia.tests.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "tests.settings"
 
 
 def runtests():
@@ -31,13 +25,13 @@ def runtests():
 
     args = sys.argv[1:]
     argv = sys.argv[:1] + ["test"] + args
+
+    shutil.rmtree(STATIC_ROOT, ignore_errors=True)
+    shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+
     try:
-        # adding an assert to catch RemovedInWagtail27Warning warnings
-        warnings.filterwarnings("error", category=RemovedInWagtail27Warning)
         execute_from_command_line(argv)
     finally:
-        from wagtailmedia.tests.settings import MEDIA_ROOT, STATIC_ROOT
-
         shutil.rmtree(STATIC_ROOT, ignore_errors=True)
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
 

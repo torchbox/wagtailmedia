@@ -10,36 +10,23 @@ STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-static")
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-media")
 MEDIA_URL = "/media/"
 
-POSTGRES_PORT = os.getenv("POSTGRES_5432_TCP_PORT", "")
-if POSTGRES_PORT:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "pgdb",
-            "USER": "pguser",
-            "PASSWORD": "pgpass",
-            "HOST": "localhost",
-            "PORT": POSTGRES_PORT,
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DATABASE_NAME", "db.sqlite3"),
+        "USER": os.environ.get("DATABASE_USER", None),
+        "PASSWORD": os.environ.get("DATABASE_PASS", None),
+        "HOST": os.environ.get("DATABASE_HOST", None),
+        "TEST": {
+            "NAME": os.environ.get("DATABASE_NAME", None),
+        },
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
-            "NAME": os.environ.get("DATABASE_NAME", "db.sqlite3"),
-            "USER": os.environ.get("DATABASE_USER", None),
-            "PASSWORD": os.environ.get("DATABASE_PASS", None),
-            "HOST": os.environ.get("DATABASE_HOST", None),
-            "TEST": {
-                "NAME": os.environ.get("DATABASE_NAME", None),
-            },
-        }
-    }
+}
 
 
 SECRET_KEY = "not needed"
 
-ROOT_URLCONF = "wagtailmedia.tests.urls"
+ROOT_URLCONF = "tests.urls"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = STATIC_ROOT
@@ -84,7 +71,7 @@ MIDDLEWARE += [
 ]
 
 INSTALLED_APPS = [
-    "wagtailmedia.tests.testapp",
+    "tests.testapp",
     "wagtailmedia",
     "taggit",
     "django.contrib.auth",

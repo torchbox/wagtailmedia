@@ -16,8 +16,8 @@ from wagtail.tests.utils import WagtailTestUtils
 
 from six import b
 
+from tests.testapp.models import EventPage, EventPageRelatedMedia
 from wagtailmedia import models
-from wagtailmedia.tests.testapp.models import EventPage, EventPageRelatedMedia
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):
@@ -31,7 +31,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
 
-    @modify_settings(INSTALLED_APPS={"prepend": "wagtailmedia.tests.testextends"})
+    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
     def test_extends(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
@@ -469,7 +469,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertContains(response, "Filesize")
         self.assertNotContains(response, "wagtailadmin/js/draftail.js")
 
-    @modify_settings(INSTALLED_APPS={"prepend": "wagtailmedia.tests.testextends"})
+    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
     def test_extends(self):
         response = self.client.get(reverse("wagtailmedia:edit", args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
