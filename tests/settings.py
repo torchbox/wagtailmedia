@@ -1,7 +1,5 @@
 import os
 
-from wagtail import VERSION as WAGTAIL_VERSION
-
 
 DEBUG = "INTERACTIVE" in os.environ
 
@@ -62,9 +60,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-if WAGTAIL_VERSION < (2, 9):
-    MIDDLEWARE += ["wagtail.core.middleware.SiteMiddleware"]
 
 MIDDLEWARE += [
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",

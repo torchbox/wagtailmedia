@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.auth import PermissionPolicyChecker
+from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.models import popular_tags_for_model
 from wagtail.core import hooks
@@ -14,20 +15,7 @@ from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
 
 
-if WAGTAIL_VERSION < (2, 5):
-    from wagtail.admin.forms import SearchForm
-
-    pagination_template = "wagtailadmin/shared/pagination_nav.html"
-else:
-    from wagtail.admin.forms.search import SearchForm
-
-    pagination_template = "wagtailadmin/shared/ajax_pagination_nav.html"
-
-if WAGTAIL_VERSION < (2, 9):
-    from wagtail.admin.utils import PermissionPolicyChecker
-else:
-    from wagtail.admin.auth import PermissionPolicyChecker
-
+pagination_template = "wagtailadmin/shared/ajax_pagination_nav.html"
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 

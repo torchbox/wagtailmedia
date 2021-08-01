@@ -11,18 +11,12 @@ from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.models import get_object_usage
 from wagtail.core.models import CollectionMember
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
-
-
-if WAGTAIL_VERSION < (2, 9):
-    from wagtail.admin.utils import get_object_usage
-else:
-    from wagtail.admin.models import get_object_usage
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
