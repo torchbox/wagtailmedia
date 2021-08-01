@@ -3,6 +3,12 @@
 
 ## Unreleased
 
+- Added `default_auto_field` for Django 3.2+ ([#134](https://github.com/torchbox/wagtailmedia/pull/134). Thanks [@hyperstown](https://github.com/hyperstown))
+- Added tag-based filters ([#132](https://github.com/torchbox/wagtailmedia/pull/132). Thanks [@th3hamm0r](https://github.com/th3hamm0r))
+- Fixed the media chooser block compatibility with Wagtail 2.13 ([#136])(https://github.com/torchbox/wagtailmedia/pull/136). Thanks [@efes](https://github.com/ephes))
+- Change the chooser uploader forms to use correctly instantiated forms ([#135](https://github.com/torchbox/wagtailmedia/pull/135))
+- Updated test targets to include Wagtail 2.13
+
 ## [0.7.1] - 2021-06-12
 
 - Fixes chooser tabs with Wagtail 2.13 ([#130](https://github.com/torchbox/wagtailmedia/pull/130)). Thanks to [@jams2](https://github.com/jams2)
@@ -113,3 +119,18 @@ content_panels = Page.content_panels + [
 ## [0.1.1] - 2016-05-26
 
 Initial release
+
+
+[0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
+[0.7.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.0
+[0.6.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.6.0
+[0.5.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.5.0
+[0.4.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.4.0
+[0.3.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.3.1
+[0.3.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.3.0
+[0.2.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.2.0
+[0.1.5]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.5
+[0.1.4]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.4
+[0.1.3]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.3
+[0.1.2]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.2
+[0.1.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.1
