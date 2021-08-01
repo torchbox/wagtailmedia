@@ -15,67 +15,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-      - uses: pre-commit/action@v2.0.0
+          python-version: "3.8"
+      - uses: pre-commit/action@v2.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
   test:
+    name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     needs: lint
-    continue-on-error: ${{ matrix.experimental }}
+
     strategy:
       matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        experimental: [false]
         include:
-          - python: 3.6
-            django: "Django>=2.2,<2.3"
-            wagtail: "wagtail>=2.11,<2.12"
-            experimental: false
-          - python: 3.7
-            django: "Django>=3.1,<3.2"
-            wagtail: "wagtail>=2.12,<2.13"
-            experimental: false
-          - python: 3.8
-            django: "Django>=3.2,<3.3"
-            wagtail: "wagtail>=2.13,<2.14"
-            experimental: false
-          - python: 3.9
-            django: "Django>=3.2,<3.3"
-            wagtail: "wagtail>=2.13,<2.14"
-            experimental: false
-          - python: 3.9
-            django: "Django>=3.2,<3.3"
-            wagtail: "git+https://github.com/wagtail/wagtail.git@main#egg=wagtail"
+          - python-version: "3.x"
+            toxenv: "wagtailmain"
             experimental: true
 
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres:12.7
+        env:
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v2
+
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ matrix.python-version }}
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install "psycopg2>=2.6"
-          pip install "${{ matrix.django }}"
-          pip install "${{ matrix.wagtail }}"
-          pip install -e .[testing]
-      - name: Test
-        run: |
-          coverage run runtests.py
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade tox tox-py tox-venv
+      - name: Run tox targets for Python ${{ matrix.python-version }}
+        if: ${{ matrix.toxenv != 'wagtailmain' }}
+        continue-on-error: ${{ matrix.experimental }}
+        run: tox --py current
         env:
           DATABASE_ENGINE: django.db.backends.postgresql
           DATABASE_HOST: localhost
           DATABASE_USER: postgres
           DATABASE_PASS: postgres
+
+      - name: Run wagtailmain tox targets
+        if: ${{ matrix.toxenv == 'wagtailmain' }}
+        continue-on-error: ${{ matrix.experimental }}
+        run: tox -e ${{ matrix.toxenv }}
+
       - name: Upload coverage reports to Codecov
         run: |
           pip install codecov
