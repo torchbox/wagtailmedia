@@ -57,9 +57,19 @@ def chooser(request):
 
     if permission_policy.user_has_permission(request.user, "add"):
         MediaForm = get_media_form(Media)
-        uploadform = MediaForm(user=request.user, prefix="media-chooser-upload")
+        media_audio = Media(uploaded_by_user=request.user, type="audio")
+        media_video = Media(uploaded_by_user=request.user, type="video")
+
+        uploadforms = {
+            "audio": MediaForm(
+                user=request.user, prefix="media-chooser-upload", instance=media_audio
+            ),
+            "video": MediaForm(
+                user=request.user, prefix="media-chooser-upload", instance=media_video
+            ),
+        }
     else:
-        uploadform = None
+        uploadforms = {}
 
     if (
         "q" in request.GET
@@ -117,7 +127,7 @@ def chooser(request):
             "media_files": media_files,
             "searchform": searchform,
             "collections": collections,
-            "uploadform": uploadform,
+            "uploadforms": uploadforms,
             "is_searching": False,
             "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
@@ -145,20 +155,25 @@ def media_chosen(request, media_id):
 
 @permission_checker.require("add")
 def chooser_upload(request, media_type):
-    Media = get_media_model()
-    MediaForm = get_media_form(Media)
+    upload_forms = {}
 
-    if request.method == "POST":
+    if (
+        permission_policy.user_has_permission(request.user, "add")
+        and request.method == "POST"
+    ):
+        Media = get_media_model()
+        MediaForm = get_media_form(Media)
+
         media = Media(uploaded_by_user=request.user, type=media_type)
-        form = MediaForm(
+        uploading_form = MediaForm(
             request.POST,
             request.FILES,
             instance=media,
             user=request.user,
             prefix="media-chooser-upload",
         )
-        if form.is_valid():
-            form.save()
+        if uploading_form.is_valid():
+            uploading_form.save()
 
             # Reindex the media entry to make sure all tags are indexed
             for backend in get_search_backends():
@@ -171,6 +186,19 @@ def chooser_upload(request, media_type):
                 None,
                 json_data={"step": "media_chosen", "result": get_media_json(media)},
             )
+
+        if media_type == "audio":
+            video = Media(uploaded_by_user=request.user, type="video")
+            video_form = MediaForm(
+                instance=video, user=request.user, prefix="media-chooser-upload"
+            )
+            upload_forms = {"audio": uploading_form, "video": video_form}
+        else:
+            audio = Media(uploaded_by_user=request.user, type="audio")
+            audio_form = MediaForm(
+                instance=audio, user=request.user, prefix="media-chooser-upload"
+            )
+            upload_forms = {"audio": audio_form, "video": uploading_form}
 
     media_files = permission_policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
@@ -193,7 +221,7 @@ def chooser_upload(request, media_type):
         "media_files": media_files,
         "searchform": searchform,
         "collections": collections,
-        "uploadform": form,
+        "uploadforms": upload_forms,
         "is_searching": False,
         "pagination_template": pagination_template,
         "media_type": media_type,

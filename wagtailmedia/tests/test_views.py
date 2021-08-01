@@ -6,6 +6,7 @@ import os
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
+from django.forms.utils import ErrorDict
 from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import reverse
@@ -755,6 +756,22 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         )
         self.assertIn("Sorry, no media files", str(response.content))
 
+    def test_upload_permission(self):
+        user = get_user_model().objects.create_user(
+            username="user", email="user@example.com", password="password"
+        )
+        user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="wagtailadmin", codename="access_admin"
+            )
+        )
+        user.save()
+
+        self.login(user)
+
+        response = self.client.get(reverse("wagtailmedia:chooser"))
+        self.assertEqual(response.context["uploadforms"], {})
+
 
 class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
     def setUp(self):
@@ -844,8 +861,34 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
 
-        # The form should have an error
-        self.assertFormError(response, "uploadform", "file", "This field is required.")
+        # The video form should have an error
+        self.assertIn("uploadforms", response.context)
+        self.assertIn("video", response.context["uploadforms"])
+        video_form = response.context["uploadforms"]["video"]
+        self.assertIn("This field is required.", video_form.errors["file"])
+        self.assertEqual(video_form.instance.title, "Test video")
+        self.assertEqual(video_form.instance.type, "video")
+
+        # the audio form should not have an error
+        self.assertIn("audio", response.context["uploadforms"])
+        audio_form = response.context["uploadforms"]["audio"]
+        self.assertEqual(audio_form.errors, ErrorDict())
+        self.assertEqual(audio_form.instance.title, "")
+        self.assertEqual(audio_form.instance.type, "audio")
+
+        # try the audio form
+        response = self.client.post(
+            reverse("wagtailmedia:chooser_upload", args=("audio",)),
+            {"media-chooser-upload-title": "Test audio"},
+        )
+        audio_form = response.context["uploadforms"]["audio"]
+        self.assertIn("This field is required.", audio_form.errors["file"])
+        self.assertEqual(audio_form.instance.title, "Test audio")
+        self.assertEqual(audio_form.instance.type, "audio")
+        video_form = response.context["uploadforms"]["video"]
+        self.assertEqual(video_form.errors, ErrorDict())
+        self.assertEqual(video_form.instance.title, "")
+        self.assertEqual(video_form.instance.type, "video")
 
     @override_settings(
         DEFAULT_FILE_STORAGE="wagtail.tests.dummy_external_storage.DummyExternalStorage"
