@@ -8,8 +8,14 @@ omit =
     */migrations/*
     tests/*
 
+[paths]
+# the following paths should be considered equivalent
+source =
+    src
+    .tox/*/site-packages
 
 [report]
+show_missing = true
 # Regexes for lines to exclude from consideration
 exclude_lines =
     # Have to re-enable the standard pragma

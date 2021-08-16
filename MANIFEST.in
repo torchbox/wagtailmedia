@@ -1,9 +1,9 @@
 global-exclude *.py[cod] __pycache__
 prune __pycache__
 prune tests
-prune venv
+prune venv .venv
 prune .tox
-graft wagtailmedia
+graft src/wagtailmedia
 include LICENSE *.md
 include pyproject.toml .editorconfig
 exclude .pre-commit-config.yaml .coveragerc codecov.yml tox.ini

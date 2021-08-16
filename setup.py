@@ -4,7 +4,7 @@ import io
 
 from setuptools import find_packages, setup
 
-from wagtailmedia import __version__
+from src.wagtailmedia import __version__
 
 
 # Testing dependencies
@@ -32,11 +32,13 @@ setup(
         "Changelog": "https://github.com/torchbox/wagtailmedia/blob/main/CHANGELOG.md",
     },
     url="https://github.com/torchbox/wagtailmedia",
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     include_package_data=True,
     license="BSD",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    keywords=["wagtail", "django", "media"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
