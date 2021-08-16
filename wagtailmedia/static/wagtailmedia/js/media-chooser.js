@@ -27,9 +27,13 @@ function createMediaChooser(id) {
     var state = null;
     /* define public API functions for the chooser */
     var chooser = {
-        getState: () => state,
-        getValue: () => state && state.id,
-        setState: (mediaData) => {
+        getState: function() { return state; },
+        getValue: function() {
+            if (state) {
+                return state.id;
+            }
+        },
+        setState: function(mediaData) {
             if (mediaData == null) {
                 // return early
                 return
@@ -40,7 +44,7 @@ function createMediaChooser(id) {
             chooserElement.removeClass('blank');
             state = mediaData;
         },
-        getTextLabel: (opts) => {
+        getTextLabel: function(opts) {
             if (!mediaTitle.text()) return '';
             var maxLength = opts && opts.maxLength,
                 result = mediaTitle.text();
