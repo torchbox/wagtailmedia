@@ -9,6 +9,9 @@ urlpatterns = [
     path("edit/<int:media_id>/", media.edit, name="edit"),
     path("delete/<int:media_id>/", media.delete, name="delete"),
     path("chooser/", chooser.chooser, name="chooser"),
+    re_path(
+        r"chooser/(?P<media_type>audio|video)/", chooser.chooser, name="chooser_typed"
+    ),
     path("chooser/<int:media_id>/", chooser.media_chosen, name="media_chosen"),
     re_path(
         r"^(?P<media_type>audio|video)/chooser/upload/$",
