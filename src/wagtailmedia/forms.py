@@ -6,23 +6,14 @@ from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import widgets
+from wagtail.admin.forms.collections import (
+    BaseCollectionMemberForm,
+    collection_member_permission_formset_factory,
+)
 
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import permission_policy as media_permission_policy
-
-
-if WAGTAIL_VERSION < (2, 5):
-    from wagtail.admin.forms import (
-        BaseCollectionMemberForm,
-        collection_member_permission_formset_factory,
-    )
-else:
-    from wagtail.admin.forms.collections import (
-        BaseCollectionMemberForm,
-        collection_member_permission_formset_factory,
-    )
 
 
 class BaseMediaForm(BaseCollectionMemberForm):
