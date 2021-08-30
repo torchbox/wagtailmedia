@@ -16,9 +16,9 @@ if POSTGRES_PORT:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "pgdb",
-            "USER": "pguser",
-            "PASSWORD": "pgpass",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
             "HOST": "localhost",
             "PORT": POSTGRES_PORT,
         }
