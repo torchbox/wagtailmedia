@@ -34,8 +34,22 @@ class AdminMediaChooser(AdminChooser):
     link_to_chosen_text = _("Edit this media item")
 
     def __init__(self, **kwargs):
-        super(AdminMediaChooser, self).__init__(**kwargs)
+        media_type = kwargs.pop("media_type", None)
+        super().__init__(**kwargs)
         self.media_model = get_media_model()
+
+        if media_type == "audio":
+            self.media_type = media_type
+            self.choose_one_text = _("Choose audio")
+            self.choose_another_text = _("Choose another audio item")
+            self.link_to_chosen_text = _("Edit this audio item")
+        elif media_type == "video":
+            self.media_type = media_type
+            self.choose_one_text = _("Choose video")
+            self.choose_another_text = _("Choose another video")
+            self.link_to_chosen_text = _("Edit this video")
+        else:
+            self.media_type = None
 
     def get_value_data(self, value):
         if value is None:
@@ -58,6 +72,11 @@ class AdminMediaChooser(AdminChooser):
 
         original_field_html = super().render_html(name, value_data.get("id"), attrs)
 
+        if self.media_type:
+            chooser_url = reverse("wagtailmedia:chooser_typed", args=(self.media_type,))
+        else:
+            chooser_url = reverse("wagtailmedia:chooser")
+
         return render_to_string(
             "wagtailmedia/widgets/media_chooser.html",
             {
@@ -67,6 +86,7 @@ class AdminMediaChooser(AdminChooser):
                 "value": value_data != {},  # only used to identify blank values
                 "title": value_data.get("title", ""),
                 "edit_url": value_data.get("edit_url", ""),
+                "chooser_url": chooser_url,
             },
         )
 
