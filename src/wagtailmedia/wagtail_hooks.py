@@ -1,6 +1,5 @@
 from django.conf.urls import include
 from django.urls import path, reverse
-from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ungettext
 
@@ -37,18 +36,6 @@ def register_media_menu_item():
         name="media",
         classnames="icon icon-media",
         order=300,
-    )
-
-
-@hooks.register("insert_editor_js")
-def editor_js():
-    return format_html(
-        """
-        <script>
-            window.chooserUrls.mediaChooser = '{0}';
-        </script>
-        """,
-        reverse("wagtailmedia:chooser"),
     )
 
 
