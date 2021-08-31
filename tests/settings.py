@@ -3,23 +3,37 @@ import os
 
 DEBUG = "INTERACTIVE" in os.environ
 
+WAGTAILMEDIA_TMP_DIRECTORY = "/tmp"
 WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-static")
 MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-media")
 MEDIA_URL = "/media/"
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("DATABASE_NAME", "db.sqlite3"),
-        "USER": os.environ.get("DATABASE_USER", None),
-        "PASSWORD": os.environ.get("DATABASE_PASS", None),
-        "HOST": os.environ.get("DATABASE_HOST", None),
-        "TEST": {
-            "NAME": os.environ.get("DATABASE_NAME", None),
-        },
+POSTGRES_PORT = os.getenv("POSTGRES_5432_TCP_PORT", "")
+if POSTGRES_PORT:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": POSTGRES_PORT,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.environ.get("DATABASE_NAME", "db.sqlite3"),
+            "USER": os.environ.get("DATABASE_USER", None),
+            "PASSWORD": os.environ.get("DATABASE_PASS", None),
+            "HOST": os.environ.get("DATABASE_HOST", None),
+            "TEST": {
+                "NAME": os.environ.get("DATABASE_NAME", None),
+            },
+        }
+    }
 
 
 SECRET_KEY = "not needed"

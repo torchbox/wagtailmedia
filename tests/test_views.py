@@ -24,7 +24,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertContains(response, "Add audio")
-        self.assertContains(response, "Add video")
+        self.assertContains(response, "Add Media")
 
     @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
     def test_extends(self):
@@ -32,7 +32,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertNotContains(response, "Add audio")
-        self.assertNotContains(response, "Add video")
+        self.assertNotContains(response, "Add Media")
         self.assertContains(response, "You shan't act")
 
     def test_search(self):
@@ -155,7 +155,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         response = self.client.get(reverse("wagtailmedia:add", args=("video",)))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
-        self.assertContains(response, "Add video")
+        self.assertContains(response, "Add Media")
         self.assertNotContains(response, "Add audio or video")
         self.assertContains(
             response,
@@ -177,7 +177,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
 
-        self.assertNotContains(response, "Add video")
+        self.assertNotContains(response, "Add Media")
         self.assertContains(response, "Add audio or video")
 
     def test_get_audio_with_collections(self):
@@ -209,7 +209,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, self.collection_label_tag)
         self.assertContains(response, "Evil plans")
-        self.assertContains(response, "Add video")
+        self.assertContains(response, "Add Media")
         self.assertContains(
             response,
             '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
@@ -386,7 +386,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         # user only has access to one collection, so no 'Collection' option
         # is displayed on the form
         self.assertNotContains(response, self.collection_label_tag)
-        self.assertContains(response, "Add video")
+        self.assertContains(response, "Add Media")
         self.assertContains(
             response,
             '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(

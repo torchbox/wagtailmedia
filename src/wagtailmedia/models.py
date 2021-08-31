@@ -15,6 +15,8 @@ from wagtail.search.queryset import SearchableQuerySetMixin
 
 from wagtailmedia.settings import wagtailmedia_settings
 
+from wagtailmedia.utils import convert_gif
+
 
 ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
 
@@ -157,6 +159,12 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
 
 class Media(AbstractMedia):
     pass
+
+    def save(self, *args, **kwargs):
+        # If the file is a gif, convert it an .mp4
+        if mimetypes.guess_type(self.filename)[0] == "image/gif":
+            convert_gif(self)
+        return super().save(*args, **kwargs)
 
 
 def get_media_model():
