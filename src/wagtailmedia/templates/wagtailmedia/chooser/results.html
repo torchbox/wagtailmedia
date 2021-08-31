@@ -16,5 +16,14 @@
 
     {% include pagination_template with items=media_files is_ajax=1 %}
 {% else %}
-    <p>{% blocktrans %}Sorry, no media files match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+    {% if is_searching %}
+        <p>{% blocktrans %}Sorry, no media files match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+    {% else %}
+        {% url 'wagtailmedia:add' media_type as wagtailmedia_add_url %}
+        {% if current_collection %}
+            <p>{% blocktrans %}You haven't uploaded any media in this collection. Why not <a href="{{ wagtailmedia_add_url }}">upload one now</a>?{% endblocktrans %}</p>
+        {% else %}
+            <p>{% blocktrans %}You haven't uploaded any media. Why not <a href="{{ wagtailmedia_add_url }}">upload one now</a>?{% endblocktrans %}</p>
+        {% endif %}
+    {% endif %}
 {% endif %}

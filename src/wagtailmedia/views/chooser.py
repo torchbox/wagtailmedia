@@ -101,6 +101,7 @@ def chooser(request, media_type=None):
                 "query_string": q,
                 "is_searching": is_searching,
                 "pagination_template": pagination_template,
+                "media_type": media_type,
             },
         )
     else:
@@ -125,6 +126,7 @@ def chooser(request, media_type=None):
             "is_searching": False,
             "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
+            "media_type": media_type,
         },
         json_data={
             "step": "chooser",
