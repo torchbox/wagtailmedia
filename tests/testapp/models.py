@@ -8,7 +8,11 @@ from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable, Page
 
-from wagtailmedia.blocks import AbstractMediaChooserBlock
+from wagtailmedia.blocks import (
+    AbstractMediaChooserBlock,
+    AudioChooserBlock,
+    VideoChooserBlock,
+)
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import AbstractMedia, Media
 
@@ -114,11 +118,20 @@ class BlogStreamPage(Page):
             ("heading", blocks.CharBlock(classname="full title", icon="title")),
             ("paragraph", blocks.RichTextBlock(icon="pilcrow")),
             ("media", TestMediaBlock(icon="media")),
+            ("video", VideoChooserBlock(icon="media")),
+            ("audio", AudioChooserBlock(icon="media")),
         ]
+    )
+
+    featured_media = models.ForeignKey(
+        "wagtailmedia.Media", on_delete=models.PROTECT, related_name="+"
     )
 
     content_panels = Page.content_panels + [
         FieldPanel("author"),
         FieldPanel("date"),
         StreamFieldPanel("body"),
+        MediaChooserPanel("featured_media"),
+        # MediaChooserPanel("featured_media", media_type="audio"),
+        # MediaChooserPanel("featured_media", media_type="video"),
     ]

@@ -59,7 +59,7 @@ class AdminMediaChooser(AdminChooser):
         return {
             "id": value.pk,
             "title": value.title,
-            "edit_link": reverse("wagtailmedia:edit", args=[value.id]),
+            "edit_link": reverse("wagtailmedia:edit", args=[value.pk]),
         }
 
     def render_html(self, name, value, attrs):
@@ -85,7 +85,7 @@ class AdminMediaChooser(AdminChooser):
                 "attrs": attrs,
                 "value": value_data != {},  # only used to identify blank values
                 "title": value_data.get("title", ""),
-                "edit_url": value_data.get("edit_url", ""),
+                "edit_url": value_data.get("edit_link", ""),
                 "chooser_url": chooser_url,
             },
         )
