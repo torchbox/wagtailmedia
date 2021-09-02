@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from wagtail.admin.edit_handlers import BaseChooserPanel
 
-from wagtailmedia.widgets import AdminMediaChooser
+from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 
 class MediaChooserPanel(BaseChooserPanel):
@@ -19,4 +19,11 @@ class MediaChooserPanel(BaseChooserPanel):
         return kwargs
 
     def widget_overrides(self):
-        return {self.field_name: AdminMediaChooser(media_type=self.media_type)}
+        if self.media_type == "audio":
+            widget_class = AdminAudioChooser
+        elif self.media_type == "video":
+            widget_class = AdminVideoChooser
+        else:
+            widget_class = AdminMediaChooser
+
+        return {self.field_name: widget_class}

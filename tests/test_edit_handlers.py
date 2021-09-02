@@ -9,7 +9,7 @@ from wagtail.core.models import Page
 from tests.testapp.models import BlogStreamPage
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import Media
-from wagtailmedia.widgets import AdminMediaChooser
+from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 
 class MediaChooserPanelTest(TestCase):
@@ -63,6 +63,12 @@ class MediaChooserPanelTest(TestCase):
             type(self.form.fields["featured_media"].widget), AdminMediaChooser
         )
 
+        form, media_chooser_panel = self._init_edit_handler(media_type="audio")
+        self.assertEqual(type(form.fields["featured_media"].widget), AdminAudioChooser)
+
+        form, media_chooser_panel = self._init_edit_handler(media_type="video")
+        self.assertEqual(type(form.fields["featured_media"].widget), AdminVideoChooser)
+
     def test_render_js_init(self):
         result = self.media_chooser_panel.render_as_field()
         self.assertIn('createMediaChooser("id_featured_media");', result)
@@ -70,19 +76,21 @@ class MediaChooserPanelTest(TestCase):
     def test_render_js_init_with_media_type(self):
         # construct an alternative page chooser panel object, with can_choose_root=True
 
-        my_page_object_list = ObjectList(
-            [MediaChooserPanel("featured_media", media_type="audio")]
-        ).bind_to(model=BlogStreamPage)
-        my_media_chooser_panel = my_page_object_list.children[0]
-        MediaChooserForm = my_page_object_list.get_form_class()
-
-        form = MediaChooserForm(instance=self.test_instance)
-        media_chooser_panel = my_media_chooser_panel.bind_to(
-            instance=self.test_instance, form=form, request=self.request
-        )
+        form, media_chooser_panel = self._init_edit_handler(media_type="audio")
         result = media_chooser_panel.render_as_field()
 
         self.assertIn('createMediaChooser("id_featured_media")', result)
+
+    def _init_edit_handler(self, media_type=None):
+        my_page_object_list = ObjectList(
+            [MediaChooserPanel("featured_media", media_type=media_type)]
+        ).bind_to(model=BlogStreamPage)
+        my_media_chooser_panel = my_page_object_list.children[0]
+        form = my_page_object_list.get_form_class()(instance=self.test_instance)
+        media_chooser_panel = my_media_chooser_panel.bind_to(
+            instance=self.test_instance, form=form, request=self.request
+        )
+        return form, media_chooser_panel
 
     def test_get_chosen_item(self):
         result = self.media_chooser_panel.get_chosen_item()
@@ -103,16 +111,7 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn("Choose a media item", result)
 
     def test_render_as_field_with_media_type(self):
-        my_page_object_list = ObjectList(
-            [MediaChooserPanel("featured_media", media_type="video")]
-        ).bind_to(model=BlogStreamPage)
-        my_media_chooser_panel = my_page_object_list.children[0]
-        MediaChooserForm = my_page_object_list.get_form_class()
-
-        form = MediaChooserForm(instance=self.test_instance)
-        media_chooser_panel = my_media_chooser_panel.bind_to(
-            instance=self.test_instance, form=form, request=self.request
-        )
+        form, media_chooser_panel = self._init_edit_handler(media_type="video")
         result = media_chooser_panel.render_as_field()
 
         chooser_url = reverse("wagtailmedia:chooser_typed", args=("video",))

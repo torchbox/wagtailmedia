@@ -41,7 +41,7 @@ class AbstractMediaChooserBlock(ChooserBlock):
     def widget(self):
         from wagtailmedia.widgets import AdminMediaChooser
 
-        return AdminMediaChooser(media_type=self.media_type)
+        return AdminMediaChooser()
 
     def get_form_state(self, value):
         return self.widget.get_value_data(value)
@@ -61,6 +61,12 @@ class AudioChooserBlock(AbstractMediaChooserBlock):
             media_type="audio",
             **kwargs,
         )
+
+    @cached_property
+    def widget(self):
+        from wagtailmedia.widgets import AdminAudioChooser
+
+        return AdminAudioChooser()
 
     def render_basic(self, value, context=None):
         if not value:
@@ -87,6 +93,12 @@ class VideoChooserBlock(AbstractMediaChooserBlock):
             media_type="video",
             **kwargs,
         )
+
+    @cached_property
+    def widget(self):
+        from wagtailmedia.widgets import AdminVideoChooser
+
+        return AdminVideoChooser()
 
     def render_basic(self, value, context=None):
         if not value:

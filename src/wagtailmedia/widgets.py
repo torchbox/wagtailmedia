@@ -29,27 +29,14 @@ from wagtailmedia.models import get_media_model
 
 
 class AdminMediaChooser(AdminChooser):
+    media_type = None
     choose_one_text = _("Choose a media item")
     choose_another_text = _("Choose another media item")
     link_to_chosen_text = _("Edit this media item")
 
     def __init__(self, **kwargs):
-        media_type = kwargs.pop("media_type", None)
         super().__init__(**kwargs)
         self.media_model = get_media_model()
-
-        if media_type == "audio":
-            self.media_type = media_type
-            self.choose_one_text = _("Choose audio")
-            self.choose_another_text = _("Choose another audio item")
-            self.link_to_chosen_text = _("Edit this audio item")
-        elif media_type == "video":
-            self.media_type = media_type
-            self.choose_one_text = _("Choose video")
-            self.choose_another_text = _("Choose another video")
-            self.link_to_chosen_text = _("Edit this video")
-        else:
-            self.media_type = None
 
     def get_value_data(self, value):
         if value is None:
@@ -100,6 +87,20 @@ class AdminMediaChooser(AdminChooser):
         ]
 
 
+class AdminAudioChooser(AdminMediaChooser):
+    media_type = "audio"
+    choose_one_text = _("Choose audio")
+    choose_another_text = _("Choose another audio item")
+    link_to_chosen_text = _("Edit this audio item")
+
+
+class AdminVideoChooser(AdminMediaChooser):
+    media_type = "video"
+    choose_one_text = _("Choose video")
+    choose_another_text = _("Choose another video")
+    link_to_chosen_text = _("Edit this video")
+
+
 class MediaChooserAdapter(WidgetAdapter):
     js_constructor = "wagtailmedia.MediaChooser"
 
@@ -119,3 +120,5 @@ class MediaChooserAdapter(WidgetAdapter):
 
 
 register(MediaChooserAdapter(), AdminMediaChooser)
+register(MediaChooserAdapter(), AdminAudioChooser)
+register(MediaChooserAdapter(), AdminVideoChooser)

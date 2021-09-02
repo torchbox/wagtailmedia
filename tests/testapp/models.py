@@ -132,6 +132,7 @@ class BlogStreamPage(Page):
         FieldPanel("date"),
         StreamFieldPanel("body"),
         MediaChooserPanel("featured_media"),
+        # the following are left here for local testing convenience
         # MediaChooserPanel("featured_media", media_type="audio"),
         # MediaChooserPanel("featured_media", media_type="video"),
     ]
