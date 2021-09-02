@@ -57,14 +57,16 @@ Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
 WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
 ```
 
-You can customize the model form used with your `Media` model using the `WAGTAILMEDIA_MEDIA_FORM_BASE` setting.  It should be the dotted path to the form and will be used as the base form passed to modelform_factory() when constructing the media form.
+You can customize the model form used with your `Media` model using the `WAGTAILMEDIA_MEDIA_FORM_BASE` setting.
+It should be the dotted path to the form and will be used as the base form passed to `modelform_factory()` when constructing the media form.
 
 ### Hooks
 
 #### `construct_media_chooser_queryset`
 
 Called when rendering the media chooser view, to allow the media listing QuerySet to be customised.
-The callable passed into the hook will receive the current media QuerySet and the request object, and must return a Media QuerySet (either the original one, or a new one).
+The callable passed into the hook will receive the current media QuerySet and the request object,
+and must return a Media QuerySet (either the original one, or a new one).
 
 ```python
 from wagtail.core import hooks
@@ -84,8 +86,6 @@ def show_my_uploaded_media_only(media, request):
 You can use `Media` as a regular Django field. Here’s an example:
 
 ```python
-from __future__ import unicode_literals
-
 from django.db import models
 
 from wagtail.wagtailcore.models import Page
@@ -115,9 +115,14 @@ class BlogPageWithMedia(Page):
     ]
 ```
 
+The `MediaChooserPanel` accepts the `media_type` keyword argument (kwarg) to limit the types of media that can be chosen or uploaded.
+At the moment only "audio" (`MediaChooserPanel(media_type="audio")`) and "video" (`MediaChooserPanel(media_type="audio")`) are supported,
+and any other type will make the chooser behave as if it did not get any kwarg.
+
 #### Name clash with Wagtail
 
-Do not name the field `media`. When rendering the admin UI, Wagtail uses a `media` property for its fields’ CSS & JS assets loading. Using `media` as a field name breaks the admin UI ([#54](https://github.com/torchbox/wagtailmedia/issues/54)).
+Do not name the field `media`. When rendering the admin UI, Wagtail uses a `media` property for its fields’ CSS & JS assets loading.
+Using `media` as a field name breaks the admin UI ([#54](https://github.com/torchbox/wagtailmedia/issues/54)).
 
 ### In StreamField
 
@@ -128,8 +133,6 @@ and implement your own `render_basic` method.
 Here is an example:
 
 ```python
-from __future__ import unicode_literals
-
 from django.db import models
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
@@ -188,6 +191,24 @@ class BlogPage(Page):
     ]
 ```
 
+You can also use audio or video-specific choosers:
+
+```python
+# ...
+from wagtailmedia.blocks import AudioChooserBlock, VideoChooserBlock
+
+
+class BlogPage(Page):
+    # ...
+
+    body = StreamField([
+        # ... other block definitions
+        ('audio', AudioChooserBlock(icon='media')),
+        ('video', VideoChooserBlock(icon='media')),
+    ])
+```
+
+
 ## Translations
 
 wagtailmedia has translations in French and Chinese. More translations welcome!
@@ -236,6 +257,6 @@ tox
 ```
 
 or, you can run them for a specific environment `tox -e py38-dj32-wagtail213` or specific test
-`tox -e py38-wagtail213 wagtailmedia.tests.test_views.TestMediaChooserUploadView`
+`tox -e py38-wagtail213 tests.test_views.TestMediaChooserUploadView`
 
 To run the test app interactively, use `tox -e interactive`, visit `http://127.0.0.1:8020/admin/` and log in with `admin`/`changeme`.
