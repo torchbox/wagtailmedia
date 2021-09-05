@@ -148,22 +148,23 @@ class Media(AbstractMedia):
 
 def get_media_model():
     from django.apps import apps
-    from django.conf import settings
+
+    from wagtailmedia.settings import wagtailmedia_settings
 
     try:
-        app_label, model_name = settings.WAGTAILMEDIA_MEDIA_MODEL.split(".")
+        app_label, model_name = wagtailmedia_settings.MEDIA_MODEL.split(".")
     except AttributeError:
         return Media
     except ValueError:
         raise ImproperlyConfigured(
-            "WAGTAILMEDIA_MEDIA_MODEL must be of the form 'app_label.model_name'"
+            "WAGTAILMEDIA[\"MEDIA_MODEL\"] must be of the form 'app_label.model_name'"
         )
 
     media_model = apps.get_model(app_label, model_name)
     if media_model is None:
         raise ImproperlyConfigured(
-            "WAGTAILMEDIA_MEDIA_MODEL refers to model '%s' that has not been installed"
-            % settings.WAGTAILMEDIA_MEDIA_MODEL
+            "WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '%s' that has not been installed"
+            % wagtailmedia_settings.MEDIA_MODEL
         )
     return media_model
 

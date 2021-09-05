@@ -276,7 +276,7 @@ class TestMediaFilesDeletion(TransactionTestCase):
         self.assertFalse(media.file.storage.exists(filename))
 
 
-@override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+@override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
 class TestMediaFilesDeletionForCustomModels(TestMediaFilesDeletion):
     def test_media_model(self):
         cls = get_media_model()

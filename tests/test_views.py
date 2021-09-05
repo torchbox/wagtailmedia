@@ -329,7 +329,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(media.collection, evil_plans_collection)
         self.assertEqual(media.type, "video")
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_get_with_custom_model(self):
         # both audio and video use the same template
         response = self.client.get(reverse("wagtailmedia:add", args=("video",)))
@@ -516,7 +516,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, "File not found")
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_get_with_custom_model(self):
         # Build a fake file
         fake_file = ContentFile(b("A boring example song"))
@@ -691,7 +691,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(len(response.context["media_files"]), 1)
         self.assertEqual(response.context["media_files"][0], media)
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_with_custom_model(self):
         response = self.client.get(reverse("wagtailmedia:chooser"))
         self.assertEqual(response.status_code, 200)
