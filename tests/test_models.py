@@ -284,3 +284,28 @@ class TestMediaFilesDeletionForCustomModels(TestMediaFilesDeletion):
             "%s.%s" % (cls._meta.app_label, cls.__name__),
             "wagtailmedia_tests.CustomMedia",
         )
+
+
+class TestMediaValidateExtensions(TestCase):
+    def test_create_with_invalid_thumbnail_extension(self):
+        """Checks if created media has an expected extension"""
+        media = Media.objects.create(
+            title="Test media", file="test.mp3", type="audio", thumbnail="thumb.doc"
+        )
+
+        with self.assertRaises(ValidationError):
+            media.full_clean()
+
+        media.delete()
+
+    def test_create_with_valid_thumbnail_extension(self):
+        """Checks if the uploaded media has the expected thumnail extensions."""
+        media = Media.objects.create(
+            title="Test media", file="test.mp3", type="audio", thumbnail="thumb.png"
+        )
+        try:
+            media.full_clean()
+        except ValidationError:
+            self.fail("Validation error is raised even when valid file name is passed")
+
+        media.delete()

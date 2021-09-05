@@ -5,7 +5,7 @@ import os.path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.validators import MinValueValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.dispatch import Signal
 from django.urls import reverse
@@ -17,6 +17,9 @@ from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
+
+
+ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
@@ -120,6 +123,10 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         super().clean(*args, **kwargs)
         if not self.duration:
             self.duration = 0
+
+        if self.thumbnail:
+            validate = FileExtensionValidator(ALLOWED_EXTENSIONS_THUMBNAIL)
+            validate(self.thumbnail)
 
     class Meta:
         abstract = True
