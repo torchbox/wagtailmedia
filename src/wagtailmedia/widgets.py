@@ -29,12 +29,13 @@ from wagtailmedia.models import get_media_model
 
 
 class AdminMediaChooser(AdminChooser):
+    media_type = None
     choose_one_text = _("Choose a media item")
     choose_another_text = _("Choose another media item")
     link_to_chosen_text = _("Edit this media item")
 
     def __init__(self, **kwargs):
-        super(AdminMediaChooser, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.media_model = get_media_model()
 
     def get_value_data(self, value):
@@ -45,7 +46,7 @@ class AdminMediaChooser(AdminChooser):
         return {
             "id": value.pk,
             "title": value.title,
-            "edit_link": reverse("wagtailmedia:edit", args=[value.id]),
+            "edit_link": reverse("wagtailmedia:edit", args=[value.pk]),
         }
 
     def render_html(self, name, value, attrs):
@@ -58,6 +59,11 @@ class AdminMediaChooser(AdminChooser):
 
         original_field_html = super().render_html(name, value_data.get("id"), attrs)
 
+        if self.media_type:
+            chooser_url = reverse("wagtailmedia:chooser_typed", args=(self.media_type,))
+        else:
+            chooser_url = reverse("wagtailmedia:chooser")
+
         return render_to_string(
             "wagtailmedia/widgets/media_chooser.html",
             {
@@ -66,7 +72,8 @@ class AdminMediaChooser(AdminChooser):
                 "attrs": attrs,
                 "value": value_data != {},  # only used to identify blank values
                 "title": value_data.get("title", ""),
-                "edit_url": value_data.get("edit_url", ""),
+                "edit_url": value_data.get("edit_link", ""),
+                "chooser_url": chooser_url,
             },
         )
 
@@ -78,6 +85,20 @@ class AdminMediaChooser(AdminChooser):
             "wagtailmedia/js/media-chooser-modal.js",
             "wagtailmedia/js/media-chooser.js",
         ]
+
+
+class AdminAudioChooser(AdminMediaChooser):
+    media_type = "audio"
+    choose_one_text = _("Choose audio")
+    choose_another_text = _("Choose another audio item")
+    link_to_chosen_text = _("Edit this audio item")
+
+
+class AdminVideoChooser(AdminMediaChooser):
+    media_type = "video"
+    choose_one_text = _("Choose video")
+    choose_another_text = _("Choose another video")
+    link_to_chosen_text = _("Edit this video")
 
 
 class MediaChooserAdapter(WidgetAdapter):
@@ -99,3 +120,5 @@ class MediaChooserAdapter(WidgetAdapter):
 
 
 register(MediaChooserAdapter(), AdminMediaChooser)
+register(MediaChooserAdapter(), AdminAudioChooser)
+register(MediaChooserAdapter(), AdminVideoChooser)

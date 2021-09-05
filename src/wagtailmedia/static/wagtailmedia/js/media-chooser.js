@@ -1,12 +1,13 @@
 function createMediaChooser(id) {
-    var chooserElement = $('#' + id + '-chooser');
-    var mediaTitle = chooserElement.find('.title');
-    var input = $('#' + id);
-    var editLink = chooserElement.find('.edit-link');
+    const chooserElement = $('#' + id + '-chooser');
+    const mediaTitle = chooserElement.find('.title');
+    const input = $('#' + id);
+    const editLink = chooserElement.find('.edit-link');
+    const chooserBaseUrl = chooserElement.data('chooserUrl');
 
     $('.action-choose', chooserElement).on('click', function() {
         ModalWorkflow({
-            url: window.chooserUrls.mediaChooser,
+            url: chooserBaseUrl,
             onload: MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS,
             responses: {
                 mediaChosen: function(mediaData) {

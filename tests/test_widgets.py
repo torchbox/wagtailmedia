@@ -3,8 +3,10 @@ import importlib
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.urls import reverse
 
 from wagtailmedia import widgets
+from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 
 class WidgetTests(TestCase):
@@ -59,3 +61,46 @@ class WidgetTests(TestCase):
                 with patch.object(media_chooser, "get_value_data") as get_value_data:
                     _ = media_chooser.render_html("foo", None, {})
                     self.assertEqual(expected_called, get_value_data.called)
+
+
+class AdminMediaChooserTest(TestCase):
+    def test_default_chooser_text(self):
+        chooser = AdminMediaChooser()
+        self.assertEqual(chooser.choose_one_text, "Choose a media item")
+        self.assertEqual(chooser.choose_another_text, "Choose another media item")
+        self.assertEqual(chooser.link_to_chosen_text, "Edit this media item")
+
+    def text_audio_chooser_text(self):
+        chooser = AdminAudioChooser(media_type="audio")
+        self.assertEqual(chooser.choose_one_text, "Choose audio")
+        self.assertEqual(chooser.choose_another_text, "Choose another audio item")
+        self.assertEqual(chooser.link_to_chosen_text, "Edit this audio item")
+
+    def text_video_chooser_text(self):
+        chooser = AdminVideoChooser(media_type="video")
+        self.assertEqual(chooser.choose_one_text, "Choose video")
+        self.assertEqual(chooser.choose_another_text, "Choose another video")
+        self.assertEqual(chooser.link_to_chosen_text, "Edit this video")
+
+    @patch("wagtailmedia.widgets.render_to_string")
+    def test_render_html_uses_the_generic_chooser_url_by_default(
+        self, mock_render_to_string
+    ):
+        chooser = AdminMediaChooser()
+        chooser.render_html("test", None, {})
+
+        render_context = mock_render_to_string.call_args[0][1]
+        self.assertEqual(render_context["chooser_url"], reverse("wagtailmedia:chooser"))
+
+    @patch("wagtailmedia.widgets.render_to_string")
+    def test_render_html_uses_the_typed_chooser_url_when_using_media_type(
+        self, mock_render_to_string
+    ):
+        chooser = AdminAudioChooser()
+        chooser.render_html("test", None, {})
+
+        render_context = mock_render_to_string.call_args[0][1]
+        self.assertEqual(
+            render_context["chooser_url"],
+            reverse("wagtailmedia:chooser_typed", args=("audio",)),
+        )

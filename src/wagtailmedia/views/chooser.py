@@ -32,7 +32,7 @@ def get_media_json(media):
     }
 
 
-def chooser(request):
+def chooser(request, media_type=None):
     Media = get_media_model()
 
     media_files = permission_policy.instances_user_has_any_permission_for(
@@ -56,8 +56,14 @@ def chooser(request):
                 user=request.user, prefix="media-chooser-upload", instance=media_video
             ),
         }
+
+        if media_type:
+            uploadforms = {media_type: uploadforms[media_type]}
     else:
         uploadforms = {}
+
+    if media_type:
+        media_files = media_files.filter(type=media_type)
 
     if (
         "q" in request.GET
@@ -95,6 +101,7 @@ def chooser(request):
                 "query_string": q,
                 "is_searching": is_searching,
                 "pagination_template": pagination_template,
+                "media_type": media_type,
             },
         )
     else:
@@ -119,6 +126,7 @@ def chooser(request):
             "is_searching": False,
             "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
+            "media_type": media_type,
         },
         json_data={
             "step": "chooser",

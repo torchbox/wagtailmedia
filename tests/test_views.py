@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 from django.forms.utils import ErrorDict
 from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
 from wagtail.core.models import Collection, GroupCollectionPermission, Page
 from wagtail.tests.utils import WagtailTestUtils
@@ -705,6 +705,70 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertIn("wagtailadmin/js/draftail.js", json_data["html"])
 
 
+class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
+    @classmethod
+    def setUpTestData(cls):
+        fake_audio = ContentFile(b("A boring example song"))
+        fake_audio.name = "song.mp3"
+
+        audio = models.Media(
+            title="Test audio", duration=100, file=fake_audio, type="audio"
+        )
+        audio.save()
+
+        fake_video = ContentFile(b("An exciting video"))
+        fake_video.name = "video.mp4"
+
+        video = models.Media(
+            title="Test video", duration=100, file=fake_video, type="video"
+        )
+        video.save()
+
+    def setUp(self):
+        self.user = self.login()
+
+    def test_audio_chooser(self):
+        response = self.client.get(
+            reverse("wagtailmedia:chooser_typed", args=("audio",))
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+        json_data = json.loads(response.content.decode("utf-8"))
+        self.assertSetEqual(
+            set(json_data.keys()),
+            {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
+        )
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        self.assertEqual(json_data["step"], "chooser")
+        self.assertEqual(
+            json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
+        )
+
+        html = response.json().get("html")
+        self.assertInHTML("Test audio", html)
+        self.assertInHTML('<a href="#upload-audio">Upload Audio</a>', html)
+        self.assertNotInHTML("Test video", html)
+        self.assertNotInHTML('<a href="#upload-video">Upload Video</a>', html)
+
+    def test_video_chooser(self):
+        response = self.client.get(
+            reverse("wagtailmedia:chooser_typed", args=("video",))
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+        html = response.json().get("html")
+        self.assertInHTML("Test video", html)
+        self.assertInHTML('<a href="#upload-video">Upload Video</a>', html)
+        self.assertNotInHTML("Test audio", html)
+        self.assertNotInHTML('<a href="#upload-audio">Upload Audio</a>', html)
+
+    def test_typed_chooser_with_invalid_media_type(self):
+        with self.assertRaises(NoReverseMatch):
+            self.client.get(
+                reverse("wagtailmedia:chooser_typed", args=("subspace-transmission",))
+            )
+
+
 class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
     def setUp(self):
         add_media_permission = Permission.objects.get(
@@ -754,7 +818,12 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         response = self.client.get(
             reverse("wagtailmedia:chooser"), {"collection_id": self.root_collection.id}
         )
-        self.assertIn("Sorry, no media files", str(response.content))
+
+        media_add_url = reverse("wagtailmedia:add", args=("media",))
+        self.assertContains(
+            response,
+            f'You haven\'t uploaded any media. Why not <a href="{media_add_url}">upload one now</a>',
+        )
 
     def test_upload_permission(self):
         user = get_user_model().objects.create_user(
