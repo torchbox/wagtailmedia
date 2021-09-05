@@ -25,6 +25,22 @@ INSTALLED_APPS = [
 ]
 ```
 
+All wagtailmedia settings are defined in a single `WAGTAILMEDIA` dictionary in your settings file:
+
+```python
+# settings.py
+
+WAGTAILMEDIA = {
+    "MEDIA_MODEL": "",  # string, dotted-notation. Defaults to "wagtailmedia.Media"
+    "MEDIA_FORM_BASE": "",   # strind, dotted-notation. Defaults to an empty string
+    "AUDIO_EXTENSIONS": [],  # list of extensions
+    "VIDEO_EXTENSIONS": [],  # list of extensions
+}
+```
+
+`AUDIO_EXTENSIONS` defaults to "aac", "aiff", "flac", "m4a", "m4b", "mp3", "ogg" and "wav".
+`VIDEO_EXTENSIONS` defaults to "avi", "h264", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "ogv" and "webm".
+
 ### URL configuration
 
 Your project needs to be set up to serve user-uploaded files from `MEDIA_ROOT`.
@@ -51,7 +67,7 @@ With this configuration in place, you are ready to run `./manage.py migrate` to 
 The `Media` model can be customised. To do this, you need
 to add a new model to your project that inherits from `wagtailmedia.models.AbstractMedia`.
 
-Then set the `MEDIA_MODEL` attribute in the `WAGTAILMEDIA` settings to point to it:
+Then set the `MEDIA_MODEL` attribute in the `WAGTAILMEDIA` settings dictionary to point to it:
 
 ```python
 # settings.py
@@ -220,7 +236,6 @@ class BlogPage(Page):
         ('video', VideoChooserBlock(icon='media')),
     ])
 ```
-
 
 ## Translations
 

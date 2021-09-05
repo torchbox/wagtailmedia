@@ -14,7 +14,23 @@ from django.conf import settings
 from django.test.signals import setting_changed
 
 
-DEFAULTS = {"MEDIA_MODEL": "wagtailmedia.Media", "MEDIA_FORM_BASE": ""}
+DEFAULTS = {
+    "MEDIA_MODEL": "wagtailmedia.Media",
+    "MEDIA_FORM_BASE": "",
+    "AUDIO_EXTENSIONS": ["aac", "aiff", "flac", "m4a", "m4b", "mp3", "ogg", "wav"],
+    "VIDEO_EXTENSIONS": [
+        "avi",
+        "h264",
+        "m4v",
+        "mkv",
+        "mov",
+        "mp4",
+        "mpeg",
+        "mpg",
+        "ogv",
+        "webm",
+    ],
+}
 
 # List of settings that have been deprecated
 DEPRECATED_SETTINGS = [

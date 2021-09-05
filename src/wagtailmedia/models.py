@@ -18,6 +18,8 @@ from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
 
+from wagtailmedia.settings import wagtailmedia_settings
+
 
 ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
 
@@ -128,6 +130,13 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
             validate = FileExtensionValidator(ALLOWED_EXTENSIONS_THUMBNAIL)
             validate(self.thumbnail)
 
+        if self.type == "audio" and wagtailmedia_settings.AUDIO_EXTENSIONS:
+            validate = FileExtensionValidator(wagtailmedia_settings.AUDIO_EXTENSIONS)
+            validate(self.file)
+        elif self.type == "video" and wagtailmedia_settings.VIDEO_EXTENSIONS:
+            validate = FileExtensionValidator(wagtailmedia_settings.VIDEO_EXTENSIONS)
+            validate(self.file)
+
     class Meta:
         abstract = True
         verbose_name = _("media")
@@ -166,6 +175,7 @@ def get_media_model():
             "WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '%s' that has not been installed"
             % wagtailmedia_settings.MEDIA_MODEL
         )
+
     return media_model
 
 

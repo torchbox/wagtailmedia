@@ -287,25 +287,65 @@ class TestMediaFilesDeletionForCustomModels(TestMediaFilesDeletion):
 
 
 class TestMediaValidateExtensions(TestCase):
-    def test_create_with_invalid_thumbnail_extension(self):
-        """Checks if created media has an expected extension"""
-        media = Media.objects.create(
-            title="Test media", file="test.mp3", type="audio", thumbnail="thumb.doc"
+    def _create(self, file, type, thumbnail=None):
+        return Media.objects.create(
+            title="Test media", file=file, type=type, thumbnail=thumbnail
         )
 
-        with self.assertRaises(ValidationError):
-            media.full_clean()
+    def test_create_with_invalid_thumbnail_extension(self):
+        """Checks if created media has an expected extension"""
+        self.media = self._create("test.mp3", type="audio", thumbnail="thumb.doc")
 
-        media.delete()
+        with self.assertRaises(ValidationError):
+            self.media.full_clean()
 
     def test_create_with_valid_thumbnail_extension(self):
         """Checks if the uploaded media has the expected thumnail extensions."""
-        media = Media.objects.create(
-            title="Test media", file="test.mp3", type="audio", thumbnail="thumb.png"
-        )
+        self.media = self._create("test.mp3", type="audio", thumbnail="thumb.png")
         try:
-            media.full_clean()
+            self.media.full_clean()
         except ValidationError:
             self.fail("Validation error is raised even when valid file name is passed")
 
-        media.delete()
+    def test_create_audio_with_invalid_extension(self):
+        self.media = self._create("test.pdf", type="audio")
+        with self.assertRaises(ValidationError):
+            self.media.full_clean()
+
+    def test_create_audio_with_valid_extension(self):
+        self.media = self._create("test.mp3", type="audio")
+        try:
+            self.media.full_clean()
+        except ValidationError:
+            self.fail("Validation error is raised even when valid file name is passed")
+
+    @override_settings(WAGTAILMEDIA={"AUDIO_EXTENSIONS": ["pdf"]})
+    def test_create_audio_with_custom_extension(self):
+        self.media = self._create("test.pdf", type="audio")
+        try:
+            self.media.full_clean()
+        except ValidationError:
+            self.fail("Validation error is raised even when valid file name is passed")
+
+    def test_create_video_with_invalid_extension(self):
+        self.media = self._create("test.pdf", type="video")
+        with self.assertRaises(ValidationError):
+            self.media.full_clean()
+
+    def test_create_video_with_valid_extension(self):
+        self.media = self._create("test.avi", type="video")
+        try:
+            self.media.full_clean()
+        except ValidationError:
+            self.fail("Validation error is raised even when valid file name is passed")
+
+    @override_settings(WAGTAILMEDIA={"VIDEO_EXTENSIONS": []})
+    def test_create_video_with_any_extension(self):
+        self.media = self._create("test.pdf", type="video")
+        try:
+            self.media.full_clean()
+        except ValidationError:
+            self.fail("Validation error is raised even when valid file name is passed")
+
+    def tearDown(self):
+        self.media.delete()
