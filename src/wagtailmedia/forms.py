@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.conf import settings
 from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +13,7 @@ from wagtail.admin.forms.collections import (
 
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import permission_policy as media_permission_policy
+from wagtailmedia.settings import wagtailmedia_settings
 
 
 class BaseMediaForm(BaseCollectionMemberForm):
@@ -37,7 +37,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
 
 
 def get_media_base_form():
-    base_form_override = getattr(settings, "WAGTAILMEDIA_MEDIA_FORM_BASE", "")
+    base_form_override = wagtailmedia_settings.MEDIA_FORM_BASE
     if base_form_override:
         base_form = import_string(base_form_override)
     else:

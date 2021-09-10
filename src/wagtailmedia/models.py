@@ -5,7 +5,7 @@ import os.path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.validators import MinValueValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.dispatch import Signal
 from django.urls import reverse
@@ -17,6 +17,11 @@ from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
+
+from wagtailmedia.settings import wagtailmedia_settings
+
+
+ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
 
 
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
@@ -121,6 +126,17 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         if not self.duration:
             self.duration = 0
 
+        if self.thumbnail:
+            validate = FileExtensionValidator(ALLOWED_EXTENSIONS_THUMBNAIL)
+            validate(self.thumbnail)
+
+        if self.type == "audio" and wagtailmedia_settings.AUDIO_EXTENSIONS:
+            validate = FileExtensionValidator(wagtailmedia_settings.AUDIO_EXTENSIONS)
+            validate(self.file)
+        elif self.type == "video" and wagtailmedia_settings.VIDEO_EXTENSIONS:
+            validate = FileExtensionValidator(wagtailmedia_settings.VIDEO_EXTENSIONS)
+            validate(self.file)
+
     class Meta:
         abstract = True
         verbose_name = _("media")
@@ -141,23 +157,25 @@ class Media(AbstractMedia):
 
 def get_media_model():
     from django.apps import apps
-    from django.conf import settings
+
+    from wagtailmedia.settings import wagtailmedia_settings
 
     try:
-        app_label, model_name = settings.WAGTAILMEDIA_MEDIA_MODEL.split(".")
+        app_label, model_name = wagtailmedia_settings.MEDIA_MODEL.split(".")
     except AttributeError:
         return Media
     except ValueError:
         raise ImproperlyConfigured(
-            "WAGTAILMEDIA_MEDIA_MODEL must be of the form 'app_label.model_name'"
+            "WAGTAILMEDIA[\"MEDIA_MODEL\"] must be of the form 'app_label.model_name'"
         )
 
     media_model = apps.get_model(app_label, model_name)
     if media_model is None:
         raise ImproperlyConfigured(
-            "WAGTAILMEDIA_MEDIA_MODEL refers to model '%s' that has not been installed"
-            % settings.WAGTAILMEDIA_MEDIA_MODEL
+            "WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '%s' that has not been installed"
+            % wagtailmedia_settings.MEDIA_MODEL
         )
+
     return media_model
 
 

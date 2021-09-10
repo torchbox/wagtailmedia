@@ -35,7 +35,7 @@ class TestFormOverride(TestCase):
         self.assertIsInstance(form.fields["thumbnail"].widget, forms.ClearableFileInput)
 
     @override_settings(
-        WAGTAILMEDIA_MEDIA_FORM_BASE="tests.testapp.forms.AlternateMediaForm"
+        WAGTAILMEDIA={"MEDIA_FORM_BASE": "tests.testapp.forms.AlternateMediaForm"}
     )
     def test_overridden_base_form(self):
         self.assertIs(get_media_base_form(), AlternateMediaForm)

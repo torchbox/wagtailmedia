@@ -1,16 +1,11 @@
-from django.conf import settings
 from django.contrib import admin
 
-from wagtailmedia.models import Media
+from wagtailmedia.settings import wagtailmedia_settings
 
 
-if (
-    hasattr(settings, "WAGTAILMEDIA_MEDIA_MODEL")
-    and settings.WAGTAILMEDIA_MEDIA_MODEL != "wagtailmedia.Media"
-):
-    # This installation provides its own custom media class;
-    # to avoid confusion, we won't expose the unused wagtailmedia.Media class
-    # in the admin.
-    pass
-else:
+if wagtailmedia_settings.MEDIA_MODEL == "wagtailmedia.Media":
+    # Only expose the package-provided media class in the Django admin if the installation
+    # does not provide its own custom media class in order to avoid confusion.
+    from wagtailmedia.models import Media
+
     admin.site.register(Media)

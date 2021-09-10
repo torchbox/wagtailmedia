@@ -47,8 +47,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
     @staticmethod
     def make_media():
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         for i in range(50):
             media = models.Media(
@@ -224,8 +223,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
     def test_post_audio(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Submit
         post_data = {"title": "Test media", "file": fake_file, "duration": 100}
@@ -246,8 +244,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
     def test_post_video(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example movie"))
-        fake_file.name = "movie.mp4"
+        fake_file = ContentFile(b("A boring example movie"), name="movie.mp4")
 
         # Submit
         post_data = {
@@ -276,8 +273,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         evil_plans_collection = root_collection.add_child(name="Evil plans")
 
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Submit
         post_data = {
@@ -304,14 +300,10 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         root_collection = Collection.get_first_root_node()
         evil_plans_collection = root_collection.add_child(name="Evil plans")
 
-        # Build a fake file
-        fake_file = ContentFile(b("A boring example movie"))
-        fake_file.name = "movie.mp3"
-
         # Submit
         post_data = {
             "title": "Test media",
-            "file": fake_file,
+            "file": ContentFile(b("A boring example movie"), name="movie.mp4"),
             "duration": 100,
             "collection": evil_plans_collection.id,
         }
@@ -329,7 +321,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(media.collection, evil_plans_collection)
         self.assertEqual(media.type, "video")
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_get_with_custom_model(self):
         # both audio and video use the same template
         response = self.client.get(reverse("wagtailmedia:add", args=("video",)))
@@ -406,8 +398,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
     def test_post_audio(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Submit
         post_data = {"title": "Test media", "file": fake_file, "duration": 100}
@@ -428,8 +419,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
     def test_post_video(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example movie"))
-        fake_file.name = "movie.mp4"
+        fake_file = ContentFile(b("A boring example movie"), name="movie.mp4")
 
         # Submit
         post_data = {"title": "Test media", "file": fake_file, "duration": 100}
@@ -454,8 +444,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.login()
 
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Create a media to edit
         self.media = models.get_media_model().objects.create(
@@ -482,8 +471,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
     def test_post(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Submit title change
         post_data = {"title": "Test media changed!", "file": fake_file, "duration": 100}
@@ -501,8 +489,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
     def test_with_missing_source_file(self):
         # Build a fake file
-        fake_file = ContentFile(b("An ephemeral media"))
-        fake_file.name = "to-be-deleted.mp3"
+        fake_file = ContentFile(b("An ephemeral media"), name="to-be-deleted.mp3")
 
         # Create a new media to delete the source for
         media = models.Media.objects.create(
@@ -516,11 +503,10 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, "File not found")
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_get_with_custom_model(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         # Create a media to edit
         media = models.get_media_model().objects.create(
@@ -603,8 +589,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
     @staticmethod
     def make_media():
-        fake_file = ContentFile(b("A boring example song"))
-        fake_file.name = "song.mp3"
+        fake_file = ContentFile(b("A boring example song"), name="song.mp3")
 
         for i in range(50):
             media = models.Media(
@@ -691,7 +676,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(len(response.context["media_files"]), 1)
         self.assertEqual(response.context["media_files"][0], media)
 
-    @override_settings(WAGTAILMEDIA_MEDIA_MODEL="wagtailmedia_tests.CustomMedia")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_with_custom_model(self):
         response = self.client.get(reverse("wagtailmedia:chooser"))
         self.assertEqual(response.status_code, 200)
@@ -794,8 +779,7 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         )
         user.groups.add(conspirators_group)
 
-        fake_file = ContentFile(b("A boring song"))
-        fake_file.name = "test-song.mp3"
+        fake_file = ContentFile(b("A boring song"), name="test-song.mp3")
         media = models.Media(
             title="Test",
             duration=100,
@@ -847,7 +831,9 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
         self.login()
 
         # Create a media to choose
-        self.media = models.Media.objects.create(title="Test media", duration=100)
+        self.media = models.Media.objects.create(
+            title="Test media", file="media.mp3", duration=100
+        )
 
     def test_simple(self):
         response = self.client.get(
@@ -877,7 +863,9 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             reverse("wagtailmedia:chooser_upload", args=("audio",)),
             {
                 "media-chooser-upload-title": "Test audio",
-                "media-chooser-upload-file": ContentFile(b("A boring example")),
+                "media-chooser-upload-file": ContentFile(
+                    b("A boring example"), name="audio.mp3"
+                ),
                 "media-chooser-upload-duration": "100",
             },
         )
@@ -899,7 +887,9 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             reverse("wagtailmedia:chooser_upload", args=("video",)),
             {
                 "media-chooser-upload-title": "Test video",
-                "media-chooser-upload-file": ContentFile(b("A boring example")),
+                "media-chooser-upload-file": ContentFile(
+                    b("A boring example"), name="video.avi"
+                ),
                 "media-chooser-upload-duration": "100",
                 "media-chooser-upload-width": "640",
                 "media-chooser-upload-height": "480",
@@ -967,7 +957,9 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             reverse("wagtailmedia:chooser_upload", args=("video",)),
             {
                 "media-chooser-upload-title": "Test video",
-                "media-chooser-upload-file": ContentFile(b("A boring example")),
+                "media-chooser-upload-file": ContentFile(
+                    b("A boring example"), name="video.avi"
+                ),
                 "media-chooser-upload-duration": "100",
             },
         )

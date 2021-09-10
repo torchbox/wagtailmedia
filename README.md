@@ -25,6 +25,22 @@ INSTALLED_APPS = [
 ]
 ```
 
+All wagtailmedia settings are defined in a single `WAGTAILMEDIA` dictionary in your settings file:
+
+```python
+# settings.py
+
+WAGTAILMEDIA = {
+    "MEDIA_MODEL": "",  # string, dotted-notation. Defaults to "wagtailmedia.Media"
+    "MEDIA_FORM_BASE": "",   # strind, dotted-notation. Defaults to an empty string
+    "AUDIO_EXTENSIONS": [],  # list of extensions
+    "VIDEO_EXTENSIONS": [],  # list of extensions
+}
+```
+
+`AUDIO_EXTENSIONS` defaults to "aac", "aiff", "flac", "m4a", "m4b", "mp3", "ogg" and "wav".
+`VIDEO_EXTENSIONS` defaults to "avi", "h264", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "ogv" and "webm".
+
 ### URL configuration
 
 Your project needs to be set up to serve user-uploaded files from `MEDIA_ROOT`.
@@ -51,14 +67,27 @@ With this configuration in place, you are ready to run `./manage.py migrate` to 
 The `Media` model can be customised. To do this, you need
 to add a new model to your project that inherits from `wagtailmedia.models.AbstractMedia`.
 
-Then set the `WAGTAILMEDIA_MEDIA_MODEL` setting to point to it:
+Then set the `MEDIA_MODEL` attribute in the `WAGTAILMEDIA` settings dictionary to point to it:
 
 ```python
-WAGTAILMEDIA_MEDIA_MODEL = 'mymedia.CustomMedia'
+# settings.py
+WAGTAILMEDIA = {
+    "MEDIA_MODEL": "my_app.CustomMedia",
+    # ...
+}
 ```
 
-You can customize the model form used with your `Media` model using the `WAGTAILMEDIA_MEDIA_FORM_BASE` setting.
+You can customize the model form used with your `Media` model using the `MEDIA_FORM_BASE` setting.
 It should be the dotted path to the form and will be used as the base form passed to `modelform_factory()` when constructing the media form.
+
+```python
+# settings.py
+
+WAGTAILMEDIA = {
+    "MEDIA_FORM_BASE": "my_app.forms.CustomMediaForm",
+    # ...
+}
+```
 
 ### Hooks
 
@@ -207,7 +236,6 @@ class BlogPage(Page):
         ('video', VideoChooserBlock(icon='media')),
     ])
 ```
-
 
 ## Translations
 
