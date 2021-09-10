@@ -1,5 +1,7 @@
 from django.test import TestCase, override_settings
 
+import mock
+
 from wagtailmedia.settings import WagtailMediaSettings, wagtailmedia_settings
 
 
@@ -34,3 +36,12 @@ class SettingsTests(TestCase):
         )
         with self.assertWarnsMessage(PendingDeprecationWarning, msg):
             WagtailMediaSettings({"WAGTAILMEDIA_MEDIA_MODEL": "myapp.CustomMedia"})
+
+    @mock.patch("wagtailmedia.settings.REMOVED_SETTINGS", ["A_REMOVED_SETTING"])
+    def test_runtimeerror_raised_on_removed_setting(self):
+        msg = (
+            "The 'A_REMOVED_SETTING' setting has been removed. "
+            "Please refer to the wagtailmedia documentation for available settings."
+        )
+        with self.assertRaisesMessage(RuntimeError, msg):
+            WagtailMediaSettings({"A_REMOVED_SETTING": "myapp.CustomMedia"})
