@@ -2,6 +2,9 @@
 # Changelog
 
 ## Unreleased
+-
+
+## [0.8.0] - 2021-09-11
 
 - Updated test targets to include Wagtail 2.14
 - Changed the chooser uploader forms to use correctly instantiated forms ([#135](https://github.com/torchbox/wagtailmedia/pull/135))
@@ -127,7 +130,9 @@ content_panels = Page.content_panels + [
 
 Initial release
 
+---
 
+[0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
 [0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
 [0.7.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.0
 [0.6.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.6.0
