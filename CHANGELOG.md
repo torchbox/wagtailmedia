@@ -3,17 +3,22 @@
 
 ## Unreleased
 
-- Added specialized StreamField blocks and support media type filter in `MediaChooserPanel` ([#139](https://github.com/torchbox/wagtailmedia/pull/139))
-- Refactored project structure and updated tooling ([#137](https://github.com/torchbox/wagtailmedia/pull/137))
-- Added `default_auto_field` for Django 3.2+ ([#134](https://github.com/torchbox/wagtailmedia/pull/134). Thanks [@hyperstown](https://github.com/hyperstown))
-- Added tag-based filters ([#132](https://github.com/torchbox/wagtailmedia/pull/132). Thanks [@th3hamm0r](https://github.com/th3hamm0r))
-- Fixed the media chooser block compatibility with Wagtail 2.13 ([#136](https://github.com/torchbox/wagtailmedia/pull/136). Thanks [@efes](https://github.com/ephes))
-- Change the chooser uploader forms to use correctly instantiated forms ([#135](https://github.com/torchbox/wagtailmedia/pull/135))
 - Updated test targets to include Wagtail 2.14
+- Changed the chooser uploader forms to use correctly instantiated forms ([#135](https://github.com/torchbox/wagtailmedia/pull/135))
+- Fixed the media chooser block compatibility with Wagtail 2.13 ([#136](https://github.com/torchbox/wagtailmedia/pull/136). Thanks [@efes](https://github.com/ephes))
+- Added tag-based filters ([#132](https://github.com/torchbox/wagtailmedia/pull/132). Thanks [@th3hamm0r](https://github.com/th3hamm0r))
+- Added `default_auto_field` for Django 3.2+ ([#134](https://github.com/torchbox/wagtailmedia/pull/134). Thanks [@hyperstown](https://github.com/hyperstown))
+- Refactored project structure and updated tooling ([#137](https://github.com/torchbox/wagtailmedia/pull/137))
+- Added specialized StreamField blocks and support media type filter in `MediaChooserPanel` ([#139](https://github.com/torchbox/wagtailmedia/pull/139))
+- Added file extension validation ([#140](https://github.com/torchbox/wagtailmedia/pull/140))
+
+  Thumbnails limited to `gif`, `png`, `jpg`/`jpeg`, `webp`. Audio to `aac`, `aiff`, `flac`, `m4a`, `m4b`, `mp3`, `ogg` and `wav`.
+  Video to `avi`, `h264`, `m4v`, `mkv`, `mov`, `mp4`, `mpeg`, `mpg`, `ogv` and `webm`
+- Switched to a unified `WAGTAILMEDIA` setting dictionary ([#140](https://github.com/torchbox/wagtailmedia/pull/140))
 
 ## [0.7.1] - 2021-06-12
 
-- Fixes chooser tabs with Wagtail 2.13 ([#130](https://github.com/torchbox/wagtailmedia/pull/130)). Thanks to [@jams2](https://github.com/jams2)
+- Fixed chooser tabs with Wagtail 2.13 ([#130](https://github.com/torchbox/wagtailmedia/pull/130)). Thanks to [@jams2](https://github.com/jams2)
 
 ## [0.7.0] - 2020-11-06
 
