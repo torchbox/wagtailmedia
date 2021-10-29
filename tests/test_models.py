@@ -144,9 +144,13 @@ class TestMediaQuerySet(TestCase):
         aaa_media = Media.objects.create(title="AAA Test media", duration=100)
         zzz_media = Media.objects.create(title="ZZZ Test media", duration=100)
 
-        results = Media.objects.order_by("title").search("Test")
+        results = Media.objects.order_by("title").search(
+            "Test", order_by_relevance=False
+        )
         self.assertEqual(list(results), [aaa_media, zzz_media])
-        results = Media.objects.order_by("-title").search("Test")
+        results = Media.objects.order_by("-title").search(
+            "Test", order_by_relevance=False
+        )
         self.assertEqual(list(results), [zzz_media, aaa_media])
 
     def _test_form_init_with_non_editable_field(self, media_type, field_name):

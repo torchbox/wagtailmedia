@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.search_promotions",
     "wagtail.images",
     "wagtail.users",
     "wagtail.documents",
