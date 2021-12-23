@@ -1,0 +1,443 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-07 17:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: src/apps/wagtailmedia/blocks.py:83
+msgid "Your browser does not support the audio element."
+msgstr "Ваш браузер не підтримує елемент аудіо."
+
+#: src/apps/wagtailmedia/blocks.py:115
+msgid "Your browser does not support the video element."
+msgstr "Ваш браузер не підтримує елемент відео."
+
+#: src/apps/wagtailmedia/forms.py:70
+msgid "Add"
+msgstr "Додати"
+
+#: src/apps/wagtailmedia/forms.py:70
+msgid "Add/edit media you own"
+msgstr "Додати/редагувати медіа, якими ви володієте"
+
+#: src/apps/wagtailmedia/forms.py:71 src/apps/wagtailmedia/views/media.py:134
+#: src/apps/wagtailmedia/views/media.py:189
+msgid "Edit"
+msgstr "Редагувати"
+
+#: src/apps/wagtailmedia/forms.py:71
+msgid "Edit any media"
+msgstr "Редагувати будь яке медіа"
+
+#: src/apps/wagtailmedia/models.py:33
+msgid "Audio file"
+msgstr "Аудіо файл"
+
+#: src/apps/wagtailmedia/models.py:34
+msgid "Video file"
+msgstr "Відео файл"
+
+#: src/apps/wagtailmedia/models.py:37
+msgid "title"
+msgstr "заголовок"
+
+#: src/apps/wagtailmedia/models.py:38
+msgid "file"
+msgstr "файл"
+
+#: src/apps/wagtailmedia/models.py:47
+msgid "duration"
+msgstr "тривалість"
+
+#: src/apps/wagtailmedia/models.py:48
+msgid "Duration in seconds"
+msgstr "Тривалість в секундах"
+
+#: src/apps/wagtailmedia/models.py:50
+msgid "width"
+msgstr "ширина"
+
+#: src/apps/wagtailmedia/models.py:52
+msgid "height"
+msgstr "висота"
+
+#: src/apps/wagtailmedia/models.py:55
+msgid "thumbnail"
+msgstr "ескіз"
+
+#: src/apps/wagtailmedia/models.py:58
+msgid "created at"
+msgstr "створено о"
+
+#: src/apps/wagtailmedia/models.py:61
+msgid "uploaded by user"
+msgstr "завантажено користувачем"
+
+#: src/apps/wagtailmedia/models.py:68
+msgid "tags"
+msgstr "теги"
+
+#: src/apps/wagtailmedia/models.py:143
+msgid "media"
+msgstr "медіа"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:2
+msgid "Choose a media file"
+msgstr "Вибрати медіа файл"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:16
+msgid "Search"
+msgstr "Пошук"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:18
+msgid "Upload Audio"
+msgstr "Завантажити аудіо"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:21
+msgid "Upload Video"
+msgstr "Завантажити відео"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:38
+msgid "Popular tags"
+msgstr "Популярні теги"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:64
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:51
+msgid "Uploading…"
+msgstr "Завантаження..."
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:64
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:51
+msgid "Upload"
+msgstr "Завантажити"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/results.html:5
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/results.html:5
+#, python-format
+msgid ""
+"\n"
+"            There is one match\n"
+"        "
+msgid_plural ""
+"\n"
+"            There are %(counter)s matches\n"
+"        "
+msgstr[0] ""
+"\n"
+"            Є один збіг \n"
+"        "
+msgstr[1] ""
+"\n"
+"            Є %(counter)s збігів\n"
+"        "
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/results.html:12
+msgid "Latest media"
+msgstr "Останні медіа"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/results.html:20
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/results.html:20
+#, python-format
+msgid "Sorry, no media files match \"<em>%(query_string)s</em>\""
+msgstr ""
+"На жаль, жоден медіафайл не відповідає запиту \"<em>%(query_string)s</em>\""
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/results.html:28
+#, python-format
+msgid ""
+"You haven't uploaded any media in this collection. Why not <a href="
+"\"%(wagtailmedia_add_url)s\">upload one now</a>?"
+msgstr ""
+"Ви не завантажили жодного медіафайлу в цю колекцію. Чому б не <a href="
+"\"%(wagtailmedia_add_url)s\">завантажити зараз</a>?"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/chooser/results.html:30
+#, python-format
+msgid ""
+"You haven't uploaded any media. Why not <a href=\"%(wagtailmedia_add_url)s"
+"\">upload one now</a>?"
+msgstr ""
+"Ви не завантажили жодного медіафайлу. Чому б не <a href="
+"\"%(wagtailmedia_add_url)s\">завантажити зараз</a>?"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/homepage/site_summary_media.html:5
+#, python-format
+msgid ""
+"\n"
+"        <span>%(total)s</span> Media file\n"
+"    "
+msgid_plural ""
+"\n"
+"        <span>%(total)s</span> Media files\n"
+"    "
+msgstr[0] ""
+"\n"
+"        <span>%(total)s</span> медіафайл\n"
+"    "
+msgstr[1] ""
+"\n"
+"        <span>%(total)s</span> медіафайлів\n"
+"    "
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/_file_field.html:5
+msgid "Change media file:"
+msgstr "Змінити медіафайл:"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/_thumbnail_field.html:9
+msgid "Change thumbnail file:"
+msgstr "Змінити файл ескізу:"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:6
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:35
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/index.html:45
+msgid "Add audio"
+msgstr "Додати аудіо"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:8
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:37
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/index.html:51
+msgid "Add video"
+msgstr "Додати відео"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:10
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/add.html:39
+msgid "Add audio or video"
+msgstr "Додати аудіо або відео"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:3
+#, python-format
+msgid "Delete %(title)s"
+msgstr "Видалити %(title)s"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:5
+msgid "Delete media file"
+msgstr "Видалити медіафайл"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:12
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:66
+#, python-format
+msgid "Used %(usage_count)s time"
+msgid_plural "Used %(usage_count)s times"
+msgstr[0] "Використано %(usage_count)s раз"
+msgstr[1] "Використано %(usage_count)s разів"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:16
+msgid "Are you sure you want to delete this media file?"
+msgstr "Ви впевнені, що хочете видалити цей медіафайл?"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:19
+msgid "Yes, delete"
+msgstr "Так, видалити"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:4
+#, python-format
+msgid "Editing %(title)s"
+msgstr "Редагування %(title)s"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:26
+msgid "Editing"
+msgstr "Редагування"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:46
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:48
+#: src/apps/wagtailmedia/views/media.py:217
+msgid "Delete"
+msgstr "Видалити"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:58
+msgid "Filesize"
+msgstr "Розмір файлу"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:59
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/edit.html:64
+msgid "Usage"
+msgstr "Використання"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/index.html:23
+#: src/apps/wagtailmedia/wagtail_hooks.py:34
+#: src/apps/wagtailmedia/wagtail_hooks.py:72
+msgid "Media"
+msgstr "Медіа"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/index.html:68
+msgid "Popular Tags:"
+msgstr "Популярні теги"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/index.html:77
+msgid "Clear choice"
+msgstr "Очистити вибір"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:11
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:14
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:16
+msgid "Title"
+msgstr "Заголовок"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:17
+msgid "File"
+msgstr "Файл"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:18
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:18
+msgid "Type"
+msgstr "Тип"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:22
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/list.html:25
+msgid "Uploaded"
+msgstr "Завантажено"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/results.html:27
+#, python-format
+msgid ""
+"You haven't uploaded any media files in this collection. You can upload <a "
+"href=\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+"Ви не завантажили жодного медіафайлу в цю колекцію. Ви можете завантажити <a "
+"href=\"%(wagtailmedia_add_audio_url)s\">аудіо</a> або <a href="
+"\"%(wagtailmedia_add_video_url)s\">відео</a> файли."
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/results.html:29
+#, python-format
+msgid ""
+"You haven't uploaded any media files. You can upload <a href="
+"\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+"Ви не завантажили жодного медіафайлу. Ви можете завантажити <a href="
+"\"%(wagtailmedia_add_audio_url)s\">аудіо</a> або <a href="
+"\"%(wagtailmedia_add_video_url)s\">відео</a> файли."
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:3
+#, python-format
+msgid "Usage of %(title)s"
+msgstr "Використання %(title)s"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:5
+msgid "Usage of"
+msgstr "Використання"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:17
+msgid "Parent"
+msgstr "Батько"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:19
+msgid "Status"
+msgstr "Статус"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/media/usage.html:26
+msgid "Edit this page"
+msgstr "Редагувати цю сторінку"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/permissions/includes/media_permissions_formset.html:4
+msgid "Media permissions"
+msgstr "Медіа дозволи"
+
+#: src/apps/wagtailmedia/templates/wagtailmedia/permissions/includes/media_permissions_formset.html:5
+msgid "Add a media permission"
+msgstr "Додати дозвіл медіа"
+
+#: src/apps/wagtailmedia/views/media.py:47
+msgid "Search media files"
+msgstr "Пошук медіафайлів"
+
+#: src/apps/wagtailmedia/views/media.py:52
+msgid "Search media"
+msgstr "Пошук медіа"
+
+#: src/apps/wagtailmedia/views/media.py:131
+#, python-brace-format
+msgid "Media file '{0}' added."
+msgstr "Медіафайл '{0}' додано."
+
+#: src/apps/wagtailmedia/views/media.py:141
+msgid "The media file could not be saved due to errors."
+msgstr "Не вдалося зберегти медіафайл через помилки. "
+
+#: src/apps/wagtailmedia/views/media.py:186
+#, python-brace-format
+msgid "Media file '{0}' updated"
+msgstr "Медіафайл '{0}' оновлено"
+
+#: src/apps/wagtailmedia/views/media.py:195
+msgid "The media could not be saved due to errors."
+msgstr "Не вдалося зберегти медіа через помилки."
+
+#: src/apps/wagtailmedia/views/media.py:213
+msgid ""
+"The file could not be found. Please change the source or delete the media "
+"file"
+msgstr ""
+"Не вдалося знайти файл. Будь ласка, змініть джерело або видаліть медіа-файл "
+
+#: src/apps/wagtailmedia/views/media.py:248
+#, python-brace-format
+msgid "Media file '{0}' deleted."
+msgstr "Медіафайл '{0}' видалено."
+
+#: src/apps/wagtailmedia/wagtail_hooks.py:93
+#, python-format
+msgid "%(count)s media file"
+msgid_plural "%(count)s media files"
+msgstr[0] "%(count)s медіафайл"
+msgstr[1] "%(count)s медіафайлів"
+
+#: src/apps/wagtailmedia/widgets.py:33
+msgid "Choose a media item"
+msgstr "Вибрати медіа"
+
+#: src/apps/wagtailmedia/widgets.py:34
+msgid "Choose another media item"
+msgstr "Вибрати інше медіа"
+
+#: src/apps/wagtailmedia/widgets.py:35
+msgid "Edit this media item"
+msgstr "Редагувати це медіа"
+
+#: src/apps/wagtailmedia/widgets.py:92
+msgid "Choose audio"
+msgstr "Вибрати аудіо"
+
+#: src/apps/wagtailmedia/widgets.py:93
+msgid "Choose another audio item"
+msgstr "Вибрати інше аудіо"
+
+#: src/apps/wagtailmedia/widgets.py:94
+msgid "Edit this audio item"
+msgstr "Редагувати це аудіо"
+
+#: src/apps/wagtailmedia/widgets.py:99
+msgid "Choose video"
+msgstr "Вибрати відео"
+
+#: src/apps/wagtailmedia/widgets.py:100
+msgid "Choose another video"
+msgstr "Вибрати інше відео"
+
+#: src/apps/wagtailmedia/widgets.py:101
+msgid "Edit this video"
+msgstr "Редагувати це відео "
