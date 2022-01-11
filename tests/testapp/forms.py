@@ -1,12 +1,13 @@
-from django.forms import ModelForm
 from django.forms.widgets import Widget
+
+from wagtailmedia.forms import BaseMediaForm
 
 
 class OverridenWidget(Widget):
     pass
 
 
-class AlternateMediaForm(ModelForm):
+class AlternateMediaForm(BaseMediaForm):
     class Meta:
         widgets = {
             "tags": OverridenWidget,

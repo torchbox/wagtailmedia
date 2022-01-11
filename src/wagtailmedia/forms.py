@@ -45,9 +45,6 @@ def get_media_base_form():
     return base_form
 
 
-media_base_form = get_media_base_form()
-
-
 def get_media_form(model):
     fields = model.admin_form_fields
     if "collection" not in fields:
@@ -59,7 +56,7 @@ def get_media_form(model):
 
     return modelform_factory(
         model,
-        form=media_base_form,
+        form=get_media_base_form(),
         fields=fields,
     )
 
