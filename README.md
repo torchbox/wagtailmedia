@@ -60,7 +60,10 @@ in production, you will need to configure your web server to serve files from `M
 For further details, see the Django documentation: [Serving files uploaded by a user during development](https://docs.djangoproject.com/en/stable/howto/static-files/#serving-files-uploaded-by-a-user-during-development)
 and [Deploying static files](https://docs.djangoproject.com/en/stable/howto/static-files/deployment/).
 
-With this configuration in place, you are ready to run `./manage.py migrate` to create the database tables used by wagtailmedia.
+With this configuration in place, you are ready to run `./manage.py migrate` to create the database tables used by `wagtailmedia`.
+
+`wagtailmedia` loads additional assets for the chooser panel interface.
+Run `./manage.py collectstatic` after the migrations step to collect all the required assets.
 
 ### Custom `Media` model
 
