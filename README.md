@@ -62,6 +62,10 @@ and [Deploying static files](https://docs.djangoproject.com/en/stable/howto/stat
 
 With this configuration in place, you are ready to run `./manage.py migrate` to create the database tables used by wagtailmedia.
 
+`wagtailmedia` loads additional assets to create the chooser panel interface. Because of this, you will need to run `./manage.py collectstatic` after migrations.
+
+> If you do not collect the static files, no extra asset files and scripts will be loaded and the admin interface will not load as expected. You may encounter a completely blank section instead.
+
 ### Custom `Media` model
 
 The `Media` model can be customised. To do this, you need
