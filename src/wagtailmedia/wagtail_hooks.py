@@ -1,8 +1,9 @@
 from django.conf.urls import include
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
-from django.utils.translation import ungettext
+from django.utils.translation import ngettext
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
@@ -39,19 +40,37 @@ def register_media_menu_item():
     )
 
 
-class MediaSummaryItem(SummaryItem):
-    order = 300
-    template = "wagtailmedia/homepage/site_summary_media.html"
+if WAGTAIL_VERSION >= (2, 15):
 
-    def get_context(self):
-        return {
-            "total_media": get_media_model().objects.count(),
-        }
+    class MediaSummaryItem(SummaryItem):
+        order = 300
+        template_name = "wagtailmedia/homepage/site_summary_media.html"
 
-    def is_shown(self):
-        return permission_policy.user_has_any_permission(
-            self.request.user, ["add", "change", "delete"]
-        )
+        def get_context_data(self, parent_context):
+            context = super().get_context_data(parent_context)
+            context["total_media"] = get_media_model().objects.count()
+            return context
+
+        def is_shown(self):
+            return permission_policy.user_has_any_permission(
+                self.request.user, ["add", "change", "delete"]
+            )
+
+else:
+
+    class MediaSummaryItem(SummaryItem):
+        order = 300
+        template = "wagtailmedia/homepage/site_summary_media.html"
+
+        def get_context(self):
+            return {
+                "total_media": get_media_model().objects.count(),
+            }
+
+        def is_shown(self):
+            return permission_policy.user_has_any_permission(
+                self.request.user, ["add", "change", "delete"]
+            )
 
 
 @hooks.register("construct_homepage_summary_items")
@@ -89,7 +108,7 @@ def describe_collection_media(collection):
         url = reverse("wagtailmedia:index") + ("?collection_id=%d" % collection.id)
         return {
             "count": media_count,
-            "count_text": ungettext(
+            "count_text": ngettext(
                 "%(count)s media file", "%(count)s media files", media_count
             )
             % {"count": media_count},

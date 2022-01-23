@@ -1,5 +1,7 @@
 import os
 
+from wagtail import VERSION as WAGTAIL_VERSION
+
 
 DEBUG = "INTERACTIVE" in os.environ
 
@@ -112,12 +114,14 @@ PASSWORD_HASHERS = (
 
 WAGTAILSEARCH_BACKENDS = {
     "default": {
-        "BACKEND": "wagtail.search.backends.db",
+        "BACKEND": "wagtail.search.backends.database"
+        if WAGTAIL_VERSION >= (2, 15)
+        else "wagtail.search.backends.db",
     }
 }
 
 # must be set for interactive demo, copied per
 # https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
-ALLOWED_HOSTS = "*"
+ALLOWED_HOSTS = ["*"]
 
 WAGTAIL_SITE_NAME = "Test Site"
