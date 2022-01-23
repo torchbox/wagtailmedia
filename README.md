@@ -20,7 +20,7 @@ In your settings file, add `wagtailmedia` to `INSTALLED_APPS`:
 ```python
 INSTALLED_APPS = [
     # ...
-    'wagtailmedia',
+    "wagtailmedia",
     # ...
 ]
 ```
@@ -32,7 +32,7 @@ All wagtailmedia settings are defined in a single `WAGTAILMEDIA` dictionary in y
 
 WAGTAILMEDIA = {
     "MEDIA_MODEL": "",  # string, dotted-notation. Defaults to "wagtailmedia.Media"
-    "MEDIA_FORM_BASE": "",   # strind, dotted-notation. Defaults to an empty string
+    "MEDIA_FORM_BASE": "",  # string, dotted-notation. Defaults to an empty string
     "AUDIO_EXTENSIONS": [],  # list of extensions
     "VIDEO_EXTENSIONS": [],  # list of extensions
 }
@@ -100,7 +100,8 @@ and must return a Media QuerySet (either the original one, or a new one).
 ```python
 from wagtail.core import hooks
 
-@hooks.register('construct_media_chooser_queryset')
+
+@hooks.register("construct_media_chooser_queryset")
 def show_my_uploaded_media_only(media, request):
     # Only show uploaded media
     media = media.filter(uploaded_by_user=request.user)
@@ -129,18 +130,18 @@ class BlogPageWithMedia(Page):
     date = models.DateField("Post date")
     body = RichTextField(blank=False)
     featured_media = models.ForeignKey(
-        'wagtailmedia.Media',
+        "wagtailmedia.Media",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name="+",
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
-        FieldPanel('body'),
-        MediaChooserPanel('featured_media'),
+        FieldPanel("author"),
+        FieldPanel("date"),
+        FieldPanel("body"),
+        MediaChooserPanel("featured_media"),
     ]
 ```
 
@@ -177,46 +178,50 @@ from wagtailmedia.blocks import AbstractMediaChooserBlock
 class TestMediaBlock(AbstractMediaChooserBlock):
     def render_basic(self, value, context=None):
         if not value:
-            return ''
+            return ""
 
-        if value.type == 'video':
-            player_code = '''
+        if value.type == "video":
+            player_code = """
             <div>
                 <video width="320" height="240" controls>
                     {0}
                     Your browser does not support the video tag.
                 </video>
             </div>
-            '''
+            """
         else:
-            player_code = '''
+            player_code = """
             <div>
                 <audio controls>
                     {0}
                     Your browser does not support the audio element.
                 </audio>
             </div>
-            '''
+            """
 
-        return format_html(player_code, format_html_join(
-            '\n', "<source{0}>",
-            [[flatatt(s)] for s in value.sources]
-        ))
+        return format_html(
+            player_code,
+            format_html_join(
+                "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
+            ),
+        )
 
 
 class BlogPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField("Post date")
-    body = StreamField([
-        ('heading', blocks.CharBlock(classname="full title", icon='title')),
-        ('paragraph', blocks.RichTextBlock(icon='pilcrow')),
-        ('media', TestMediaBlock(icon='media')),
-    ])
+    body = StreamField(
+        [
+            ("heading", blocks.CharBlock(classname="full title", icon="title")),
+            ("paragraph", blocks.RichTextBlock(icon="pilcrow")),
+            ("media", TestMediaBlock(icon="media")),
+        ]
+    )
 
     content_panels = Page.content_panels + [
-        FieldPanel('author'),
-        FieldPanel('date'),
-        StreamFieldPanel('body'),
+        FieldPanel("author"),
+        FieldPanel("date"),
+        StreamFieldPanel("body"),
     ]
 ```
 
@@ -230,11 +235,13 @@ from wagtailmedia.blocks import AudioChooserBlock, VideoChooserBlock
 class BlogPage(Page):
     # ...
 
-    body = StreamField([
-        # ... other block definitions
-        ('audio', AudioChooserBlock(icon='media')),
-        ('video', VideoChooserBlock(icon='media')),
-    ])
+    body = StreamField(
+        [
+            # ... other block definitions
+            ("audio", AudioChooserBlock(icon="media")),
+            ("video", VideoChooserBlock(icon="media")),
+        ]
+    )
 ```
 
 ## Translations
