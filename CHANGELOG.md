@@ -4,6 +4,17 @@
 ## Unreleased
 -
 
+## [0.9.0] - 2022-02-22
+
+### Added
+- Wagtail 2.15 support ([#143](https://github.com/torchbox/wagtailmedia/pull/143)). Thanks @gasman
+- Ukrainian translation ([#145](https://github.com/torchbox/wagtailmedia/pull/145)). Thanks [@yuriifabirovskyi](https://github.com/yuriifabirovskyi)
+- Wagtail 2.16 and Django 4.0 support
+- Note about `collectstatic` in installation notes. Thanks [@G-kodes](https://github.com/G-kodes)
+
+### Fixed
+- Import issues due to module-level call to `get_media_base_form()` ([#148](https://github.com/torchbox/wagtailmedia/pull/148)). Thanks [@jsma](https://github.com/jsma)
+
 ## [0.8.0] - 2021-09-11
 
 - Updated test targets to include Wagtail 2.14
@@ -132,6 +143,7 @@ Initial release
 
 ---
 
+[0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
 [0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
 [0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
 [0.7.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.0
