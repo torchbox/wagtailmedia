@@ -94,8 +94,13 @@ class MediaChooserPanelTest(TestCase):
         return form, media_chooser_panel
 
     def test_get_chosen_item(self):
-        result = self.media_chooser_panel.get_chosen_item()
-        self.assertEqual(result, self.video)
+        if WAGTAIL_VERSION >= (2, 17):
+            self.assertEqual(
+                self.media_chooser_panel.bound_field.form.initial["featured_media"],
+                self.video.pk,
+            )
+        else:
+            self.assertEqual(self.media_chooser_panel.get_chosen_item(), self.video)
 
     def test_render_as_field(self):
         result = self.media_chooser_panel.render_as_field()
