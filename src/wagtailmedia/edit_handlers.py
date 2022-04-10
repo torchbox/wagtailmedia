@@ -1,11 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
-from wagtail.admin.edit_handlers import BaseChooserPanel
+from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 
-class MediaChooserPanel(BaseChooserPanel):
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.admin.panels import FieldPanel
+else:
+    from wagtail.admin.edit_handlers import BaseChooserPanel as FieldPanel
+
+
+class MediaChooserPanel(FieldPanel):
     object_type_name = "media"
 
     def __init__(self, field_name, media_type=None, *args, **kwargs):
@@ -18,12 +24,26 @@ class MediaChooserPanel(BaseChooserPanel):
         kwargs.update(media_type=self.media_type)
         return kwargs
 
-    def widget_overrides(self):
+    @property
+    def _widget_class(self):
         if self.media_type == "audio":
-            widget_class = AdminAudioChooser
+            return AdminAudioChooser
         elif self.media_type == "video":
-            widget_class = AdminVideoChooser
-        else:
-            widget_class = AdminMediaChooser
+            return AdminVideoChooser
+        return AdminMediaChooser
 
-        return {self.field_name: widget_class}
+    if WAGTAIL_VERSION >= (3, 0):
+
+        def get_form_options(self):
+            opts = super().get_form_options()
+            if "widgets" in opts:
+                opts["widgets"][self.field_name] = self._widget_class
+            else:
+                opts["widgets"] = {self.field_name: self._widget_class}
+
+            return opts
+
+    else:
+
+        def widget_overrides(self):
+            return {self.field_name: self._widget_class}
