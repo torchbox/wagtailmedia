@@ -143,7 +143,7 @@ Initial release
 
 ---
 
-[0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
+[0.9.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
 [0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
 [0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
 [0.7.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.0
