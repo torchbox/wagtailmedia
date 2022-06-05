@@ -11,6 +11,7 @@ from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.core.models import Collection, GroupCollectionPermission, Page
 from wagtail.tests.utils import WagtailTestUtils
 
@@ -573,7 +574,10 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             set(json_data.keys()),
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
-        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        if WAGTAIL_VERSION >= (3, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
@@ -709,6 +713,8 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         )
         video.save()
 
+        cls.tab_prefix = "tab-" if WAGTAIL_VERSION >= (3, 0) else ""
+
     def setUp(self):
         self.user = self.login()
 
@@ -723,17 +729,29 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
             set(json_data.keys()),
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
-        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        if WAGTAIL_VERSION >= (3, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
         )
 
         html = response.json().get("html")
-        self.assertInHTML("Test audio", html)
-        self.assertInHTML('<a href="#upload-audio">Upload Audio</a>', html)
-        self.assertNotInHTML("Test video", html)
-        self.assertNotInHTML('<a href="#upload-video">Upload Video</a>', html)
+        for expected in [
+            "Test audio",
+            f'href="#{self.tab_prefix}upload-audio"',
+            "Upload Audio",
+        ]:
+            self.assertIn(expected, html)
+
+        for unexpected in [
+            "Test video",
+            f'href="#{self.tab_prefix}upload-video"',
+            "Upload Video",
+        ]:
+            self.assertNotIn(unexpected, html)
 
     def test_video_chooser(self):
         response = self.client.get(
@@ -742,10 +760,19 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/json")
         html = response.json().get("html")
-        self.assertInHTML("Test video", html)
-        self.assertInHTML('<a href="#upload-video">Upload Video</a>', html)
-        self.assertNotInHTML("Test audio", html)
-        self.assertNotInHTML('<a href="#upload-audio">Upload Audio</a>', html)
+        for expected in [
+            "Test video",
+            f'href="#{self.tab_prefix}upload-video"',
+            "Upload Video",
+        ]:
+            self.assertIn(expected, html)
+
+        for unexpected in [
+            "Test audio",
+            f'href="#{self.tab_prefix}upload-audio"',
+            "Upload Audio",
+        ]:
+            self.assertNotIn(unexpected, html)
 
     def test_typed_chooser_with_invalid_media_type(self):
         with self.assertRaises(NoReverseMatch):
@@ -918,7 +945,10 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
 
         # Shouldn't redirect anywhere
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        if WAGTAIL_VERSION >= (3, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
 
         # The video form should have an error
         self.assertIn("uploadforms", response.context)

@@ -26,6 +26,7 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                 success: function(data, status) {
                     $('#search-results').html(data);
                     ajaxifyLinks($('#search-results'));
+                    initWMTabs()
                 }
             });
         }
@@ -55,6 +56,7 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         }
 
         ajaxifyLinks(modal.body);
+        initWMTabs()
 
         $('form.media-upload', modal.body).on('submit', function() {
             var formdata = new FormData(this);
