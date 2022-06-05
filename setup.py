@@ -57,10 +57,11 @@ setup(
         "Framework :: Django :: 3.2",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
+        "Framework :: Wagtail :: 3",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
     ],
     install_requires=[
-        "wagtail>=2.11",
+        "wagtail>=2.15",
     ],
     extras_require={
         "testing": testing_extras,
