@@ -3,6 +3,7 @@ from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 
 from modelcluster.fields import ParentalKey
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
@@ -113,6 +114,8 @@ class TestMediaBlock(AbstractMediaChooserBlock):
 class BlogStreamPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField("Post date")
+    sf_kwargs = {"use_json_field": True} if WAGTAIL_VERSION >= (4, 0) else {}
+
     body = StreamField(
         [
             ("heading", blocks.CharBlock(classname="full title", icon="title")),
@@ -120,7 +123,8 @@ class BlogStreamPage(Page):
             ("media", TestMediaBlock(icon="media")),
             ("video", VideoChooserBlock(icon="media")),
             ("audio", AudioChooserBlock(icon="media")),
-        ]
+        ],
+        **sf_kwargs,
     )
 
     featured_media = models.ForeignKey(
