@@ -9,8 +9,6 @@ from django.test import TestCase, TransactionTestCase, override_settings
 
 from wagtail.core.models import Collection
 
-from six import b
-
 from wagtailmedia import signal_handlers
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import Media, get_media_model
@@ -19,7 +17,7 @@ from wagtailmedia.models import Media, get_media_model
 class TestMediaValidation(TestCase):
     def test_duration_validation(self):
         # ensure duration is optional
-        fake_file = ContentFile(b("A boring example movie"))
+        fake_file = ContentFile("A boring example movie")
         fake_file.name = "movie.mp4"
         media = Media(
             title="Test media file",
@@ -57,7 +55,7 @@ class TestMediaTemplating(TestCase):
             (1, "1.0"),
             (1234567.7654321, "1234567.7654321"),
         ):
-            fake_file = ContentFile(b("A boring example movie"))
+            fake_file = ContentFile("A boring example movie")
             fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
@@ -81,7 +79,7 @@ class TestMediaTemplating(TestCase):
             (1, "1"),
             (1234567.7654321, "1234568"),
         ):
-            fake_file = ContentFile(b("A boring example movie"))
+            fake_file = ContentFile("A boring example movie")
             fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
@@ -105,7 +103,7 @@ class TestMediaTemplating(TestCase):
             (1, "1"),
             (1234567.7654321, "1234567.8"),
         ):
-            fake_file = ContentFile(b("A boring example movie"))
+            fake_file = ContentFile("A boring example movie")
             fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
@@ -179,7 +177,7 @@ class TestMediaQuerySet(TestCase):
 
 class TestAbstractMediaInterfaceModel(TestCase):
     def test_sources_mp4_type(self):
-        fake_file = ContentFile(b("A boring example movie"))
+        fake_file = ContentFile("A boring example movie")
         fake_file.name = "movie.mp4"
         media = Media()
         media.file = File(fake_file)
@@ -194,7 +192,7 @@ class TestAbstractMediaInterfaceModel(TestCase):
         )
 
     def test_sources_unknown_type(self):
-        fake_file = ContentFile(b("A boring example movie"))
+        fake_file = ContentFile("A boring example movie")
         fake_file.name = "movie"
         media = Media()
         media.file = File(fake_file)
@@ -266,7 +264,7 @@ class TestMediaFilesDeletion(TransactionTestCase):
 
     def test_media_file_deleted_oncommit(self):
         with transaction.atomic():
-            fake_file = ContentFile(b("A boring example movie"))
+            fake_file = ContentFile("A boring example movie")
             fake_file.name = "movie-for-deletion.mp4"
 
             media = get_media_model().objects.create(
