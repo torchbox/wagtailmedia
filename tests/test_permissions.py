@@ -9,8 +9,6 @@ from django.urls import reverse
 from wagtail.core.models import Collection, GroupCollectionPermission
 from wagtail.tests.utils import WagtailTestUtils
 
-from six import b
-
 from wagtailmedia import models
 
 
@@ -64,7 +62,7 @@ class TestMediaPermissions(TestCase):
 class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
     def setUp(self):
         # Build a fake file
-        fake_file = ContentFile(b("A boring example song"))
+        fake_file = ContentFile("A boring example song")
         fake_file.name = "song.mp3"
 
         self.root_collection = Collection.get_first_root_node()
