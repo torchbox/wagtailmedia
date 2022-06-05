@@ -81,6 +81,17 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         index.FilterField("uploaded_by_user"),
     ]
 
+    admin_form_fields = (
+        "title",
+        "file",
+        "collection",
+        "duration",
+        "width",
+        "height",
+        "thumbnail",
+        "tags",
+    )
+
     def __str__(self):
         return self.title
 
@@ -144,16 +155,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
 
 
 class Media(AbstractMedia):
-    admin_form_fields = (
-        "title",
-        "file",
-        "collection",
-        "duration",
-        "width",
-        "height",
-        "thumbnail",
-        "tags",
-    )
+    pass
 
 
 def get_media_model():
