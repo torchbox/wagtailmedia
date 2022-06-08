@@ -573,9 +573,11 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
         if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
-        else:
             self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        else:
+            self.assertTemplateUsed(
+                response, "wagtailmedia/chooser/chooser-legacy.html"
+            )
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
@@ -728,9 +730,11 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
         if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
-        else:
             self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        else:
+            self.assertTemplateUsed(
+                response, "wagtailmedia/chooser/chooser-legacy.html"
+            )
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
@@ -944,9 +948,11 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         # Shouldn't redirect anywhere
         self.assertEqual(response.status_code, 200)
         if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser-next.html")
-        else:
             self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
+        else:
+            self.assertTemplateUsed(
+                response, "wagtailmedia/chooser/chooser-legacy.html"
+            )
 
         # The video form should have an error
         self.assertIn("uploadforms", response.context)

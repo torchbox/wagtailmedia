@@ -117,9 +117,9 @@ def chooser(request, media_type=None):
 
     return render_modal_workflow(
         request,
-        "wagtailmedia/chooser/chooser-next.html"
+        "wagtailmedia/chooser/chooser.html"
         if WAGTAIL_VERSION >= (3, 0)
-        else "wagtailmedia/chooser/chooser.html",
+        else "wagtailmedia/chooser/chooser-legacy.html",
         None,
         {
             "media_files": media_files,
@@ -227,9 +227,9 @@ def chooser_upload(request, media_type):
     }
     return render_modal_workflow(
         request,
-        "wagtailmedia/chooser/chooser-next.html"
+        "wagtailmedia/chooser/chooser.html"
         if WAGTAIL_VERSION >= (3, 0)
-        else "wagtailmedia/chooser/chooser.html",
+        else "wagtailmedia/chooser/chooser-legacy.html",
         None,
         context,
         json_data={"step": "chooser"},
