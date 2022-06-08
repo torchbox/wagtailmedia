@@ -3,7 +3,7 @@
 {% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 icon="media" %}
 
 {# TODO: drop data-wmtabs and the tabs.js include when a better tabs framework is in place #}
-<div class="w-tabs" data-tabs data-tabs-animate data-wm-tabs>
+<div class="w-tabs" data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
     {% if uploadforms %}
         {# Both auth and video forms are powered by the same media form, so use one of them #}
         {% if uploadforms.video %}
@@ -65,7 +65,7 @@
         </section>
         {% if uploadforms %}
             {% for form_type, uploadform in uploadforms.items %}
-            <section id="tab-upload-{{ form_type }}" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-upload-{{ form_type }}">
+            <section id="tab-upload-{{ form_type }}" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-upload-{{ form_type }}" hidden>
                 <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' form_type %}" method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     <ul class="fields">
