@@ -3,6 +3,7 @@
 {% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 icon="media" %}
 
 {# TODO: drop data-wmtabs and the tabs.js include when a better tabs framework is in place #}
+{% See https://github.com/wagtail/wagtail/issues/8408. #}
 <div class="w-tabs" data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
     {% if uploadforms %}
         {# Both auth and video forms are powered by the same media form, so use one of them #}
