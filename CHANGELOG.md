@@ -2,7 +2,21 @@
 # Changelog
 
 ## Unreleased
--
+
+## [0.10.0] - 2022-06-10
+
+### Added
+
+- Wagtail 3.0 support
+- CodeQL configuration. Thanks @thibaudcolas
+
+### Changed
+
+- Updated French translations ([#159](https://github.com/torchbox/wagtailmedia/pull/159)). Thanks @hoccau, @Antoine
+
+### Removed
+
+- Support for Wagtail < 2.15
 
 ## [0.9.0] - 2022-02-22
 
@@ -143,6 +157,7 @@ Initial release
 
 ---
 
+[0.10.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.0
 [0.9.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
 [0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
 [0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
