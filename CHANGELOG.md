@@ -3,6 +3,12 @@
 
 ## Unreleased
 
+## [0.10.1] - 2022-06-20
+
+### Fixed
+
+- Fixed comment tag in template ([#163](https://github.com/torchbox/wagtailmedia/pull/163)). Thanks @th3hamm0r
+
 ## [0.10.0] - 2022-06-10
 
 ### Added
@@ -157,6 +163,7 @@ Initial release
 
 ---
 
+[0.10.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.1
 [0.10.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.0
 [0.9.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
 [0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
