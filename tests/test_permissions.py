@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.urls import reverse
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.core.models import Collection, GroupCollectionPermission
 from wagtail.tests.utils import WagtailTestUtils
 
@@ -98,6 +99,11 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
         user.user_permissions.add(admin_permission)
         self.assertTrue(self.client.login(username="changeonly", password="password"))
 
+        if WAGTAIL_VERSION >= (4, 0):
+            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
+        else:
+            self.collection_label_tag = '<label for="id_collection">'
+
     def test_get_index(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
@@ -127,7 +133,7 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
 
         # media can only be moved to collections you have add permission for,
         # so the 'collection' field is not available here
-        self.assertNotContains(response, '<label for="id_collection">')
+        self.assertNotContains(response, self.collection_label_tag)
 
         # if the user has add permission on a different collection,
         # they should have option to move the media
@@ -141,7 +147,7 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
         )
         response = self.client.get(reverse("wagtailmedia:edit", args=(self.media.id,)))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '<label for="id_collection">')
+        self.assertContains(response, self.collection_label_tag)
         self.assertContains(response, "Nice plans")
         self.assertContains(response, "Evil plans")
 

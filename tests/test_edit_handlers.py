@@ -157,7 +157,14 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
         self.assertIn('<span class="title">Test video</span>', result)
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (2, 17):
+        if WAGTAIL_VERSION >= (4, 0):
+            self.assertIn(
+                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
+                f'class="edit-link button button-small button-secondary" '
+                f'target="_blank" rel="noreferrer">Edit this media item</a>',
+                result,
+            )
+        elif WAGTAIL_VERSION >= (2, 17):
             self.assertIn(
                 f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
                 f'target="_blank" rel="noreferrer">Edit this media item</a>',
@@ -179,7 +186,14 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
         self.assertIn('<span class="title">Test video</span>', result)
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (2, 17):
+        if WAGTAIL_VERSION >= (4, 0):
+            self.assertIn(
+                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
+                f'class="edit-link button button-small button-secondary" '
+                f'target="_blank" rel="noreferrer">Edit this video</a>',
+                result,
+            )
+        elif WAGTAIL_VERSION >= (2, 17):
             self.assertIn(
                 f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
                 f'target="_blank" rel="noreferrer">Edit this video</a>',
@@ -203,7 +217,14 @@ class MediaChooserPanelTest(TestCase):
 
         self.assertIn('<span class="title"></span>', result)
 
-        if WAGTAIL_VERSION >= (2, 17):
+        if WAGTAIL_VERSION >= (4, 0):
+            self.assertIn(
+                '<a href="" aria-describedby="id_featured_media-title" '
+                'class="edit-link button button-small button-secondary w-hidden" target="_blank" '
+                'rel="noreferrer">Edit this media item</a>',
+                result,
+            )
+        elif WAGTAIL_VERSION >= (2, 17):
             self.assertIn(
                 '<a href="" class="edit-link button button-small button-secondary" target="_blank" '
                 'rel="noreferrer">Edit this media item</a>',
@@ -231,7 +252,14 @@ class MediaChooserPanelTest(TestCase):
             media_chooser_panel = self.my_media_chooser_panel.bind_to(
                 instance=self.test_instance, form=form, request=self.request
             )
-        self.assertIn(
-            "<span>This field is required.</span>",
-            media_chooser_panel.render_as_field(),
-        )
+
+        if WAGTAIL_VERSION >= (4, 0):
+            self.assertInHTML(
+                '<p class="error-message">This field is required.</p>',
+                media_chooser_panel.render_as_field(),
+            )
+        else:
+            self.assertIn(
+                "<span>This field is required.</span>",
+                media_chooser_panel.render_as_field(),
+            )
