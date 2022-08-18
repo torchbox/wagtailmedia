@@ -106,6 +106,11 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
+        if WAGTAIL_VERSION >= (4, 0):
+            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
+        else:
+            self.collection_label_tag = '<label for="id_collection">'
+
     def test_action_block(self):
         with self.settings(
             TEMPLATES=[
@@ -142,7 +147,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
         # as standard, only the root collection exists and so no 'Collection' option
         # is displayed on the form
-        self.assertNotContains(response, '<label for="id_collection">')
+        self.assertNotContains(response, self.collection_label_tag)
         self.assertContains(response, "Add audio")
         self.assertNotContains(response, "Add audio or video")
         self.assertContains(
@@ -169,7 +174,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
 
         # as standard, only the root collection exists and so no 'Collection' option
         # is displayed on the form
-        self.assertNotContains(response, '<label for="id_collection">')
+        self.assertNotContains(response, self.collection_label_tag)
 
         # draftail should NOT be a standard JS include on this page
         self.assertNotContains(response, "wagtailadmin/js/draftail.js")
@@ -190,7 +195,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
 
-        self.assertContains(response, '<label for="id_collection">')
+        self.assertContains(response, self.collection_label_tag)
         self.assertContains(response, "Evil plans")
         self.assertContains(response, "Add audio")
         self.assertContains(
@@ -209,7 +214,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
 
-        self.assertContains(response, '<label for="id_collection">')
+        self.assertContains(response, self.collection_label_tag)
         self.assertContains(response, "Evil plans")
         self.assertContains(response, "Add video")
         self.assertContains(
@@ -361,6 +366,11 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
         self.client.login(username="moriarty", password="password")
 
+        if WAGTAIL_VERSION >= (4, 0):
+            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
+        else:
+            self.collection_label_tag = '<label for="id_collection">'
+
     def test_get_audio(self):
         response = self.client.get(reverse("wagtailmedia:add", args=("audio",)))
         self.assertEqual(response.status_code, 200)
@@ -368,7 +378,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
         # user only has access to one collection, so no 'Collection' option
         # is displayed on the form
-        self.assertNotContains(response, '<label for="id_collection">')
+        self.assertNotContains(response, self.collection_label_tag)
         self.assertContains(response, "Add audio")
         self.assertContains(
             response,
@@ -385,7 +395,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
         # user only has access to one collection, so no 'Collection' option
         # is displayed on the form
-        self.assertNotContains(response, '<label for="id_collection">')
+        self.assertNotContains(response, self.collection_label_tag)
         self.assertContains(response, "Add video")
         self.assertContains(
             response,
