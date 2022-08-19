@@ -142,7 +142,7 @@ class MediaChooserPanelTest(TestCase):
         )
 
     def test_get_chosen_item(self):
-        if WAGTAIL_VERSION >= (2, 17):
+        if WAGTAIL_VERSION >= (3, 0):
             self.assertEqual(
                 self.media_chooser_panel.bound_field.form.initial["featured_media"],
                 self.video.pk,
@@ -164,7 +164,7 @@ class MediaChooserPanelTest(TestCase):
                 f'target="_blank" rel="noreferrer">Edit this media item</a>',
                 result,
             )
-        elif WAGTAIL_VERSION >= (2, 17):
+        elif WAGTAIL_VERSION >= (3, 0):
             self.assertIn(
                 f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
                 f'target="_blank" rel="noreferrer">Edit this media item</a>',
@@ -193,7 +193,7 @@ class MediaChooserPanelTest(TestCase):
                 f'target="_blank" rel="noreferrer">Edit this video</a>',
                 result,
             )
-        elif WAGTAIL_VERSION >= (2, 17):
+        elif WAGTAIL_VERSION >= (3, 0):
             self.assertIn(
                 f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
                 f'target="_blank" rel="noreferrer">Edit this video</a>',
@@ -224,7 +224,7 @@ class MediaChooserPanelTest(TestCase):
                 'rel="noreferrer">Edit this media item</a>',
                 result,
             )
-        elif WAGTAIL_VERSION >= (2, 17):
+        elif WAGTAIL_VERSION >= (3, 0):
             self.assertIn(
                 '<a href="" class="edit-link button button-small button-secondary" target="_blank" '
                 'rel="noreferrer">Edit this media item</a>',
