@@ -8,22 +8,17 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.staticfiles import versioned_static
 from wagtail.admin.widgets import AdminChooser
+from wagtail.utils.version import get_main_version
 
 
 try:
+    from wagtail.telepath import register
+    from wagtail.widget_adapters import WidgetAdapter
+except ImportError:
     from wagtail.core.telepath import register
     from wagtail.core.widget_adapters import WidgetAdapter
-except ImportError:  # do-nothing fallback for Wagtail <2.13
-
-    def register(adapter, cls):
-        pass
-
-    class WidgetAdapter:
-        pass
-
 
 from wagtailmedia.models import get_media_model
 
@@ -50,11 +45,6 @@ class AdminMediaChooser(AdminChooser):
         }
 
     def render_html(self, name, value, attrs):
-        if WAGTAIL_VERSION < (2, 12):
-            # From Wagtail 2.12, get_value_data is called as a preprocessing step in
-            # WidgetWithScript before invoking render_html -> value is already the
-            # return value of get_value_data
-            value = self.get_value_data(value)
         value_data = value if value is not None else {}
 
         original_field_html = super().render_html(name, value_data.get("id"), attrs)
