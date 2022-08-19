@@ -31,46 +31,40 @@ class MediaMenuItem(MenuItem):
 
 @hooks.register("register_admin_menu_item")
 def register_media_menu_item():
-    return MediaMenuItem(
-        _("Media"),
-        reverse("wagtailmedia:index"),
-        name="media",
-        classnames="icon icon-media",
-        order=300,
-    )
+    if WAGTAIL_VERSION >= (4, 0, 0):
+        return MediaMenuItem(
+            _("Media"),
+            reverse("wagtailmedia:index"),
+            name="media",
+            icon_name="media",
+            order=300,
+        )
+    else:
+        return MediaMenuItem(
+            _("Media"),
+            reverse("wagtailmedia:index"),
+            name="media",
+            classnames="icon icon-media",
+            order=300,
+        )
 
 
-if WAGTAIL_VERSION >= (2, 15):
-
-    class MediaSummaryItem(SummaryItem):
-        order = 300
+class MediaSummaryItem(SummaryItem):
+    order = 300
+    if WAGTAIL_VERSION >= (4, 0, 0):
         template_name = "wagtailmedia/homepage/site_summary_media.html"
+    else:
+        template_name = "wagtailmedia/homepage/legacy_site_summary_media.html"
 
-        def get_context_data(self, parent_context):
-            context = super().get_context_data(parent_context)
-            context["total_media"] = get_media_model().objects.count()
-            return context
+    def get_context_data(self, parent_context):
+        context = super().get_context_data(parent_context)
+        context["total_media"] = get_media_model().objects.count()
+        return context
 
-        def is_shown(self):
-            return permission_policy.user_has_any_permission(
-                self.request.user, ["add", "change", "delete"]
-            )
-
-else:
-
-    class MediaSummaryItem(SummaryItem):
-        order = 300
-        template = "wagtailmedia/homepage/site_summary_media.html"
-
-        def get_context(self):
-            return {
-                "total_media": get_media_model().objects.count(),
-            }
-
-        def is_shown(self):
-            return permission_policy.user_has_any_permission(
-                self.request.user, ["add", "change", "delete"]
-            )
+    def is_shown(self):
+        return permission_policy.user_has_any_permission(
+            self.request.user, ["add", "change", "delete"]
+        )
 
 
 @hooks.register("construct_homepage_summary_items")
