@@ -23,10 +23,16 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
+    def assertIndexTemplateUsed(self, response):
+        if WAGTAIL_VERSION >= (4, 0, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
+
     def test_simple(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertIndexTemplateUsed(response)
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
 
@@ -34,7 +40,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
     def test_extends(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertIndexTemplateUsed(response)
         self.assertNotContains(response, "Add audio")
         self.assertNotContains(response, "Add video")
         self.assertContains(response, "You shan't act")
@@ -61,7 +67,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertIndexTemplateUsed(response)
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -73,7 +79,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertIndexTemplateUsed(response)
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -85,7 +91,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertIndexTemplateUsed(response)
 
         # Check that we got the last page
         self.assertEqual(
