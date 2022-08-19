@@ -107,7 +107,10 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
     def test_get_index(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        if WAGTAIL_VERSION >= (4, 0, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
 
         # user should not get an "Add audio" and "Add video" buttons
         self.assertNotContains(response, "Add audio")

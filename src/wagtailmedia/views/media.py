@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import messages
 from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
 from wagtail.admin.forms.search import SearchForm
@@ -93,7 +94,9 @@ def index(request):
     else:
         return render(
             request,
-            "wagtailmedia/media/index.html",
+            "wagtailmedia/media/index.html"
+            if WAGTAIL_VERSION >= (4, 0, 0)
+            else "wagtailmedia/media/legacy/index.html",
             {
                 "ordering": ordering,
                 "media_files": media,
