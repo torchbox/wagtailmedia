@@ -26,17 +26,6 @@ class SettingsTests(TestCase):
             "Setting should have been restored",
         )
 
-    def test_warning_raised_on_deprecated_setting(self):
-        """
-        Make sure user is alerted with an deprecated setting is used.
-        """
-        msg = (
-            "The 'WAGTAILMEDIA_MEDIA_MODEL' setting is deprecated and will be removed in the next release, "
-            'use WAGTAILMEDIA["MEDIA_MODEL"] instead.'
-        )
-        with self.assertWarnsMessage(PendingDeprecationWarning, msg):
-            WagtailMediaSettings({"WAGTAILMEDIA_MEDIA_MODEL": "myapp.CustomMedia"})
-
     @mock.patch("wagtailmedia.settings.REMOVED_SETTINGS", ["A_REMOVED_SETTING"])
     def test_runtimeerror_raised_on_removed_setting(self):
         msg = (
