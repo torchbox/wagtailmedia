@@ -8,12 +8,33 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.admin import widgets
 from wagtail.admin.forms.collections import (
     BaseCollectionMemberForm,
+    CollectionChoiceField,
     collection_member_permission_formset_factory,
 )
 
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import permission_policy as media_permission_policy
 from wagtailmedia.settings import wagtailmedia_settings
+
+
+try:
+    from wagtail.models import Collection
+except ImportError:
+    from wagtail.core.models import Collection
+
+
+# Callback to allow us to override the default form field for the collection field
+def formfield_for_dbfield(db_field, **kwargs):
+    if db_field.name == "collection":
+        return CollectionChoiceField(
+            label=_("Collection"),
+            queryset=Collection.objects.all(),
+            empty_label=None,
+            **kwargs,
+        )
+
+    # For all other fields, just call its formfield() method.
+    return db_field.formfield(**kwargs)
 
 
 class BaseMediaForm(BaseCollectionMemberForm):
@@ -58,6 +79,7 @@ def get_media_form(model):
         model,
         form=get_media_base_form(),
         fields=fields,
+        formfield_callback=formfield_for_dbfield,
     )
 
 
