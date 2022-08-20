@@ -13,8 +13,6 @@ import warnings
 from django.conf import settings
 from django.test.signals import setting_changed
 
-from wagtailmedia.deprecation import RemovedInWagtailMedia010Warning
-
 
 DEFAULTS = {
     "MEDIA_MODEL": "wagtailmedia.Media",
@@ -35,12 +33,10 @@ DEFAULTS = {
 }
 
 # List of settings that have been deprecated
-DEPRECATED_SETTINGS = [
-    ("WAGTAILMEDIA_MEDIA_MODEL", RemovedInWagtailMedia010Warning),
-    ("WAGTAILMEDIA_MEDIA_FORM_BASE", RemovedInWagtailMedia010Warning),
-]
+DEPRECATED_SETTINGS = []
 
 # List of settings that have been removed
+# note: use a tuple of (setting, deprecation warning from deprecation.py)
 REMOVED_SETTINGS = []
 
 
