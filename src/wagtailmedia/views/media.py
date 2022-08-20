@@ -83,7 +83,9 @@ def index(request):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return render(
             request,
-            "wagtailmedia/media/results.html",
+            "wagtailmedia/media/results.html"
+            if WAGTAIL_VERSION >= (4, 0, 0)
+            else "wagtailmedia/media/legacy/results.html",
             {
                 "ordering": ordering,
                 "media_files": media,

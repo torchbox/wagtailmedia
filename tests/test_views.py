@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 import json
 import os
 
+from unittest import skipUnless
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
@@ -36,8 +38,19 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
 
+    @skipUnless(WAGTAIL_VERSION >= (4, 0, 0), "Wagtail 4.0+ only")
     @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
     def test_extends(self):
+        response = self.client.get(reverse("wagtailmedia:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertIndexTemplateUsed(response)
+        self.assertNotContains(response, "Add audio")
+        self.assertNotContains(response, "Add video")
+        self.assertContains(response, "You shan't act")
+
+    @skipUnless(WAGTAIL_VERSION < (4, 0, 0), "Wagtail < 4.0, legacy templates")
+    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends_legacy"})
+    def test_extends_legacy(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
         self.assertIndexTemplateUsed(response)
@@ -579,6 +592,12 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.user = self.login()
 
+    def assertListTemplateUsed(self, response):
+        if WAGTAIL_VERSION >= (4, 0, 0):
+            self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
+        else:
+            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/list.html")
+
     def test_simple(self):
         response = self.client.get(reverse("wagtailmedia:chooser"))
         self.assertEqual(response.status_code, 200)
@@ -624,7 +643,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
+        self.assertListTemplateUsed(response)
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -638,7 +657,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
+        self.assertListTemplateUsed(response)
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -650,7 +669,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
+        self.assertListTemplateUsed(response)
 
         # Check that we got the last page
         self.assertEqual(

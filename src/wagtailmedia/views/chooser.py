@@ -9,6 +9,7 @@ from wagtail.admin.models import popular_tags_for_model
 from wagtail.core import hooks
 from wagtail.core.models import Collection
 from wagtail.search.backends import get_search_backends
+from wagtail.utils.version import get_main_version
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
@@ -96,7 +97,9 @@ def chooser(request, media_type=None):
 
         return render(
             request,
-            "wagtailmedia/chooser/results.html",
+            "wagtailmedia/chooser/results.html"
+            if WAGTAIL_VERSION >= (4, 0, 0)
+            else "wagtailmedia/chooser/legacy/results.html",
             {
                 "media_files": media_files,
                 "query_string": q,
@@ -130,6 +133,7 @@ def chooser(request, media_type=None):
             "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
             "media_type": media_type,
+            "wagtail_version": get_main_version(),
         },
         json_data={
             "step": "chooser",
@@ -224,6 +228,7 @@ def chooser_upload(request, media_type):
         "is_searching": False,
         "pagination_template": pagination_template,
         "media_type": media_type,
+        "wagtail_version": get_main_version(),
     }
     return render_modal_workflow(
         request,

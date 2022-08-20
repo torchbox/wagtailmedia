@@ -64,6 +64,7 @@ class AdminMediaChooser(AdminChooser):
                 "title": value_data.get("title", ""),
                 "edit_url": value_data.get("edit_link", ""),
                 "chooser_url": chooser_url,
+                "wagtail_version": get_main_version(),
             },
         )
 

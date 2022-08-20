@@ -1,10 +1,7 @@
-{% load i18n l10n wagtailadmin_tags %}
+{% load i18n %}
 <table class="listing">
     <col />
     <col  />
-    {% if collections %}
-        <col  />
-    {% endif %}
     <col width="16%" />
     <thead>
         <tr class="table-headers">
@@ -19,9 +16,6 @@
             </th>
             <th>{% trans "File" %}</th>
             <th>{% trans "Type" %}</th>
-            {% if collections %}
-                <th>{% trans "Collection" %}</th>
-            {% endif %}
             <th>
                 {% if not is_searching %}
                     <a href="{% url 'wagtailmedia:index' %}{% if not ordering == "-created_at" %}?ordering=-created_at{% endif %}" class="icon icon-arrow-down-after {% if  ordering == "-created_at" %}teal{% endif %}">
@@ -36,11 +30,11 @@
     <tbody>
         {% for media_file in media_files %}
             <tr>
-                <td id="media_{{ media_file.pk|unlocalize }}_title" class="title">
+                <td class="title">
                     {% if choosing %}
-                        <div class="title-wrapper"><a href="{% url 'wagtailmedia:media_chosen' media_file.pk %}" class="media-choice">{{ media_file.title }}</a></div>
+                        <h2><a href="{% url 'wagtailmedia:media_chosen' media_file.id %}" class="media-choice">{{ media_file.title }}</a></h2>
                     {% else %}
-                        <div class="title-wrapper"><a href="{% url 'wagtailmedia:edit' media_file.id %}">{{ media_file.title }}</a></div>
+                        <h2><a href="{% url 'wagtailmedia:edit' media_file.id %}">{{ media_file.title }}</a></h2>
                     {% endif %}
                 </td>
                 <td>
@@ -51,10 +45,7 @@
                     {% endif %}
                 </td>
                 <td>{{ media_file.get_type_display }}</td>
-                {% if collections %}
-                    <td>{{ media_file.collection.name }}</td>
-                {% endif %}
-                <td>{% human_readable_date media_file.created_at %}</td>
+                <td><div class="human-readable-date" title="{{ media_file.created_at|date:"d M Y H:i" }}">{{ media_file.created_at|timesince }} ago</div></td>
             </tr>
         {% endfor %}
     </tbody>
