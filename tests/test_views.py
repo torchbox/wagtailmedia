@@ -43,7 +43,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
     def test_extends(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertNotContains(response, "Add audio")
         self.assertNotContains(response, "Add video")
         self.assertContains(response, "You shan't act")
@@ -53,10 +53,10 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
     def test_extends_legacy(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
+        self.assertContains(response, "You shan't act")
         self.assertNotContains(response, "Add audio")
         self.assertNotContains(response, "Add video")
-        self.assertContains(response, "You shan't act")
 
     def test_search(self):
         response = self.client.get(reverse("wagtailmedia:index"), {"q": "Hello"})
