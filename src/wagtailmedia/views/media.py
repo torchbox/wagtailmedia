@@ -91,6 +91,7 @@ def index(request):
                 "media_files": media,
                 "query_string": query_string,
                 "is_searching": bool(query_string),
+                "collections": collections,
             },
         )
     else:
