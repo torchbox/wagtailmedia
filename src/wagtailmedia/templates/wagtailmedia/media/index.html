@@ -44,6 +44,19 @@
             <form class="image-search search-bar" action="{% url 'wagtailmedia:index' %}" method="GET" novalidate>
                 <ul class="fields">
                     <li>{% include "wagtailadmin/shared/collection_chooser.html" %}</li>
+                    {% if popular_tags %}
+                    <li>
+                        <fieldset class="tagfilter">
+                            <legend>{% trans 'Popular Tags:' %}</legend>
+                            {% for tag in popular_tags %}
+                                <a class="button button-small bicolor button--icon{% if tag.name != current_tag %} button-secondary{% endif %}" href="{% url 'wagtailmedia:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                            {% endfor %}
+                            {% if current_tag %}
+                                <a class="button button-small bicolor button-secondary button--icon" href="{% url 'wagtailmedia:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
+                            {% endif %}
+                        </fieldset>
+                    </li>
+                    {% endif %}
                 </ul>
             </form>
         {% endif %}
