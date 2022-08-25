@@ -84,6 +84,7 @@ class AdminMediaChooser(AdminChooser):
     def media(self):
         return forms.Media(
             js=[
+                "wagtailmedia/js/tabs.js",
                 "wagtailmedia/js/media-chooser-modal.js",
                 "wagtailmedia/js/media-chooser.js",
             ]
