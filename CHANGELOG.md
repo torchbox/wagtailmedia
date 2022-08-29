@@ -3,6 +3,15 @@
 
 ## Unreleased
 
+### Added
+
+- Added support for Wagtail 4.0 ([#169](https://github.com/torchbox/wagtailmedia/pull/169)). With thanks to @th3hamm0r for testing.
+
+### Fixed
+
+- Sorting in the media index and chooser.
+- Tabs script dependency in the chooser. ([#170](https://github.com/torchbox/wagtailmedia/pull/170)). Thanks @jhnbkr.
+
 ## [0.10.1] - 2022-06-20
 
 ### Fixed
