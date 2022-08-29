@@ -15,6 +15,7 @@ function createMediaChooser(id) {
                     mediaTitle.text(mediaData.title);
                     chooserElement.removeClass('blank');
                     editLink.attr('href', mediaData.edit_link);
+                    editLink.removeClass('w-hidden');
                 }
             }
         });
@@ -42,6 +43,7 @@ function createMediaChooser(id) {
             input.val(mediaData.id);
             mediaTitle.text(mediaData.title);
             editLink.attr('href', mediaData.edit_link);
+            editLink.removeClass('w-hidden');
             chooserElement.removeClass('blank');
             state = mediaData;
         },
