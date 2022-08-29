@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: wagtailmedia\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-29 06:43-0500\n"
-"PO-Revision-Date: 2020-12-18 11:56+0100\n"
+"PO-Revision-Date: 2022-08-29 15:31+0200\n"
 "Last-Translator: Henrik Kröger <hedwig@riseup.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -21,16 +21,16 @@ msgstr ""
 
 #: src/wagtailmedia/blocks.py:83
 msgid "Your browser does not support the audio element."
-msgstr ""
+msgstr "Ihr Browser unterstützt dieses Audio-Element nicht."
 
 #: src/wagtailmedia/blocks.py:115
 msgid "Your browser does not support the video element."
-msgstr ""
+msgstr "Ihr Browser unterstützt dieses Video-Element nicht."
 
 #: src/wagtailmedia/forms.py:30
 #: src/wagtailmedia/templates/wagtailmedia/media/list.html:29
 msgid "Collection"
-msgstr ""
+msgstr "Sammlung"
 
 #: src/wagtailmedia/forms.py:89
 msgid "Add"
@@ -124,7 +124,7 @@ msgstr "Video hochladen"
 #: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:38
 #: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:55
 msgid "Popular tags"
-msgstr ""
+msgstr "Häufig verwendete Schlagwörter"
 
 #: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:64
 #: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:85
@@ -151,11 +151,11 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"            Es gibt eine Übereinstimung\n"
+"            Es gibt ein Ergebnis\n"
 "        "
 msgstr[1] ""
 "\n"
-"            Es gibt %(counter)s Übereinstimmungen\n"
+"            Es gibt %(counter)s Ergebnisse\n"
 "        "
 
 #: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:12
@@ -173,33 +173,23 @@ msgstr "Leider entsprechen keine Medien-Dateien \"<em>%(query_string)s</em>\""
 
 #: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:28
 #: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:28
-#, fuzzy, python-format
-#| msgid ""
-#| "You haven't uploaded any media files in this collection. You can upload "
-#| "<a href=\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
-#| "\"%(wagtailmedia_add_video_url)s\">video</a> files."
+#, python-format
 msgid ""
 "You haven't uploaded any media in this collection. Why not <a href="
 "\"%(wagtailmedia_add_url)s\">upload one now</a>?"
 msgstr ""
-"Sie haben noch keine Medien-Dateien in dieser Sammlung hochgeladen. Sie "
-"können <a href=\"%(wagtailmedia_add_audio_url)s\">Audio-</a> oder <a href="
-"\"%(wagtailmedia_add_video_url)s\">Video-</a>Dateien hochladen."
+"Sie haben noch keine Medien-Dateien in dieser Sammlung hochgeladen. Warum "
+"nicht jetzt <a href=\"%(wagtailmedia_add_url)s\">eine hochladen</a>?"
 
 #: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:30
 #: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:30
-#, fuzzy, python-format
-#| msgid ""
-#| "You haven't uploaded any media files. You can upload <a href="
-#| "\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
-#| "\"%(wagtailmedia_add_video_url)s\">video</a> files."
+#, python-format
 msgid ""
 "You haven't uploaded any media. Why not <a href=\"%(wagtailmedia_add_url)s"
 "\">upload one now</a>?"
 msgstr ""
-"Sie haben noch keine Medien-Dateien hochgeladen. Sie können <a href="
-"\"%(wagtailmedia_add_audio_url)s\">Audio-</a> oder <a href="
-"\"%(wagtailmedia_add_video_url)s\">Video-</a>Dateien hochladen."
+"Sie haben noch keine Medien-Dateien hochgeladen. Warum nicht jetzt <a href="
+"\"%(wagtailmedia_add_url)s\">eine hochladen</a>?"
 
 #: src/wagtailmedia/templates/wagtailmedia/homepage/legacy_site_summary_media.html:5
 #: src/wagtailmedia/templates/wagtailmedia/homepage/site_summary_media.html:6
@@ -211,7 +201,11 @@ msgid_plural ""
 "<span>%(total)s</span> Media files <span class=\"visuallyhidden\">created in "
 "%(site_name)s</span>"
 msgstr[0] ""
+"<span>%(total)s</span> Medien-Datei <span class=\"visuallyhidden\">erstellt "
+"in %(site_name)s</span>"
 msgstr[1] ""
+"<span>%(total)s</span> Medien-Dateien <span class=\"visuallyhidden"
+"\">erstellt in %(site_name)s</span>"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/_file_field.html:5
 msgid "Change media file:"
@@ -267,7 +261,7 @@ msgstr "Ja, löschen"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:21
 msgid "No, don't delete"
-msgstr ""
+msgstr "Nein, nicht löschen"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/edit.html:4
 #, python-format
@@ -309,15 +303,15 @@ msgstr "Medien"
 #: src/wagtailmedia/templates/wagtailmedia/media/index.html:53
 #: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:68
 msgid "Popular Tags:"
-msgstr ""
+msgstr "Häufig verwendete Schlagwörter:"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/index.html:58
 msgid "Clear"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:77
 msgid "Clear choice"
-msgstr ""
+msgstr "Auswahl zurücksetzen"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:17
 #: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:20
@@ -350,8 +344,8 @@ msgstr "Hochgeladen"
 #, python-format
 msgid "There is %(counter)s match"
 msgid_plural "There are %(counter)s matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Es gibt %(counter)s Ergebnis"
+msgstr[1] "Es gibt %(counter)s Ergebnisse"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/legacy/results.html:27
 #: src/wagtailmedia/templates/wagtailmedia/media/results.html:27
@@ -454,64 +448,36 @@ msgstr[1] "%(count)s Medien-Dateien"
 
 #: src/wagtailmedia/widgets.py:28
 msgid "Choose a media item"
-msgstr "Wähle ein Medienelement aus"
+msgstr "Medienelement auswählen"
 
 #: src/wagtailmedia/widgets.py:29
 msgid "Choose another media item"
-msgstr "Wähle ein weiteres Medienelement aus"
+msgstr "Anderes Medienelement auswählen"
 
 #: src/wagtailmedia/widgets.py:30
 msgid "Edit this media item"
 msgstr "Dieses Medienelement bearbeiten"
 
 #: src/wagtailmedia/widgets.py:87
-#, fuzzy
-#| msgid "Choose a media file"
 msgid "Choose audio"
-msgstr "Wähle eine Medien-Datei"
+msgstr "Audio auswählen"
 
 #: src/wagtailmedia/widgets.py:88
-#, fuzzy
-#| msgid "Choose another media item"
 msgid "Choose another audio item"
-msgstr "Wähle ein weiteres Medienelement aus"
+msgstr "Anderes Audio auswählen"
 
 #: src/wagtailmedia/widgets.py:89
-#, fuzzy
-#| msgid "Edit this media item"
 msgid "Edit this audio item"
-msgstr "Dieses Medienelement bearbeiten"
+msgstr "Dieses Audio bearbeiten"
 
 #: src/wagtailmedia/widgets.py:94
 msgid "Choose video"
-msgstr ""
+msgstr "Video auswählen"
 
 #: src/wagtailmedia/widgets.py:95
-#, fuzzy
-#| msgid "Choose another media item"
 msgid "Choose another video"
-msgstr "Wähle ein weiteres Medienelement aus"
+msgstr "Anderes Video auswählen"
 
 #: src/wagtailmedia/widgets.py:96
-#, fuzzy
-#| msgid "Edit this page"
 msgid "Edit this video"
-msgstr "Diese Seite bearbeiten"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "        <span>%(total)s</span> Media file\n"
-#~ "    "
-#~ msgid_plural ""
-#~ "\n"
-#~ "        <span>%(total)s</span> Media files\n"
-#~ "    "
-#~ msgstr[0] ""
-#~ "\n"
-#~ "        <span>%(total)s</span> Medien-Datei\n"
-#~ "    "
-#~ msgstr[1] ""
-#~ "\n"
-#~ "        <span>%(total)s</span> Medien-Dateien\n"
-#~ "    "
+msgstr "Dieses Video bearbeiten"
