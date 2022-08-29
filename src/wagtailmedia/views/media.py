@@ -33,10 +33,7 @@ def index(request):
     )
 
     # Ordering
-    if "ordering" in request.GET and request.GET["ordering"] in [
-        "title",
-        "-created_at",
-    ]:
+    if request.GET.get("ordering") in ["title", "-title", "-created_at", "created_at"]:
         ordering = request.GET["ordering"]
     else:
         ordering = "-created_at"

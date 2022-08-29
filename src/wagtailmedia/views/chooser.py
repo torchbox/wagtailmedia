@@ -34,9 +34,18 @@ def get_media_json(media):
     }
 
 
+def get_ordering(request):
+    if request.GET.get("ordering") in ["title", "-title", "-created_at", "created_at"]:
+        return request.GET["ordering"]
+
+    # default to -created_at
+    return "-created_at"
+
+
 def chooser(request, media_type=None):
     Media = get_media_model()
 
+    ordering = get_ordering(request)
     media_files = permission_policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
@@ -84,7 +93,7 @@ def chooser(request, media_type=None):
             media_files = media_files.search(q)
             is_searching = True
         else:
-            media_files = media_files.order_by("-created_at")
+            media_files = media_files.order_by(ordering)
             is_searching = False
             q = None
 
@@ -106,6 +115,7 @@ def chooser(request, media_type=None):
                 "is_searching": is_searching,
                 "pagination_template": pagination_template,
                 "media_type": media_type,
+                "ordering": ordering,
             },
         )
     else:
@@ -115,7 +125,7 @@ def chooser(request, media_type=None):
         if len(collections) < 2:
             collections = None
 
-        media_files = media_files.order_by("-created_at")
+        media_files = media_files.order_by(ordering)
         paginator, media_files = paginate(request, media_files, per_page=10)
 
     return render_modal_workflow(
@@ -134,6 +144,7 @@ def chooser(request, media_type=None):
             "popular_tags": popular_tags_for_model(Media),
             "media_type": media_type,
             "wagtail_version": get_main_version(),
+            "ordering": ordering,
         },
         json_data={
             "step": "chooser",
@@ -203,6 +214,8 @@ def chooser_upload(request, media_type):
             )
             upload_forms = {"audio": audio_form, "video": uploading_form}
 
+    ordering = get_ordering(request)
+
     media_files = permission_policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
@@ -217,7 +230,7 @@ def chooser_upload(request, media_type):
     if len(collections) < 2:
         collections = None
 
-    media_files = media_files.order_by("-created_at")
+    media_files = media_files.order_by(ordering)
     paginator, media_files = paginate(request, media_files, per_page=10)
 
     context = {
@@ -229,6 +242,7 @@ def chooser_upload(request, media_type):
         "pagination_template": pagination_template,
         "media_type": media_type,
         "wagtail_version": get_main_version(),
+        "ordering": ordering,
     }
     return render_modal_workflow(
         request,
