@@ -17,6 +17,11 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                 setPage(page);
                 e.preventDefault();
             });
+
+            $('a[data-ordering]', context).on('click', function(e) {
+                sortResults(this.dataset["ordering"]);
+                e.preventDefault();
+            });
         }
 
         function fetchResults(requestData) {
@@ -53,6 +58,14 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             params['collection_id'] = $('#collection_chooser_collection_id').val();
             fetchResults(params);
             return false;
+        }
+
+        function sortResults(order) {
+            fetchResults({
+                q: $('#id_q').val(),
+                collection_id: $('#collection_chooser_collection_id').val(),
+                ordering: order
+            });
         }
 
         ajaxifyLinks(modal.body);
