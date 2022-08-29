@@ -1,0 +1,460 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-29 06:24-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wagtailmedia/blocks.py:83
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+#: src/wagtailmedia/blocks.py:115
+msgid "Your browser does not support the video element."
+msgstr ""
+
+#: src/wagtailmedia/forms.py:30
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:29
+msgid "Collection"
+msgstr ""
+
+#: src/wagtailmedia/forms.py:89
+msgid "Add"
+msgstr ""
+
+#: src/wagtailmedia/forms.py:89
+msgid "Add/edit media you own"
+msgstr ""
+
+#: src/wagtailmedia/forms.py:90 src/wagtailmedia/views/media.py:137
+#: src/wagtailmedia/views/media.py:192
+msgid "Edit"
+msgstr ""
+
+#: src/wagtailmedia/forms.py:90
+msgid "Edit any media"
+msgstr ""
+
+#: src/wagtailmedia/models.py:33
+msgid "Audio file"
+msgstr ""
+
+#: src/wagtailmedia/models.py:34
+msgid "Video file"
+msgstr ""
+
+#: src/wagtailmedia/models.py:37
+msgid "title"
+msgstr ""
+
+#: src/wagtailmedia/models.py:38
+msgid "file"
+msgstr ""
+
+#: src/wagtailmedia/models.py:47
+msgid "duration"
+msgstr ""
+
+#: src/wagtailmedia/models.py:48
+msgid "Duration in seconds"
+msgstr ""
+
+#: src/wagtailmedia/models.py:50
+msgid "width"
+msgstr ""
+
+#: src/wagtailmedia/models.py:52
+msgid "height"
+msgstr ""
+
+#: src/wagtailmedia/models.py:55
+msgid "thumbnail"
+msgstr ""
+
+#: src/wagtailmedia/models.py:58
+msgid "created at"
+msgstr ""
+
+#: src/wagtailmedia/models.py:61
+msgid "uploaded by user"
+msgstr ""
+
+#: src/wagtailmedia/models.py:68
+msgid "tags"
+msgstr ""
+
+#: src/wagtailmedia/models.py:154
+msgid "media"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:2
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:2
+msgid "Choose a media file"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:16
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:21
+msgid "Search"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:18
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:24
+msgid "Upload Audio"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:21
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:32
+msgid "Upload Video"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:38
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:55
+msgid "Popular tags"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:64
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:85
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:56
+msgid "Uploading…"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser-legacy.html:64
+#: src/wagtailmedia/templates/wagtailmedia/chooser/chooser.html:85
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:56
+msgid "Upload"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:5
+#: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:5
+#, python-format
+msgid ""
+"\n"
+"            There is one match\n"
+"        "
+msgid_plural ""
+"\n"
+"            There are %(counter)s matches\n"
+"        "
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:12
+#: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:12
+msgid "Latest media"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:20
+#: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:20
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/results.html:20
+#: src/wagtailmedia/templates/wagtailmedia/media/results.html:20
+#, python-format
+msgid "Sorry, no media files match \"<em>%(query_string)s</em>\""
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:28
+#: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:28
+#, python-format
+msgid ""
+"You haven't uploaded any media in this collection. Why not <a href="
+"\"%(wagtailmedia_add_url)s\">upload one now</a>?"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/chooser/legacy/results.html:30
+#: src/wagtailmedia/templates/wagtailmedia/chooser/results.html:30
+#, python-format
+msgid ""
+"You haven't uploaded any media. Why not <a href=\"%(wagtailmedia_add_url)s"
+"\">upload one now</a>?"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/homepage/legacy_site_summary_media.html:5
+#: src/wagtailmedia/templates/wagtailmedia/homepage/site_summary_media.html:6
+#, python-format
+msgid ""
+"<span>%(total)s</span> Media file <span class=\"visuallyhidden\">created in "
+"%(site_name)s</span>"
+msgid_plural ""
+"<span>%(total)s</span> Media files <span class=\"visuallyhidden\">created in "
+"%(site_name)s</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/_file_field.html:5
+msgid "Change media file:"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/_thumbnail_field.html:9
+msgid "Change thumbnail file:"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:6
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:35
+#: src/wagtailmedia/templates/wagtailmedia/media/index.html:30
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:45
+msgid "Add audio"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:8
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:37
+#: src/wagtailmedia/templates/wagtailmedia/media/index.html:33
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:51
+msgid "Add video"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:10
+#: src/wagtailmedia/templates/wagtailmedia/media/add.html:39
+msgid "Add audio or video"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:3
+#, python-format
+msgid "Delete %(title)s"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:5
+msgid "Delete media file"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:12
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:69
+#, python-format
+msgid "Used %(usage_count)s time"
+msgid_plural "Used %(usage_count)s times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:16
+msgid "Are you sure you want to delete this media file?"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:20
+msgid "Yes, delete"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html:21
+msgid "No, don't delete"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:4
+#, python-format
+msgid "Editing %(title)s"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:27
+msgid "Editing"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:49
+msgid "Save"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:51
+#: src/wagtailmedia/views/media.py:220
+msgid "Delete"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:61
+msgid "Filesize"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:62
+msgid "File not found"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/edit.html:67
+msgid "Usage"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/index.html:25
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:23
+#: src/wagtailmedia/wagtail_hooks.py:36 src/wagtailmedia/wagtail_hooks.py:44
+#: src/wagtailmedia/wagtail_hooks.py:85
+msgid "Media"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/index.html:53
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:68
+msgid "Popular Tags:"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/index.html:58
+msgid "Clear"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/index.html:77
+msgid "Clear choice"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:17
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:20
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:20
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:23
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:16
+msgid "Title"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:23
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:26
+msgid "File"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:24
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:27
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:18
+msgid "Type"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:32
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/list.html:35
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:38
+#: src/wagtailmedia/templates/wagtailmedia/media/list.html:41
+msgid "Uploaded"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/results.html:5
+#: src/wagtailmedia/templates/wagtailmedia/media/results.html:5
+#, python-format
+msgid "There is %(counter)s match"
+msgid_plural "There are %(counter)s matches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/results.html:27
+#: src/wagtailmedia/templates/wagtailmedia/media/results.html:27
+#, python-format
+msgid ""
+"You haven't uploaded any media files in this collection. You can upload <a "
+"href=\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/legacy/results.html:29
+#: src/wagtailmedia/templates/wagtailmedia/media/results.html:29
+#, python-format
+msgid ""
+"You haven't uploaded any media files. You can upload <a href="
+"\"%(wagtailmedia_add_audio_url)s\">audio</a> or <a href="
+"\"%(wagtailmedia_add_video_url)s\">video</a> files."
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:3
+#, python-format
+msgid "Usage of %(title)s"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:5
+msgid "Usage of"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:17
+msgid "Parent"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:19
+msgid "Status"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/media/usage.html:26
+msgid "Edit this page"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/permissions/includes/media_permissions_formset.html:5
+msgid "Media permissions"
+msgstr ""
+
+#: src/wagtailmedia/templates/wagtailmedia/permissions/includes/media_permissions_formset.html:6
+msgid "Add a media permission"
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:55
+msgid "Search media files"
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:60
+msgid "Search media"
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:134
+#, python-brace-format
+msgid "Media file '{0}' added."
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:144
+msgid "The media file could not be saved due to errors."
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:189
+#, python-brace-format
+msgid "Media file '{0}' updated"
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:198
+msgid "The media could not be saved due to errors."
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:216
+msgid ""
+"The file could not be found. Please change the source or delete the media "
+"file"
+msgstr ""
+
+#: src/wagtailmedia/views/media.py:251
+#, python-brace-format
+msgid "Media file '{0}' deleted."
+msgstr ""
+
+#: src/wagtailmedia/wagtail_hooks.py:106
+#, python-format
+msgid "%(count)s media file"
+msgid_plural "%(count)s media files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/wagtailmedia/widgets.py:28
+msgid "Choose a media item"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:29
+msgid "Choose another media item"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:30
+msgid "Edit this media item"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:87
+msgid "Choose audio"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:88
+msgid "Choose another audio item"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:89
+msgid "Edit this audio item"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:94
+msgid "Choose video"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:95
+msgid "Choose another video"
+msgstr ""
+
+#: src/wagtailmedia/widgets.py:96
+msgid "Edit this video"
+msgstr ""
