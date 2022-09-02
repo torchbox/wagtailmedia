@@ -3,14 +3,22 @@
 
 ## Unreleased
 
+
+## [0.11.0] - 2021-09-02
+
 ### Added
 
-- Added support for Wagtail 4.0 ([#169](https://github.com/torchbox/wagtailmedia/pull/169)). With thanks to @th3hamm0r for testing.
+- Added support for Wagtail 4.0 ([#169](https://github.com/torchbox/wagtailmedia/pull/169)).
+  With thanks to @th3hamm0r for testing and follow-up fix ([#172](https://github.com/torchbox/wagtailmedia/pull/172)).
 
 ### Fixed
 
 - Sorting in the media index and chooser.
 - Tabs script dependency in the chooser. ([#170](https://github.com/torchbox/wagtailmedia/pull/170)). Thanks @jhnbkr.
+
+### Changed
+
+- Updated German translations ([#171](https://github.com/torchbox/wagtailmedia/pull/171)). Thanks @th3hamm0r.
 
 ## [0.10.1] - 2022-06-20
 
@@ -172,6 +180,7 @@ Initial release
 
 ---
 
+[0.11.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.0
 [0.10.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.1
 [0.10.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.0
 [0.9.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
