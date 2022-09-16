@@ -71,6 +71,7 @@
         {% if uploadforms %}
             {% for form_type, uploadform in uploadforms.items %}
             <section id="tab-upload-{{ form_type }}" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-upload-{{ form_type }}" hidden>
+                {% include "wagtailadmin/shared/non_field_errors.html" with form=uploadform %}
                 <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' form_type %}" method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     <ul class="fields">

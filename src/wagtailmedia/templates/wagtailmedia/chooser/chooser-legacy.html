@@ -50,6 +50,7 @@
     {% if uploadforms %}
         {% for form_type, uploadform in uploadforms.items %}
         <section id="upload-{{ form_type }}" class="{% if uploadform.errors and media_type == form_type %}active{% endif %} nice-padding">
+            {% include "wagtailadmin/shared/non_field_errors.html" with form=uploadform %}
             <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' form_type %}" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <ul class="fields">
