@@ -1039,6 +1039,33 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         # Check that the video was created
         self.assertTrue(models.Media.objects.filter(title="Test video").exists())
 
+    def test_none_field_errors_are_being_rendered(self):
+        response = self.client.post(
+            reverse("wagtailmedia:chooser_upload", args=("video",)),
+            {
+                "media-chooser-upload-title": "Test video",
+                "media-chooser-upload-file": ContentFile(
+                    "A boring example", name="video.pdf"
+                ),
+            },
+        )
+
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # The video form should have an error
+        self.assertIn("uploadforms", response.context)
+        self.assertIn("video", response.context["uploadforms"])
+        video_form = response.context["uploadforms"]["video"]
+
+        non_field_errors = video_form.non_field_errors()
+        self.assertGreater(len(non_field_errors), 0)
+
+        json_data = json.loads(response.content.decode("utf-8"))
+
+        for error in non_field_errors:
+            self.assertIn(error, json_data["html"])
+
 
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]
