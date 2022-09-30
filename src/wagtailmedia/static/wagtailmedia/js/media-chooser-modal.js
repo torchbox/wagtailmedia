@@ -74,7 +74,27 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         $('form.media-upload', modal.body).on('submit', function() {
             var formdata = new FormData(this);
 
-            if ($('#id_title', modal.body).val() == '') {
+            // Get the title field of the submitted form, not the first in the modal.
+            const input = this.querySelector('#id_media-chooser-upload-title');
+            if (!input.value) {
+                if (!input.hasAttribute('aria-invalid')) {
+                    input.setAttribute('aria-invalid', 'true');
+                    const field = input.closest('[data-field]');
+                    field.classList.add('w-field--error');
+                    const errors = field.querySelector('[data-field-errors]');
+                    const icon = errors.querySelector('.icon');
+                    if (icon) {
+                        icon.removeAttribute('hidden');
+                    }
+                    const errorElement = document.createElement('p');
+                    errorElement.classList.add('error-message');
+                    // Global function provided by Wagtail.
+                    errorElement.innerHTML = gettext('This field is required.');
+                    errors.appendChild(errorElement);
+                }
+                setTimeout(cancelSpinner, 500);
+            // Support for WAGTAIL_VERSION < (4, 0, 0)
+            } else if ($('#id_title', modal.body).val() == '') {
                 var li = $('#id_title', modal.body).closest('li');
                 if (!li.hasClass('error')) {
                     li.addClass('error');
