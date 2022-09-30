@@ -65,8 +65,7 @@ class EventPage(Page):
     signup_link = models.URLField(blank=True)
 
 
-EventPage.content_panels = [
-    FieldPanel("title", classname="full title"),
+EventPage.content_panels = Page.content_panels + [
     FieldPanel("date_from"),
     FieldPanel("date_to"),
     FieldPanel("time_from"),
