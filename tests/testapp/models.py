@@ -74,7 +74,7 @@ EventPage.content_panels = Page.content_panels + [
     FieldPanel("cost"),
     FieldPanel("signup_link"),
     FieldPanel("body"),
-    InlinePanel("related_media", label="Related media"),
+    InlinePanel("related_media", heading="Related media", label="Media item"),
 ]
 
 
