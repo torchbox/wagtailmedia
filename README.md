@@ -215,7 +215,7 @@ class BlogPage(Page):
     date = models.DateField("Post date")
     body = StreamField(
         [
-            ("heading", blocks.CharBlock(classname="full title", icon="title")),
+            ("heading", blocks.CharBlock(classname="title", icon="title")),
             ("paragraph", blocks.RichTextBlock(icon="pilcrow")),
             ("media", TestMediaBlock(icon="media")),
         ]

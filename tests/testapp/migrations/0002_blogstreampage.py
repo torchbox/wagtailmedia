@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                             (
                                 "heading",
                                 wagtail.core.blocks.CharBlock(
-                                    form_classname="full title", icon="title"
+                                    form_classname="title", icon="title"
                                 ),
                             ),
                             (
