@@ -73,7 +73,7 @@ EventPage.content_panels = Page.content_panels + [
     FieldPanel("location"),
     FieldPanel("cost"),
     FieldPanel("signup_link"),
-    FieldPanel("body", classname="full"),
+    FieldPanel("body"),
     InlinePanel("related_media", label="Related media"),
 ]
 
@@ -117,7 +117,7 @@ class BlogStreamPage(Page):
 
     body = StreamField(
         [
-            ("heading", blocks.CharBlock(classname="full title", icon="title")),
+            ("heading", blocks.CharBlock(classname="title", icon="title")),
             ("paragraph", blocks.RichTextBlock(icon="pilcrow")),
             ("media", TestMediaBlock(icon="media")),
             ("video", VideoChooserBlock(icon="media")),
