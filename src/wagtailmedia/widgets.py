@@ -60,6 +60,7 @@ class AdminMediaChooser(AdminChooser):
                 "widget": self,
                 "original_field_html": original_field_html,
                 "attrs": attrs,
+                "icon": "media",
                 "value": value_data != {},  # only used to identify blank values
                 "title": value_data.get("title", ""),
                 "edit_url": value_data.get("edit_link", ""),
