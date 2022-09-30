@@ -267,7 +267,7 @@ cd wagtailmedia
 With your preferred virtualenv activated, install testing dependencies:
 
 ```sh
-pip install -e .[testing] -U
+pip install -e '.[testing]' -U
 ```
 
 ### pre-commit
