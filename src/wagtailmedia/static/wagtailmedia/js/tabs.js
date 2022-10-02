@@ -50,7 +50,6 @@ class WMTabs {
     };
 
     this.onComponentLoaded();
-    console.log(this);
   }
 
   onComponentLoaded() {
