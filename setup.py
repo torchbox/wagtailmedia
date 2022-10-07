@@ -4,6 +4,8 @@ import io
 
 from setuptools import find_packages, setup
 
+from src.wagtailmedia import __version__
+
 
 # Testing dependencies
 testing_extras = [
@@ -14,16 +16,12 @@ testing_extras = [
     "tox~=3.24",
 ]
 
-version = {}
-with io.open("src/wagtailmedia/version.py") as fp:
-    exec(fp.read(), version)
-
 with io.open("README.md", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
 
 setup(
     name="wagtailmedia",
-    version=version["__version__"],
+    version=__version__,
     description="A module for Wagtail that provides functionality "
     "similar to wagtail.documents module, but for audio and video files.",
     author="Mikalai Radchuk",
@@ -53,16 +51,13 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Framework :: Django",
-        "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.2",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
         "Framework :: Wagtail :: 3",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
     ],
-    install_requires=[
-        "wagtail>=2.15",
-    ],
+    install_requires=["wagtail>=2.15", "Django>=3.2"],
     extras_require={
         "testing": testing_extras,
     },
