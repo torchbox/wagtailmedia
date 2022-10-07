@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n wagtailadmin_tags %}
 {% trans "Choose a media file" as  choose_str %}
 {% include "wagtailadmin/shared/header.html" with title=choose_str tabbed=1 merged=1 icon="media" %}
 
@@ -23,8 +23,8 @@
     </ul>
 {% endif %}
 
-<div class="tab-content">
-    <section id="search" class="{% if not uploadforms.audio.errors and not uploadforms.video.errors %}active {% endif %}nice-padding">
+<div class="tab-content wagtailmedia-tabs">
+    <section id="search" class="{% if not uploadforms.audio.errors and not uploadforms.audio.non_field_errors %}active {% endif %}nice-padding">
         <form class="media-search search-bar" action="{% url 'wagtailmedia:chooser' %}" method="GET" novalidate>
             <ul class="fields">
                 {% for field in searchform %}
@@ -62,7 +62,7 @@
                         {% endif %}
                     {% endfor %}
                     <li>
-                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Upload' %}</em></button>
+                        <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}">{% icon name="spinner" %}<em>{% trans 'Upload' %}</em></button>
                     </li>
                 </ul>
             </form>

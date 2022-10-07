@@ -1,5 +1,6 @@
 from django.conf.urls import include
 from django.urls import path, reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
@@ -7,6 +8,7 @@ from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
+from wagtail.admin.staticfiles import versioned_static
 from wagtail.core import hooks
 
 from wagtailmedia import admin_urls
@@ -108,3 +110,11 @@ def describe_collection_media(collection):
             % {"count": media_count},
             "url": url,
         }
+
+
+@hooks.register("insert_editor_css")
+def add_media_css_tweaks():
+    return format_html(
+        '<link rel="stylesheet" href="{}">',
+        versioned_static("wagtailmedia/css/wagtailmedia.css"),
+    )

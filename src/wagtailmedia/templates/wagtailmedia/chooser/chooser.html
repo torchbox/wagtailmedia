@@ -4,7 +4,7 @@
 
 {# TODO: drop data-wmtabs and the tabs.js include when a better tabs framework is in place #}
 {# See https://github.com/wagtail/wagtail/issues/8408. #}
-<div class="w-tabs" data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
+<div class="w-tabs wagtailmedia-tabs" data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
     {% if uploadforms %}
         {# Both auth and video forms are powered by the same media form, so use one of them #}
         {% if uploadforms.video %}
@@ -83,7 +83,7 @@
                             {% endif %}
                         {% endfor %}
                         <li>
-                            <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Upload' %}</em></button>
+                            <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Uploading…' %}">{% icon name="spinner" %}<em>{% trans 'Upload' %}</em></button>
                         </li>
                     </ul>
                 </form>
