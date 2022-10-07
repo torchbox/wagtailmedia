@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "28 20 * * 5"
 
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
 jobs:
   analyze:
     name: Analyze
