@@ -2,6 +2,7 @@
     margin-bottom: 1em;
 }
 
+/* TODO: remove once https://github.com/wagtail/wagtail/issues/9260 is fixed */
 .w-field--admin_audeo_chooser:hover .chooser__actions,
 .w-field--admin_media_chooser:hover .chooser__actions,
 .w-field--admin_video_chooser:hover .chooser__actions,

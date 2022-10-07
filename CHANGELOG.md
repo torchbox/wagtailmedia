@@ -4,6 +4,14 @@
 ## Unreleased
 
 
+## [0.11.1] - 2021-10-07
+
+### Fixed
+
+- Further UI tidy ups for Wagtail 4 ([#173](https://github.com/torchbox/wagtailmedia/issues/173)). Thanks @thibaudcolas
+- Non-field errors not displayed in choosers ([#174](https://github.com/torchbox/wagtailmedia/pull/174)). Thanks @niarferuto
+- Chooser buttons not visible in Wagtail 4.0.2. Note this is a temporary fix until https://github.com/wagtail/wagtail/issues/9260 is addressed
+
 ## [0.11.0] - 2021-09-02
 
 ### Added
@@ -180,6 +188,7 @@ Initial release
 
 ---
 
+[0.11.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.1
 [0.11.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.0
 [0.10.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.1
 [0.10.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.0
