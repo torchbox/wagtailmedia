@@ -7,7 +7,8 @@ from wagtailmedia.models import get_media_model
 def delete_files(instance):
     # Pass false so FileField doesn't save the model.
     instance.file.delete(False)
-    instance.thumbnail.delete(False)
+    if instance.thumbnail:
+        instance.thumbnail.delete(False)
 
 
 def post_delete_file_cleanup(instance, **kwargs):
