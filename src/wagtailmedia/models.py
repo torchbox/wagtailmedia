@@ -100,8 +100,8 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         return os.path.basename(self.file.name)
 
     @property
-    def thumbnail_filename(self):
-        return os.path.basename(self.thumbnail.name)
+    def thumbnail_filename(self) -> str:
+        return os.path.basename(self.thumbnail.name) if self.thumbnail else ""
 
     @property
     def file_extension(self):
