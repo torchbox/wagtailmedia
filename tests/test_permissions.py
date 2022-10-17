@@ -62,10 +62,6 @@ class TestMediaPermissions(TestCase):
 
 class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
     def setUp(self):
-        # Build a fake file
-        fake_file = ContentFile("A boring example song")
-        fake_file.name = "song.mp3"
-
         self.root_collection = Collection.get_first_root_node()
         self.evil_plans_collection = self.root_collection.add_child(name="Evil plans")
         self.nice_plans_collection = self.root_collection.add_child(name="Nice plans")
@@ -73,7 +69,7 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
         # Create a media to edit
         self.media = models.Media.objects.create(
             title="Test media",
-            file=fake_file,
+            file=ContentFile("A boring example song", name="song.mp3"),
             collection=self.nice_plans_collection,
             duration=100,
         )

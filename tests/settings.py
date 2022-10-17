@@ -117,3 +117,4 @@ WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.databa
 ALLOWED_HOSTS = ["*"]
 
 WAGTAIL_SITE_NAME = "Test Site"
+WAGTAILADMIN_BASE_URL = "http://localhost:8020"

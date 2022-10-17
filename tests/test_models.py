@@ -17,11 +17,9 @@ from wagtailmedia.models import Media, get_media_model
 class TestMediaValidation(TestCase):
     def test_duration_validation(self):
         # ensure duration is optional
-        fake_file = ContentFile("A boring example movie")
-        fake_file.name = "movie.mp4"
         media = Media(
             title="Test media file",
-            file=File(fake_file),
+            file=ContentFile("A boring example movie", name="movie.mp4"),
             type="video",
         )
         media.full_clean()
@@ -55,11 +53,9 @@ class TestMediaTemplating(TestCase):
             (1, "1.0"),
             (1234567.7654321, "1234567.7654321"),
         ):
-            fake_file = ContentFile("A boring example movie")
-            fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
-                file=File(fake_file),
+                file=ContentFile("A boring example movie", name="movie.mp4"),
                 type="video",
             )
             media.duration = value
@@ -79,11 +75,9 @@ class TestMediaTemplating(TestCase):
             (1, "1"),
             (1234567.7654321, "1234568"),
         ):
-            fake_file = ContentFile("A boring example movie")
-            fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
-                file=File(fake_file),
+                file=ContentFile("A boring example movie", name="movie.mp4"),
                 type="video",
             )
             media.duration = value
@@ -103,11 +97,9 @@ class TestMediaTemplating(TestCase):
             (1, "1"),
             (1234567.7654321, "1234567.8"),
         ):
-            fake_file = ContentFile("A boring example movie")
-            fake_file.name = "movie.mp4"
             media = Media(
                 title="Test media file",
-                file=File(fake_file),
+                file=ContentFile("A boring example movie", name="movie.mp4"),
                 type="video",
             )
             media.duration = value
@@ -247,7 +239,7 @@ class TestMediaFilesDeletion(TransactionTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # ensure the signal handlers are registred
+        # ensure the signal handlers are registered
         signal_handlers.register_signal_handlers()
 
     def setUp(self):
@@ -264,11 +256,12 @@ class TestMediaFilesDeletion(TransactionTestCase):
 
     def test_media_file_deleted_oncommit(self):
         with transaction.atomic():
-            fake_file = ContentFile("A boring example movie")
-            fake_file.name = "movie-for-deletion.mp4"
-
             media = get_media_model().objects.create(
-                title="", file=File(fake_file), duration=1
+                title="",
+                file=ContentFile(
+                    "A boring example movie", name="movie-for-deletion.mp4"
+                ),
+                duration=1,
             )
             filename = media.file.name
 
