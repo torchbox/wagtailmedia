@@ -21,18 +21,18 @@ class MediaChooserPanelTest(TestCase):
             AnonymousUser()
         )  # technically, Anonymous users cannot access the admin
 
-        fake_file = ContentFile("Test")
-        fake_file.name = "test.mp3"
-
         cls.audio = Media.objects.create(
-            title="Test audio", duration=1000, file=fake_file, type="audio"
+            title="Test audio",
+            duration=1000,
+            file=ContentFile("Test", name="test.mp3"),
+            type="audio",
         )
 
-        fake_file = ContentFile("Test")
-        fake_file.name = "test.mp4"
-
         cls.video = Media.objects.create(
-            title="Test video", duration=1024, file=fake_file, type="video"
+            title="Test video",
+            duration=1024,
+            file=ContentFile("Test", name="test.mp4"),
+            type="video",
         )
 
         # a MediaChooserPanel class that works on BlogStreamPage's 'video' field

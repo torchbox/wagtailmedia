@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.forms.utils import ErrorDict
-from django.test import TestCase, modify_settings
+from django.test import TestCase, TransactionTestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 
@@ -551,10 +551,19 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertContains(response, "wagtailadmin/js/draftail.js")
 
 
-class TestMediaDeleteView(TestCase, WagtailTestUtils):
+class TestMediaDeleteView(TransactionTestCase, WagtailTestUtils):
     def setUp(self):
+        # Required to create root collection because the TransactionTestCase
+        # does not make initial data loaded in migrations available and
+        # serialized_rollback=True causes other problems in the test suite.
+        # ref: https://docs.djangoproject.com/en/3.0/topics/testing/overview/#rollback-emulation
+        Collection.objects.get_or_create(
+            name="Root",
+            path="0001",
+            depth=1,
+            numchild=0,
+        )
         self.login()
-
         # Create a media to delete
         self.media = models.Media.objects.create(title="Test media", duration=100)
 
@@ -566,10 +575,8 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         self.assertTemplateUsed(response, "wagtailmedia/media/confirm_delete.html")
 
     def test_delete(self):
-        # Submit title change
-        post_data = {"foo": "bar"}
         response = self.client.post(
-            reverse("wagtailmedia:delete", args=(self.media.id,)), post_data
+            reverse("wagtailmedia:delete", args=(self.media.id,))
         )
 
         # User should be redirected back to the index
@@ -586,6 +593,38 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/confirm_delete.html")
         self.assertIn("Used 0 times", str(response.content))
+
+    def test_post_delete_file_cleanup_without_thumbnail(self):
+        self.media.file = ContentFile("File", name="file.mp3")
+        self.media.save()
+        file_path = self.media.file.path
+        self.assertTrue(self.media.file.storage.exists(file_path))
+
+        self.client.post(reverse("wagtailmedia:delete", args=(self.media.id,)))
+
+        # Media should be deleted
+        self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
+
+        # The file should be deleted as well
+        self.assertFalse(self.media.file.storage.exists(file_path))
+
+    def test_post_delete_file_cleanup_with_thumbnail(self):
+        self.media.file = ContentFile("File", name="file.mp3")
+        self.media.thumbnail = ContentFile("Thumbnail", name="thumbnail.jpg")
+        self.media.save()
+        file_path = self.media.file.path
+        thumbnail_path = self.media.thumbnail.path
+        for path in (file_path, thumbnail_path):
+            self.assertTrue(self.media.file.storage.exists(path))
+
+        self.client.post(reverse("wagtailmedia:delete", args=(self.media.id,)))
+
+        # Media should be deleted
+        self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
+
+        # The files should be deleted as well
+        for path in (file_path, thumbnail_path):
+            self.assertFalse(self.media.file.storage.exists(path))
 
 
 class TestMediaChooserView(TestCase, WagtailTestUtils):

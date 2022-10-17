@@ -119,7 +119,7 @@ def add(request, media_type):
     Media = get_media_model()
     MediaForm = get_media_form(Media)
 
-    if request.POST:
+    if request.method == "POST":
         media = Media(uploaded_by_user=request.user, type=media_type)
         form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
@@ -169,7 +169,7 @@ def edit(request, media_id):
     ):
         return permission_denied(request)
 
-    if request.POST:
+    if request.method == "POST":
         original_file = media.file
         form = MediaForm(request.POST, request.FILES, instance=media, user=request.user)
         if form.is_valid():
@@ -246,7 +246,7 @@ def delete(request, media_id):
     ):
         return permission_denied(request)
 
-    if request.POST:
+    if request.method == "POST":
         media.delete()
         messages.success(request, _("Media file '{0}' deleted.").format(media.title))
         return redirect("wagtailmedia:index")
