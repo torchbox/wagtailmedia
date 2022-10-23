@@ -133,7 +133,7 @@ class BlogStreamPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("author"),
         FieldPanel("date"),
-        StreamFieldPanel("body"),
+        FieldPanel("body") if WAGTAIL_VERSION >= (3, 0) else StreamFieldPanel("body"),
         MediaChooserPanel("featured_media"),
         # the following are left here for local testing convenience
         # MediaChooserPanel("featured_media", media_type="audio"),

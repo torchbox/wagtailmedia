@@ -19,6 +19,11 @@ from wagtail.tests.utils import WagtailTestUtils
 
 from tests.testapp.models import EventPage, EventPageRelatedMedia
 from wagtailmedia import models
+from wagtailmedia.views.media import is_usage_count_enabled
+
+
+if WAGTAIL_VERSION >= (4, 1, 0):
+    from wagtail.models import ReferenceIndex
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):
@@ -1068,20 +1073,18 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             self.assertIn(error, json_data["html"])
 
 
+# TODO: Remove once support for Wagtail < 4.1 is dropped
+@override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]
 
     def setUp(self):
         self.login()
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_unused_media_usage_count(self):
         media = models.Media.objects.get(id=1)
         self.assertEqual(media.get_usage().count(), 0)
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_used_media_usage_count(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
@@ -1091,18 +1094,6 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         event_page_related_link.save()
         self.assertEqual(media.get_usage().count(), 1)
 
-    def test_usage_count_does_not_appear(self):
-        media = models.Media.objects.get(id=1)
-        page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
-        response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
-        self.assertNotContains(response, "Used 1 time")
-
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_count_appears(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
@@ -1113,31 +1104,41 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 1 time")
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 0 times")
 
+    @skipUnless(WAGTAIL_VERSION < (4, 1, 0), "Usage count is always on as of 4.1")
+    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False)
+    def test_usage_count_does_not_appear_with_usage_count_disabled(self):
+        media = models.Media.objects.get(id=1)
+        page = EventPage.objects.get(id=3)
+        event_page_related_link = EventPageRelatedMedia()
+        event_page_related_link.page = page
+        event_page_related_link.link_media = media
+        event_page_related_link.save()
+        response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
+        self.assertNotContains(response, "Used 1 time")
 
+
+# TODO: Remove once support for Wagtail < 4.1 is dropped
+@override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
 class TestGetUsage(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]
 
     def setUp(self):
         self.login()
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
+    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False)
     def test_media_get_usage_not_enabled(self):
         media = models.Media.objects.get(id=1)
         self.assertEqual(list(media.get_usage()), [])
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_unused_media_get_usage(self):
         media = models.Media.objects.get(id=1)
         self.assertEqual(list(media.get_usage()), [])
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_used_media_get_usage(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
@@ -1145,10 +1146,16 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         event_page_related_link.page = page
         event_page_related_link.link_media = media
         event_page_related_link.save()
-        self.assertTrue(issubclass(Page, type(media.get_usage()[0])))
+        usage = media.get_usage()
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
+        if WAGTAIL_VERSION >= (4, 1, 0):
+            self.assertIsInstance(usage[0], tuple)
+            self.assertIsInstance(usage[0][0], Page)
+            self.assertIsInstance(usage[0][1], list)
+            self.assertIsInstance(usage[0][1][0], ReferenceIndex)
+        else:
+            self.assertTrue(issubclass(Page, type(usage[0])))
+
     def test_usage_page(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
@@ -1158,10 +1165,24 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         event_page_related_link.save()
         response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))
         self.assertContains(response, "Christmas")
+        self.assertContains(response, EventPage.get_verbose_name())
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
+        if WAGTAIL_VERSION >= (4, 1, 0):
+            self.assertTemplateUsed("wagtailmedia/media/usage.html")
+        else:
+            self.assertTemplateUsed("wagtailmedia/media/legacy/usage.html")
+
     def test_usage_page_no_usage(self):
         response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))
         # There's no usage so there should be no table rows
         self.assertRegex(response.content.decode("utf-8"), r"<tbody>(\s|\n)*</tbody>")
+
+    def test_is_usage_count_enabled(self):
+        if WAGTAIL_VERSION >= (4, 1, 0):
+            self.assertTrue(is_usage_count_enabled())
+        else:
+            self.assertTrue(is_usage_count_enabled())
+
+            # TODO: Remove once support for Wagtail < 4.1 is dropped
+            with override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False):
+                self.assertFalse(is_usage_count_enabled())
