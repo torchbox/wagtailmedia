@@ -578,6 +578,7 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_link(self):
         response = self.client.get(
@@ -1073,11 +1074,13 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_unused_media_usage_count(self):
         media = models.Media.objects.get(id=1)
         self.assertEqual(media.get_usage().count(), 0)
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_used_media_usage_count(self):
         media = models.Media.objects.get(id=1)
@@ -1098,6 +1101,7 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertNotContains(response, "Used 1 time")
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_count_appears(self):
         media = models.Media.objects.get(id=1)
@@ -1109,6 +1113,7 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 1 time")
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
@@ -1125,11 +1130,13 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         media = models.Media.objects.get(id=1)
         self.assertEqual(list(media.get_usage()), [])
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_unused_media_get_usage(self):
         media = models.Media.objects.get(id=1)
         self.assertEqual(list(media.get_usage()), [])
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_used_media_get_usage(self):
         media = models.Media.objects.get(id=1)
@@ -1140,6 +1147,7 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         event_page_related_link.save()
         self.assertTrue(issubclass(Page, type(media.get_usage()[0])))
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_page(self):
         media = models.Media.objects.get(id=1)
@@ -1151,6 +1159,7 @@ class TestGetUsage(TestCase, WagtailTestUtils):
         response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))
         self.assertContains(response, "Christmas")
 
+    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_page_no_usage(self):
         response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))

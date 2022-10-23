@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -17,6 +18,15 @@ from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
+
+
+def is_usage_count_enabled():
+    if WAGTAIL_VERSION >= (4, 1, 0):
+        # Usage count is always on as of Wagtail 4.1 and its references index
+        # Ref: https://github.com/wagtail/wagtail/pull/9279
+        return True
+    else:
+        return getattr(settings, "WAGTAIL_USAGE_COUNT_ENABLED", False)
 
 
 permission_checker = PermissionPolicyChecker(permission_policy)
@@ -232,6 +242,7 @@ def edit(request, media_id):
             "user_can_delete": permission_policy.user_has_permission_for_instance(
                 request.user, "delete", media
             ),
+            "usage_count_enabled": is_usage_count_enabled(),
         },
     )
 
@@ -256,6 +267,7 @@ def delete(request, media_id):
         "wagtailmedia/media/confirm_delete.html",
         {
             "media": media,
+            "usage_count_enabled": is_usage_count_enabled(),
         },
     )
 

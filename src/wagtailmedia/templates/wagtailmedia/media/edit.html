@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n %}
-{% load wagtailimages_tags wagtailadmin_tags %}
+{% load wagtailimages_tags %}
 {% block titletag %}{% blocktrans with title=media.title %}Editing {{ title }}{% endblocktrans %}{% endblock %}
 
 {% block extra_js %}
@@ -62,8 +62,7 @@
                             <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
                         {% endif %}
 
-                        {% usage_count_enabled as uc_enabled %}
-                        {% if uc_enabled %}
+                        {% if usage_count_enabled %}
                             <dt>{% trans "Usage" %}</dt>
                             <dd>
                                 <a href="{{ media.usage_url }}">{% blocktrans count usage_count=media.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>
