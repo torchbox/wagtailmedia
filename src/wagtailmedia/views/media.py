@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
 
@@ -12,12 +14,17 @@ from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
 from wagtail.core.models import Collection
+from wagtail.models import Page
 from wagtail.search.backends import get_search_backends
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
+
+
+if WAGTAIL_VERSION >= (4, 1, 0):
+    from wagtail.admin.admin_url_finder import AdminURLFinder
 
 
 def is_usage_count_enabled():
@@ -272,12 +279,55 @@ def delete(request, media_id):
     )
 
 
+@permission_checker.require_any("add", "change", "delete")
 def usage(request, media_id):
+    if WAGTAIL_VERSION >= (4, 1, 0):
+        return usage_next(request, media_id)
+    else:
+        return usage_legacy(request, media_id)
+
+
+def usage_legacy(request, media_id):
     Media = get_media_model()
     media = get_object_or_404(Media, id=media_id)
 
     paginator, used_by = paginate(request, media.get_usage())
 
     return render(
-        request, "wagtailmedia/media/usage.html", {"media": media, "used_by": used_by}
+        request,
+        "wagtailmedia/media/legacy/usage.html",
+        {"media": media, "used_by": used_by},
+    )
+
+
+def usage_next(request, media_id):
+    Media = get_media_model()
+    media_item = get_object_or_404(Media, id=media_id)
+
+    paginator = Paginator(media_item.get_usage(), per_page=20)
+    object_page = paginator.get_page(request.GET.get("p"))
+
+    # Add edit URLs to each source object
+    url_finder = AdminURLFinder(request.user)
+    results = []
+    for entity, references in object_page:
+        edit_url = url_finder.get_edit_url(entity)
+        if edit_url is None:
+            label = _("(Private %s)") % entity._meta.verbose_name
+            edit_link_title = None
+        else:
+            label = str(entity)
+            edit_link_title = _("Edit this %s") % entity._meta.verbose_name
+
+        if isinstance(entity, Page):
+            verbose_name = capfirst(entity.specific_class._meta.verbose_name)
+        else:
+            verbose_name = capfirst(entity._meta.verbose_name)
+
+        results.append((label, edit_url, edit_link_title, verbose_name, references))
+
+    return render(
+        request,
+        "wagtailmedia/media/usage.html",
+        {"media_item": media_item, "results": results, "object_page": object_page},
     )
