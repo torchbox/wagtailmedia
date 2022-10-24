@@ -2,10 +2,12 @@ from __future__ import unicode_literals
 
 from django.forms import ModelChoiceField
 from django.forms.utils import flatatt
+from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 
+from wagtail.admin.compare import BlockComparison
 from wagtail.core.blocks import ChooserBlock
 
 
@@ -49,6 +51,29 @@ class AbstractMediaChooserBlock(ChooserBlock):
     def render_basic(self, value, context=None):
         raise NotImplementedError(
             "You need to implement %s.render_basic" % self.__class__.__name__
+        )
+
+    def get_comparison_class(self):
+        return MediaChooserBlockComparison
+
+
+class MediaChooserBlockComparison(BlockComparison):
+    def htmlvalue(self, value):
+        return render_to_string(
+            "wagtailmedia/widgets/compare.html",
+            {
+                "media_item_a": self.block.render_basic(value),
+                "media_item_b": self.block.render_basic(value),
+            },
+        )
+
+    def htmldiff(self):
+        return render_to_string(
+            "wagtailmedia/widgets/compare.html",
+            {
+                "media_item_a": self.block.render_basic(self.val_a),
+                "media_item_b": self.block.render_basic(self.val_b),
+            },
         )
 
 
