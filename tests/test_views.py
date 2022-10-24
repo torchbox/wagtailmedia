@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.forms.utils import ErrorDict
-from django.test import TestCase, TransactionTestCase, modify_settings
+from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 
@@ -551,33 +551,23 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertContains(response, "wagtailadmin/js/draftail.js")
 
 
-class TestMediaDeleteView(TransactionTestCase, WagtailTestUtils):
-    def setUp(self):
-        # Required to create root collection because the TransactionTestCase
-        # does not make initial data loaded in migrations available and
-        # serialized_rollback=True causes other problems in the test suite.
-        # ref: https://docs.djangoproject.com/en/3.0/topics/testing/overview/#rollback-emulation
-        Collection.objects.get_or_create(
-            name="Root",
-            path="0001",
-            depth=1,
-            numchild=0,
-        )
-        self.login()
+class TestMediaDeleteView(TestCase, WagtailTestUtils):
+    @classmethod
+    def setUpTestData(cls):
         # Create a media to delete
-        self.media = models.Media.objects.create(title="Test media", duration=100)
+        cls.media = models.Media.objects.create(title="Test media", duration=100)
+        cls.delete_media_url = reverse("wagtailmedia:delete", args=(cls.media.id,))
+
+    def setUp(self):
+        self.login()
 
     def test_simple(self):
-        response = self.client.get(
-            reverse("wagtailmedia:delete", args=(self.media.id,))
-        )
+        response = self.client.get(self.delete_media_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/confirm_delete.html")
 
     def test_delete(self):
-        response = self.client.post(
-            reverse("wagtailmedia:delete", args=(self.media.id,))
-        )
+        response = self.client.post(self.delete_media_url)
 
         # User should be redirected back to the index
         self.assertRedirects(response, reverse("wagtailmedia:index"))
@@ -587,9 +577,7 @@ class TestMediaDeleteView(TransactionTestCase, WagtailTestUtils):
 
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_link(self):
-        response = self.client.get(
-            reverse("wagtailmedia:delete", args=(self.media.id,))
-        )
+        response = self.client.get(self.delete_media_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "wagtailmedia/media/confirm_delete.html")
         self.assertIn("Used 0 times", str(response.content))
@@ -598,15 +586,17 @@ class TestMediaDeleteView(TransactionTestCase, WagtailTestUtils):
         self.media.file = ContentFile("File", name="file.mp3")
         self.media.save()
         file_path = self.media.file.path
-        self.assertTrue(self.media.file.storage.exists(file_path))
+        storage = self.media.file.storage
+        self.assertTrue(storage.exists(file_path))
 
-        self.client.post(reverse("wagtailmedia:delete", args=(self.media.id,)))
+        with self.captureOnCommitCallbacks(execute=True):
+            self.client.post(self.delete_media_url)
 
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
         # The file should be deleted as well
-        self.assertFalse(self.media.file.storage.exists(file_path))
+        self.assertFalse(storage.exists(file_path))
 
     def test_post_delete_file_cleanup_with_thumbnail(self):
         self.media.file = ContentFile("File", name="file.mp3")
@@ -614,20 +604,27 @@ class TestMediaDeleteView(TransactionTestCase, WagtailTestUtils):
         self.media.save()
         file_path = self.media.file.path
         thumbnail_path = self.media.thumbnail.path
-        for path in (file_path, thumbnail_path):
-            self.assertTrue(self.media.file.storage.exists(path))
+        storage = self.media.file.storage
 
-        self.client.post(reverse("wagtailmedia:delete", args=(self.media.id,)))
+        for path in (file_path, thumbnail_path):
+            self.assertTrue(storage.exists(path))
+
+        with self.captureOnCommitCallbacks(execute=True):
+            self.client.post(self.delete_media_url)
 
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
         # The files should be deleted as well
         for path in (file_path, thumbnail_path):
-            self.assertFalse(self.media.file.storage.exists(path))
+            self.assertFalse(storage.exists(path))
 
 
 class TestMediaChooserView(TestCase, WagtailTestUtils):
+    @classmethod
+    def setUpTestData(cls):
+        cls.chooser_url = reverse("wagtailmedia:chooser")
+
     def setUp(self):
         self.user = self.login()
 
@@ -638,7 +635,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             self.assertTemplateUsed(response, "wagtailmedia/media/legacy/list.html")
 
     def test_simple(self):
-        response = self.client.get(reverse("wagtailmedia:chooser"))
+        response = self.client.get(self.chooser_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/json")
         json_data = json.loads(response.content.decode("utf-8"))
@@ -661,7 +658,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertNotIn("wagtailadmin/js/draftail.js", json_data["html"])
 
     def test_search(self):
-        response = self.client.get(reverse("wagtailmedia:chooser"), {"q": "Hello"})
+        response = self.client.get(self.chooser_url, {"q": "Hello"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["query_string"], "Hello")
 
@@ -678,7 +675,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def test_pagination(self):
         self.make_media()
 
-        response = self.client.get(reverse("wagtailmedia:chooser"), {"p": 2})
+        response = self.client.get(self.chooser_url, {"p": 2})
 
         # Check response
         self.assertEqual(response.status_code, 200)
@@ -690,9 +687,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def test_pagination_invalid(self):
         self.make_media()
 
-        response = self.client.get(
-            reverse("wagtailmedia:chooser"), {"p": "Hello World!"}
-        )
+        response = self.client.get(self.chooser_url, {"p": "Hello World!"})
 
         # Check response
         self.assertEqual(response.status_code, 200)
@@ -704,7 +699,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def test_pagination_out_of_range(self):
         self.make_media()
 
-        response = self.client.get(reverse("wagtailmedia:chooser"), {"p": 99999})
+        response = self.client.get(self.chooser_url, {"p": 99999})
 
         # Check response
         self.assertEqual(response.status_code, 200)
@@ -731,7 +726,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             return media.filter(uploaded_by_user=self.user)
 
         with self.register_hook("construct_media_chooser_queryset", filter_media):
-            response = self.client.get(reverse("wagtailmedia:chooser"))
+            response = self.client.get(self.chooser_url)
         self.assertEqual(len(response.context["media_files"]), 1)
         self.assertEqual(response.context["media_files"][0], media)
 
@@ -750,13 +745,13 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             return media.filter(uploaded_by_user=self.user)
 
         with self.register_hook("construct_media_chooser_queryset", filter_media):
-            response = self.client.get(reverse("wagtailmedia:chooser"), {"q": "Test"})
+            response = self.client.get(self.chooser_url, {"q": "Test"})
         self.assertEqual(len(response.context["media_files"]), 1)
         self.assertEqual(response.context["media_files"][0], media)
 
     @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     def test_with_custom_model(self):
-        response = self.client.get(reverse("wagtailmedia:chooser"))
+        response = self.client.get(self.chooser_url)
         self.assertEqual(response.status_code, 200)
         json_data = json.loads(response.content.decode())
         self.assertEqual(json_data["step"], "chooser")
@@ -771,19 +766,19 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
     @classmethod
     def setUpTestData(cls):
-        fake_audio = ContentFile("A boring example song")
-        fake_audio.name = "song.mp3"
-
         audio = models.Media(
-            title="Test audio", duration=100, file=fake_audio, type="audio"
+            title="Test audio",
+            duration=100,
+            file=ContentFile("A boring example song", name="song.mp3"),
+            type="audio",
         )
         audio.save()
 
-        fake_video = ContentFile("An exciting video")
-        fake_video.name = "video.mp4"
-
         video = models.Media(
-            title="Test video", duration=100, file=fake_video, type="video"
+            title="Test video",
+            duration=100,
+            file=ContentFile("An exciting video", name="video.mp4"),
+            type="video",
         )
         video.save()
 
@@ -858,7 +853,8 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
 
 
 class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         add_media_permission = Permission.objects.get(
             content_type__app_label="wagtailmedia", codename="add_media"
         )
@@ -866,14 +862,14 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
             content_type__app_label="wagtailadmin", codename="access_admin"
         )
 
-        self.root_collection = Collection.get_first_root_node()
-        self.evil_plans_collection = self.root_collection.add_child(name="Evil plans")
+        cls.root_collection = Collection.get_first_root_node()
+        cls.evil_plans_collection = cls.root_collection.add_child(name="Evil plans")
 
         conspirators_group = Group.objects.create(name="Evil conspirators")
         conspirators_group.permissions.add(admin_permission)
         GroupCollectionPermission.objects.create(
             group=conspirators_group,
-            collection=self.evil_plans_collection,
+            collection=cls.evil_plans_collection,
             permission=add_media_permission,
         )
 
@@ -882,28 +878,29 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         )
         user.groups.add(conspirators_group)
 
-        fake_file = ContentFile("A boring song", name="test-song.mp3")
         media = models.Media(
             title="Test",
             duration=100,
-            file=fake_file,
+            file=ContentFile("A boring song", name="test-song.mp3"),
             type="audio",
-            collection=self.root_collection,
+            collection=cls.root_collection,
         )
         media.save()
+
+        cls.chooser_url = reverse("wagtailmedia:chooser")
 
     def test_all_permissions_views_root_media(self):
         self.login()
 
         response = self.client.get(
-            reverse("wagtailmedia:chooser"), {"collection_id": self.root_collection.id}
+            self.chooser_url, {"collection_id": self.root_collection.id}
         )
         self.assertIn("test-song.mp3", str(response.content))
 
     def test_single_collection_permissions_views_nothing(self):
         self.client.login(username="moriarty", password="password")
         response = self.client.get(
-            reverse("wagtailmedia:chooser"), {"collection_id": self.root_collection.id}
+            self.chooser_url, {"collection_id": self.root_collection.id}
         )
 
         media_add_url = reverse("wagtailmedia:add", args=("media",))
@@ -925,18 +922,19 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
 
         self.login(user)
 
-        response = self.client.get(reverse("wagtailmedia:chooser"))
+        response = self.client.get(self.chooser_url)
         self.assertEqual(response.context["uploadforms"], {})
 
 
 class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
-    def setUp(self):
-        self.login()
-
-        # Create a media to choose
-        self.media = models.Media.objects.create(
+    @classmethod
+    def setUpTestData(cls):
+        cls.media = models.Media.objects.create(
             title="Test media", file="media.mp3", duration=100
         )
+
+    def setUp(self):
+        self.login()
 
     def test_simple(self):
         response = self.client.get(

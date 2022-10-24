@@ -14,37 +14,38 @@ from wagtailmedia import models
 
 
 class TestMediaPermissions(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Create some user accounts for testing permissions
         User = get_user_model()
-        self.user = User.objects.create_user(
+        cls.user = User.objects.create_user(
             username="user", email="user@email.com", password="password"
         )
-        self.owner = User.objects.create_user(
+        cls.owner = User.objects.create_user(
             username="owner", email="owner@email.com", password="password"
         )
-        self.editor = User.objects.create_user(
+        cls.editor = User.objects.create_user(
             username="editor", email="editor@email.com", password="password"
         )
-        self.editor.groups.add(Group.objects.get(name="Editors"))
-        self.administrator = User.objects.create_superuser(
+        cls.editor.groups.add(Group.objects.get(name="Editors"))
+        cls.administrator = User.objects.create_superuser(
             username="administrator",
             email="administrator@email.com",
             password="password",
         )
 
         # Owner user must have the add_media permission
-        self.adders_group = Group.objects.create(name="Media adders")
+        cls.adders_group = Group.objects.create(name="Media adders")
         GroupCollectionPermission.objects.create(
-            group=self.adders_group,
+            group=cls.adders_group,
             collection=Collection.get_first_root_node(),
             permission=Permission.objects.get(codename="add_media"),
         )
-        self.owner.groups.add(self.adders_group)
+        cls.owner.groups.add(cls.adders_group)
 
         # Create a media for running tests on
-        self.media = models.Media.objects.create(
-            title="Test media", duration=100, uploaded_by_user=self.owner
+        cls.media = models.Media.objects.create(
+            title="Test media", duration=100, uploaded_by_user=cls.owner
         )
 
     def test_administrator_can_edit(self):
@@ -61,21 +62,22 @@ class TestMediaPermissions(TestCase):
 
 
 class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
-    def setUp(self):
-        self.root_collection = Collection.get_first_root_node()
-        self.evil_plans_collection = self.root_collection.add_child(name="Evil plans")
-        self.nice_plans_collection = self.root_collection.add_child(name="Nice plans")
+    @classmethod
+    def setUpTestData(cls):
+        cls.root_collection = Collection.get_first_root_node()
+        cls.evil_plans_collection = cls.root_collection.add_child(name="Evil plans")
+        cls.nice_plans_collection = cls.root_collection.add_child(name="Nice plans")
 
         # Create a media to edit
-        self.media = models.Media.objects.create(
+        cls.media = models.Media.objects.create(
             title="Test media",
             file=ContentFile("A boring example song", name="song.mp3"),
-            collection=self.nice_plans_collection,
+            collection=cls.nice_plans_collection,
             duration=100,
         )
 
         # Create a user with change_media permission but not add_media
-        user = get_user_model().objects.create_user(
+        cls.user = get_user_model().objects.create_user(
             username="changeonly", email="changeonly@example.com", password="password"
         )
         change_permission = Permission.objects.get(
@@ -84,21 +86,23 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
         admin_permission = Permission.objects.get(
             content_type__app_label="wagtailadmin", codename="access_admin"
         )
-        self.changers_group = Group.objects.create(name="Media changers")
+        cls.changers_group = Group.objects.create(name="Media changers")
         GroupCollectionPermission.objects.create(
-            group=self.changers_group,
-            collection=self.root_collection,
+            group=cls.changers_group,
+            collection=cls.root_collection,
             permission=change_permission,
         )
-        user.groups.add(self.changers_group)
+        cls.user.groups.add(cls.changers_group)
 
-        user.user_permissions.add(admin_permission)
-        self.assertTrue(self.client.login(username="changeonly", password="password"))
+        cls.user.user_permissions.add(admin_permission)
 
         if WAGTAIL_VERSION >= (4, 0):
-            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
+            cls.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
         else:
-            self.collection_label_tag = '<label for="id_collection">'
+            cls.collection_label_tag = '<label for="id_collection">'
+
+    def setUp(self):
+        self.client.force_login(self.user)
 
     def test_get_index(self):
         response = self.client.get(reverse("wagtailmedia:index"))

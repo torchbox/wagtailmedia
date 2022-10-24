@@ -5,11 +5,8 @@ from django.core.files import File
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.template import Context, Template
-from django.test import TestCase, TransactionTestCase, override_settings
+from django.test import TestCase, override_settings
 
-from wagtail.core.models import Collection
-
-from wagtailmedia import signal_handlers
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import Media, get_media_model
 
@@ -169,10 +166,9 @@ class TestMediaQuerySet(TestCase):
 
 class TestAbstractMediaInterfaceModel(TestCase):
     def test_sources_mp4_type(self):
-        fake_file = ContentFile("A boring example movie")
-        fake_file.name = "movie.mp4"
-        media = Media()
-        media.file = File(fake_file)
+        media = Media(
+            file=File(ContentFile("A boring example movie", name="movie.mp4"))
+        )
         self.assertEqual(
             media.sources,
             [
@@ -184,10 +180,7 @@ class TestAbstractMediaInterfaceModel(TestCase):
         )
 
     def test_sources_unknown_type(self):
-        fake_file = ContentFile("A boring example movie")
-        fake_file.name = "movie"
-        media = Media()
-        media.file = File(fake_file)
+        media = Media(file=File(ContentFile("A boring example movie", name="movie")))
         self.assertEqual(
             media.sources,
             [
@@ -198,29 +191,32 @@ class TestAbstractMediaInterfaceModel(TestCase):
             ],
         )
 
-
-class TestMediaFilenameProperties(TransactionTestCase):
-    def setUp(self):
-        # Required to create root collection because the TransactionTestCase
-        # does not make initial data loaded in migrations available and
-        # serialized_rollback=True causes other problems in the test suite.
-        # ref: https://docs.djangoproject.com/en/3.0/topics/testing/overview/#rollback-emulation
-        Collection.objects.get_or_create(
-            name="Root",
-            path="0001",
-            depth=1,
-            numchild=0,
+    def test_thumbnail_filename(self):
+        media = Media(
+            file=File(ContentFile("A boring example movie", name="movie.mp4")),
         )
 
-        self.media = Media(title="Test media", duration=100)
-        self.media.file.save(
-            "example.mp4", ContentFile("A amazing example music video")
-        )
+        self.assertEqual(media.thumbnail_filename, "")
+        media.thumbnail = ContentFile("Thumbnail", name="thumbnail.jpg")
+        self.assertEqual(media.thumbnail_filename, "thumbnail.jpg")
 
-        self.extensionless_media = Media(title="Test media", duration=101)
-        self.extensionless_media.file.save(
-            "example", ContentFile("A boring example music video")
+
+class TestMediaFilenameProperties(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.media = Media(
+            title="Test media",
+            duration=100,
+            file=ContentFile("A amazing example music video", name="example.mp4"),
         )
+        cls.media.save()
+
+        cls.extensionless_media = Media(
+            title="Test media",
+            duration=101,
+            file=ContentFile("A boring example music video", name="example"),
+        )
+        cls.extensionless_media.save()
 
     def test_filename(self):
         self.assertEqual("example.mp4", self.media.filename)
@@ -235,44 +231,28 @@ class TestMediaFilenameProperties(TransactionTestCase):
         self.extensionless_media.delete()
 
 
-class TestMediaFilesDeletion(TransactionTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        # ensure the signal handlers are registered
-        signal_handlers.register_signal_handlers()
-
-    def setUp(self):
-        # Required to create root collection because the TransactionTestCase
-        # does not make initial data loaded in migrations available and
-        # serialized_rollback=True causes other problems in the test suite.
-        # ref: https://docs.djangoproject.com/en/3.0/topics/testing/overview/#rollback-emulation
-        Collection.objects.get_or_create(
-            name="Root",
-            path="0001",
-            depth=1,
-            numchild=0,
-        )
-
+class TestMediaFilesDeletion(TestCase):
     def test_media_file_deleted_oncommit(self):
-        with transaction.atomic():
-            media = get_media_model().objects.create(
-                title="",
-                file=ContentFile(
-                    "A boring example movie", name="movie-for-deletion.mp4"
-                ),
-                duration=1,
-            )
-            filename = media.file.name
+        with self.captureOnCommitCallbacks(execute=True):
+            with transaction.atomic():
+                media = get_media_model().objects.create(
+                    title="",
+                    file=ContentFile(
+                        "A boring example movie", name="movie-for-deletion.mp4"
+                    ),
+                    duration=1,
+                )
+                filename = media.file.name
 
-            self.assertTrue(media.file.storage.exists(filename))
-            media.delete()
-            self.assertTrue(media.file.storage.exists(filename))
+                self.assertTrue(media.file.storage.exists(filename))
+
+                media.delete()
+                self.assertTrue(media.file.storage.exists(filename))
         self.assertFalse(media.file.storage.exists(filename))
 
 
 @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
-class TestMediaFilesDeletionForCustomModels(TestMediaFilesDeletion):
+class TestMediaModel(TestCase):
     def test_media_model(self):
         cls = get_media_model()
         self.assertEqual(
