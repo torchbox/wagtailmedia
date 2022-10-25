@@ -1,14 +1,13 @@
 from __future__ import unicode_literals
 
 from django.forms import ModelChoiceField
-from django.forms.utils import flatatt
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
-from django.utils.html import format_html, format_html_join
-from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.compare import BlockComparison
 from wagtail.core.blocks import ChooserBlock
+
+from .utils import format_audio_html, format_video_html
 
 
 class AbstractMediaChooserBlock(ChooserBlock):
@@ -100,13 +99,7 @@ class AudioChooserBlock(AbstractMediaChooserBlock):
         if value.type != self.media_type:
             return ""
 
-        return format_html(
-            "<audio controls>\n{sources}\n<p>{fallback}</p>\n</audio>",
-            sources=format_html_join(
-                "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
-            ),
-            fallback=_("Your browser does not support the audio element."),
-        )
+        return format_audio_html(value)
 
 
 class VideoChooserBlock(AbstractMediaChooserBlock):
@@ -132,10 +125,4 @@ class VideoChooserBlock(AbstractMediaChooserBlock):
         if value.type != self.media_type:
             return ""
 
-        return format_html(
-            "<video controls>\n{sources}\n<p>{fallback}</p>\n</video>",
-            sources=format_html_join(
-                "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
-            ),
-            fallback=_("Your browser does not support the video element."),
-        )
+        return format_video_html(value)
