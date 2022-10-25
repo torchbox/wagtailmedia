@@ -1,0 +1,27 @@
+.comparison--media {
+    display: inline-block;
+    max-width: 49%;
+}
+
+.comparison--media audio,
+.comparison--media video {
+    max-width: 100%;
+}
+
+.comparison--media.addition,
+.comparison--media.deletion {
+    padding: 5px;
+    margin-inline-end: 5px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.comparison--media.addition {
+    background-color: #ebffeb;
+    border-color: #f8cbcb;
+}
+
+.comparison--media.deletion {
+    background-color: #ffebeb;
+    border-color: #f8cbcb;
+}
