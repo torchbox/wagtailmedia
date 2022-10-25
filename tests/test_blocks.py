@@ -5,6 +5,7 @@ from django.urls import reverse
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
     AudioChooserBlock,
+    MediaChooserBlockComparison,
     VideoChooserBlock,
 )
 from wagtailmedia.models import Media
@@ -109,3 +110,15 @@ class BlockTests(TestCase):
 
         # will return an empty value if trying to render with the wrong media type
         self.assertEqual(block.render(self.audio), "")
+
+    def test_comparison_class(self):
+        self.assertIs(
+            AbstractMediaChooserBlock().get_comparison_class(),
+            MediaChooserBlockComparison,
+        )
+        self.assertIs(
+            AudioChooserBlock().get_comparison_class(), MediaChooserBlockComparison
+        )
+        self.assertIs(
+            VideoChooserBlock().get_comparison_class(), MediaChooserBlockComparison
+        )
