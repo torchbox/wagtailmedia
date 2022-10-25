@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db.models import ForeignKey
 
 
 class WagtailMediaAppConfig(AppConfig):
@@ -8,6 +9,20 @@ class WagtailMediaAppConfig(AppConfig):
     verbose_name = "Wagtail media"
 
     def ready(self):
-        from wagtailmedia.signal_handlers import register_signal_handlers
+        from wagtail import VERSION as WAGTAIL_VERSION
+
+        from .signal_handlers import register_signal_handlers
 
         register_signal_handlers()
+
+        if WAGTAIL_VERSION >= (3, 0):
+            from wagtail.admin.compare import register_comparison_class
+
+            from .edit_handlers import MediaFieldComparison
+            from .models import get_media_model
+
+            # Set up image ForeignKeys to use ImageFieldComparison as the comparison class
+            # when comparing page revisions
+            register_comparison_class(
+                ForeignKey, to=get_media_model(), comparison_class=MediaFieldComparison
+            )

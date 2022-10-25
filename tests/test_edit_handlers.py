@@ -8,7 +8,7 @@ from wagtail.admin.edit_handlers import ObjectList
 from wagtail.core.models import Page
 
 from tests.testapp.models import BlogStreamPage
-from wagtailmedia.edit_handlers import MediaChooserPanel
+from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison
 from wagtailmedia.models import Media
 from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
@@ -263,3 +263,8 @@ class MediaChooserPanelTest(TestCase):
                 "<span>This field is required.</span>",
                 media_chooser_panel.render_as_field(),
             )
+
+    def test_comparison_class(self):
+        self.assertIs(
+            self.my_media_chooser_panel.get_comparison_class(), MediaFieldComparison
+        )
