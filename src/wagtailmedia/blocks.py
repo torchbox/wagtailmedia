@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from typing import TYPE_CHECKING, Type
+
 from django.forms import ModelChoiceField
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
@@ -8,6 +10,10 @@ from wagtail.admin.compare import BlockComparison
 from wagtail.core.blocks import ChooserBlock
 
 from .utils import format_audio_html, format_video_html
+
+
+if TYPE_CHECKING:
+    from .widgets import AdminAudioChooser, AdminVideoChooser
 
 
 class AbstractMediaChooserBlock(ChooserBlock):
@@ -52,12 +58,12 @@ class AbstractMediaChooserBlock(ChooserBlock):
             "You need to implement %s.render_basic" % self.__class__.__name__
         )
 
-    def get_comparison_class(self):
+    def get_comparison_class(self) -> Type["MediaChooserBlockComparison"]:
         return MediaChooserBlockComparison
 
 
 class MediaChooserBlockComparison(BlockComparison):
-    def htmlvalue(self, value):
+    def htmlvalue(self, value) -> str:
         return render_to_string(
             "wagtailmedia/widgets/compare.html",
             {
@@ -66,7 +72,7 @@ class MediaChooserBlockComparison(BlockComparison):
             },
         )
 
-    def htmldiff(self):
+    def htmldiff(self) -> str:
         return render_to_string(
             "wagtailmedia/widgets/compare.html",
             {
@@ -87,12 +93,12 @@ class AudioChooserBlock(AbstractMediaChooserBlock):
         )
 
     @cached_property
-    def widget(self):
+    def widget(self) -> "AdminAudioChooser":
         from wagtailmedia.widgets import AdminAudioChooser
 
         return AdminAudioChooser()
 
-    def render_basic(self, value, context=None):
+    def render_basic(self, value, context=None) -> str:
         if not value:
             return ""
 
@@ -113,12 +119,12 @@ class VideoChooserBlock(AbstractMediaChooserBlock):
         )
 
     @cached_property
-    def widget(self):
+    def widget(self) -> "AdminVideoChooser":
         from wagtailmedia.widgets import AdminVideoChooser
 
         return AdminVideoChooser()
 
-    def render_basic(self, value, context=None):
+    def render_basic(self, value, context=None) -> str:
         if not value:
             return ""
 
