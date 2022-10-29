@@ -12,22 +12,9 @@ permissions:
   contents: read # to fetch code (actions/checkout)
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.8"
-      - uses: pre-commit/action@v3.0.0
-
   test:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
-    needs: lint
 
     strategy:
       matrix:

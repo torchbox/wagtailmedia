@@ -1,4 +1,10 @@
-# [wagtailmedia](https://pypi.org/project/wagtailmedia/) [![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)  [![PyPI downloads](https://img.shields.io/pypi/dm/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/) [![Build Status](https://github.com/torchbox/wagtailmedia/workflows/CI/badge.svg)](https://github.com/torchbox/wagtailmedia/actions) [![Coverage](https://codecov.io/github/torchbox/wagtailmedia/coverage.svg?branch=master)](https://codecov.io/github/torchbox/wagtailmedia?branch=master)
+# [wagtailmedia](https://pypi.org/project/wagtailmedia/)
+
+[![PyPI](https://img.shields.io/pypi/v/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/wagtailmedia.svg)](https://pypi.org/project/wagtailmedia/)
+[![Build Status](https://github.com/torchbox/wagtailmedia/workflows/CI/badge.svg)](https://github.com/torchbox/wagtailmedia/actions)
+[![Coverage](https://codecov.io/github/torchbox/wagtailmedia/coverage.svg?branch=master)](https://codecov.io/github/torchbox/wagtailmedia?branch=master)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/torchbox/wagtailmedia/main.svg)](https://results.pre-commit.ci/latest/github/torchbox/wagtailmedia/main)
 
 A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
