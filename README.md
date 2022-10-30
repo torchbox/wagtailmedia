@@ -253,6 +253,23 @@ class BlogPage(Page):
     )
 ```
 
+### API
+
+To expose media items in the API, you can follow the [Wagtail documentation guide](https://docs.wagtail.org/en/stable/advanced_topics/api/v2/configuration.html#api-v2-configuration)
+for API configuration with wagtailmedia specifics:
+
+```python
+# api.py
+from wagtail.api.v2.router import WagtailAPIRouter
+from wagtailmedia.api.views import MediaAPIViewSet
+
+
+# Register the router
+api_router = WagtailAPIRouter("wagtailapi")
+# add any other enpoints you need, plus the wagtailmedia one
+api_router.register_endpoint("media", MediaAPIViewSet)
+```
+
 ## Translations
 
 wagtailmedia has translations in French and Chinese. More translations welcome!
