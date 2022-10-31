@@ -277,10 +277,10 @@ class TestApiMediaListing(ApiTestBase):
 
     def test_ordering_by_random(self):
         # add some more items
-        create_audio("Hey you")
-        create_video("The Peripheral")
-        response_1 = self.get_response(order="random")
-        content_1 = json.loads(response_1.content.decode("UTF-8"))
+        for i in range(4):
+            create_audio(f"Audio {i}")
+            create_video(f"Video {i}")
+        content_1 = json.loads(self.get_response().content.decode("UTF-8"))
         item_id_list_1 = self.get_media_id_list(content_1)
 
         response_2 = self.get_response(order="random")
