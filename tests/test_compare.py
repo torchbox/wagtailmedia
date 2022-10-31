@@ -1,6 +1,5 @@
 from unittest import skipUnless
 
-from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.utils.safestring import SafeString
 
@@ -16,6 +15,8 @@ from wagtailmedia.edit_handlers import MediaFieldComparison
 from wagtailmedia.models import get_media_model
 from wagtailmedia.utils import format_audio_html, format_video_html
 
+from .utils import create_audio, create_video
+
 
 Media = get_media_model()
 
@@ -23,33 +24,10 @@ Media = get_media_model()
 class MediaBlockComparisonTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.audio_a = Media.objects.create(
-            title="Test audio 2",
-            duration=1000,
-            file=ContentFile("Test1", name="test1.mp3"),
-            type="audio",
-        )
-
-        cls.audio_b = Media.objects.create(
-            title="Test audio 2",
-            duration=100,
-            file=ContentFile("Test2", name="test2.mp3"),
-            type="audio",
-        )
-
-        cls.video_a = Media.objects.create(
-            title="Test video 1",
-            duration=1024,
-            file=ContentFile("Test1", name="test1.mp4"),
-            type="video",
-        )
-
-        cls.video_b = Media.objects.create(
-            title="Test video 2",
-            duration=1024,
-            file=ContentFile("Test1", name="test2.mp4"),
-            type="video",
-        )
+        cls.audio_a = create_audio("Test audio 1", duration=1000)
+        cls.audio_b = create_audio("Test audio 2", duration=100)
+        cls.video_a = create_video("Test video 1", duration=1024)
+        cls.video_b = create_video("Test video 2", duration=1024)
 
     def tearDown(self):
         for m in [self.audio_a, self.audio_b, self.video_a, self.video_b]:

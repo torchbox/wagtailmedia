@@ -8,7 +8,10 @@ from django.template import Context, Template
 from django.test import TestCase, override_settings
 
 from wagtailmedia.forms import get_media_form
-from wagtailmedia.models import Media, get_media_model
+from wagtailmedia.models import get_media_model
+
+
+Media = get_media_model()
 
 
 class TestMediaValidation(TestCase):
@@ -235,7 +238,7 @@ class TestMediaFilesDeletion(TestCase):
     def test_media_file_deleted_oncommit(self):
         with self.captureOnCommitCallbacks(execute=True):
             with transaction.atomic():
-                media = get_media_model().objects.create(
+                media = Media.objects.create(
                     title="",
                     file=ContentFile(
                         "A boring example movie", name="movie-for-deletion.mp4"
