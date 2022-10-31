@@ -118,3 +118,11 @@ def add_media_css_tweaks():
         '<link rel="stylesheet" href="{}">',
         versioned_static("wagtailmedia/css/wagtailmedia.css"),
     )
+
+
+@hooks.register("insert_global_admin_css")
+def add_media_comparison_css():
+    return format_html(
+        '<link rel="stylesheet" href="{}">',
+        versioned_static("wagtailmedia/css/wagtailmedia-comparison.css"),
+    )

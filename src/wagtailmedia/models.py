@@ -29,21 +29,21 @@ if WAGTAIL_VERSION >= (4, 1, 0):
 ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
 
 
+class MediaType(models.TextChoices):
+    AUDIO = "audio", _("Audio file")
+    VIDEO = "video", _("Video file")
+
+
 class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
     pass
 
 
 class AbstractMedia(CollectionMember, index.Indexed, models.Model):
-    MEDIA_TYPES = (
-        ("audio", _("Audio file")),
-        ("video", _("Video file")),
-    )
-
     title = models.CharField(max_length=255, verbose_name=_("title"))
     file = models.FileField(upload_to="media", verbose_name=_("file"))
 
     type = models.CharField(
-        choices=MEDIA_TYPES, max_length=255, blank=False, null=False
+        choices=MediaType.choices, max_length=255, blank=False, null=False
     )
     duration = models.FloatField(
         blank=True,

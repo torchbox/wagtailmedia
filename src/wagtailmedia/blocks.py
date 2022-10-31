@@ -1,12 +1,19 @@
 from __future__ import unicode_literals
 
-from django.forms import ModelChoiceField
-from django.forms.utils import flatatt
-from django.utils.functional import cached_property
-from django.utils.html import format_html, format_html_join
-from django.utils.translation import gettext_lazy as _
+from typing import TYPE_CHECKING, Type
 
+from django.forms import ModelChoiceField
+from django.template.loader import render_to_string
+from django.utils.functional import cached_property
+
+from wagtail.admin.compare import BlockComparison
 from wagtail.core.blocks import ChooserBlock
+
+from .utils import format_audio_html, format_video_html
+
+
+if TYPE_CHECKING:
+    from .widgets import AdminAudioChooser, AdminVideoChooser
 
 
 class AbstractMediaChooserBlock(ChooserBlock):
@@ -51,6 +58,29 @@ class AbstractMediaChooserBlock(ChooserBlock):
             "You need to implement %s.render_basic" % self.__class__.__name__
         )
 
+    def get_comparison_class(self) -> Type["MediaChooserBlockComparison"]:
+        return MediaChooserBlockComparison
+
+
+class MediaChooserBlockComparison(BlockComparison):
+    def htmlvalue(self, value) -> str:
+        return render_to_string(
+            "wagtailmedia/widgets/compare.html",
+            {
+                "media_item_a": self.block.render_basic(value),
+                "media_item_b": self.block.render_basic(value),
+            },
+        )
+
+    def htmldiff(self) -> str:
+        return render_to_string(
+            "wagtailmedia/widgets/compare.html",
+            {
+                "media_item_a": self.block.render_basic(self.val_a),
+                "media_item_b": self.block.render_basic(self.val_b),
+            },
+        )
+
 
 class AudioChooserBlock(AbstractMediaChooserBlock):
     def __init__(self, required=True, help_text=None, validators=(), **kwargs):
@@ -63,25 +93,19 @@ class AudioChooserBlock(AbstractMediaChooserBlock):
         )
 
     @cached_property
-    def widget(self):
+    def widget(self) -> "AdminAudioChooser":
         from wagtailmedia.widgets import AdminAudioChooser
 
         return AdminAudioChooser()
 
-    def render_basic(self, value, context=None):
+    def render_basic(self, value, context=None) -> str:
         if not value:
             return ""
 
         if value.type != self.media_type:
             return ""
 
-        return format_html(
-            "<audio controls>\n{sources}\n<p>{fallback}</p>\n</audio>",
-            sources=format_html_join(
-                "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
-            ),
-            fallback=_("Your browser does not support the audio element."),
-        )
+        return format_audio_html(value)
 
 
 class VideoChooserBlock(AbstractMediaChooserBlock):
@@ -95,22 +119,16 @@ class VideoChooserBlock(AbstractMediaChooserBlock):
         )
 
     @cached_property
-    def widget(self):
+    def widget(self) -> "AdminVideoChooser":
         from wagtailmedia.widgets import AdminVideoChooser
 
         return AdminVideoChooser()
 
-    def render_basic(self, value, context=None):
+    def render_basic(self, value, context=None) -> str:
         if not value:
             return ""
 
         if value.type != self.media_type:
             return ""
 
-        return format_html(
-            "<video controls>\n{sources}\n<p>{fallback}</p>\n</video>",
-            sources=format_html_join(
-                "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
-            ),
-            fallback=_("Your browser does not support the video element."),
-        )
+        return format_video_html(value)

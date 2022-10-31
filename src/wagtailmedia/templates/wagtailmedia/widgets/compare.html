@@ -1,0 +1,30 @@
+{% load wagtailadmin_tags %}
+
+{% if media_item_a != media_item_b %}
+    {% if media_item_a and media_item_b %}
+        {# Item has changed #}
+        <div class="comparison--media deletion">
+            {{ media_item_a }}
+        </div>
+
+        <div class="comparison--media addition">
+            {{ media_item_b }}
+        </div>
+    {% elif media_item_b %}
+        {# Item has been added #}
+        <div class="comparison--media addition">
+            {{ media_item_b }}
+        </div>
+    {% elif media_item_a %}
+        {# Image has been removed #}
+        <div class="comparison--media deletion">
+            {{ media_item_a }}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="comparison--media">
+        {% if media_item_a %}
+            {{ media_item_a }}
+        {% endif %}
+    </div>
+{% endif %}

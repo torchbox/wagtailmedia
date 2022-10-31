@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AnonymousUser
-from django.core.files.base import ContentFile
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -8,9 +7,10 @@ from wagtail.admin.edit_handlers import ObjectList
 from wagtail.core.models import Page
 
 from tests.testapp.models import BlogStreamPage
-from wagtailmedia.edit_handlers import MediaChooserPanel
-from wagtailmedia.models import Media
+from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison
 from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
+
+from .utils import create_audio, create_video
 
 
 class MediaChooserPanelTest(TestCase):
@@ -21,19 +21,8 @@ class MediaChooserPanelTest(TestCase):
             AnonymousUser()
         )  # technically, Anonymous users cannot access the admin
 
-        cls.audio = Media.objects.create(
-            title="Test audio",
-            duration=1000,
-            file=ContentFile("Test", name="test.mp3"),
-            type="audio",
-        )
-
-        cls.video = Media.objects.create(
-            title="Test video",
-            duration=1024,
-            file=ContentFile("Test", name="test.mp4"),
-            type="video",
-        )
+        cls.audio = create_audio("Test audio", duration=1000)
+        cls.video = create_video("Test video", duration=1024)
 
         # a MediaChooserPanel class that works on BlogStreamPage's 'video' field
         cls.edit_handler = ObjectList([MediaChooserPanel("featured_media")])
@@ -263,3 +252,8 @@ class MediaChooserPanelTest(TestCase):
                 "<span>This field is required.</span>",
                 media_chooser_panel.render_as_field(),
             )
+
+    def test_comparison_class(self):
+        self.assertIs(
+            self.my_media_chooser_panel.get_comparison_class(), MediaFieldComparison
+        )
