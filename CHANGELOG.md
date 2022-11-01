@@ -3,6 +3,26 @@
 
 ## Unreleased
 
+## [0.12] - 2022-11-01
+
+### Added
+
+- Russian translation ([#177](https://github.com/torchbox/wagtailmedia/pull/177)) by @vl-tk
+  Note: the authors of this package have nothing against the Russian languge. They do, however condemn the actions of the russian state and their war against Ukraine.
+- Wagtail 4.1 support ([#181](https://github.com/torchbox/wagtailmedia/pull/181)) by @zerolab
+- Media field and block comparison ([#184](https://github.com/torchbox/wagtailmedia/pull/184)) by @zerolab
+- API viewset and serializer ([#185](https://github.com/torchbox/wagtailmedia/pull/185)) by @zerolab and @hallpower
+
+### Fixed
+
+- Further UI fixes and improvements for Wagtail 4 ([#176](https://github.com/torchbox/wagtailmedia/pull/176)) by @thibaudcolas
+- On-delete errors when cleaning up thumbnails ([#178](https://github.com/torchbox/wagtailmedia/pull/178)) by @jsma
+
+### Changed
+
+- Updated GitHub Actions versions
+- Testing against Python 3.11
+- Expanded PyPI trove classifiers
 
 ## [0.11.1] - 2021-10-07
 
@@ -188,6 +208,7 @@ Initial release
 
 ---
 
+[0.12.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.12.0
 [0.11.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.1
 [0.11.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.0
 [0.10.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.1
