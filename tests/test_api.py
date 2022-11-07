@@ -223,13 +223,13 @@ class TestApiMediaListing(ApiTestBase):
         self.assertEqual(item_id_list, [self.tng.pk])
 
     def test_filtering_tags(self):
-        Media.objects.get(id=3).tags.add("test")
+        self.tng.tags.add("test")
 
         response = self.get_response(tags="test")
         content = json.loads(response.content.decode("UTF-8"))
 
         item_id_list = self.get_media_id_list(content)
-        self.assertEqual(item_id_list, [3])
+        self.assertEqual(item_id_list, [self.tng.pk])
 
     def test_filtering_unknown_field_gives_error(self):
         response = self.get_response(not_a_field="abc")
@@ -408,7 +408,7 @@ class TestApiMediaListing(ApiTestBase):
 
         item_id_list = self.get_media_id_list(content)
 
-        self.assertEqual(item_id_list, [2])
+        self.assertEqual(item_id_list, [self.tng.pk])
 
     @override_settings(WAGTAILAPI_SEARCH_ENABLED=False)
     def test_search_when_disabled_gives_error(self):
