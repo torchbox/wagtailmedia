@@ -5,14 +5,14 @@ branch = True
 source = wagtailmedia
 
 omit =
-    */migrations/*
+    **/migrations/*
     tests/*
 
 [paths]
 # the following paths should be considered equivalent
 source =
     src
-    .tox/*/site-packages
+    .tox/**/site-packages
 
 [report]
 show_missing = true
