@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -8,36 +7,18 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import messages
+from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
-from wagtail.core.models import Collection
+from wagtail.models import Collection, Page
 from wagtail.search.backends import get_search_backends
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
-
-
-try:
-    from wagtail.models import Page
-except ImportError:
-    from wagtail.core.models import Page
-
-if WAGTAIL_VERSION >= (4, 1, 0):
-    from wagtail.admin.admin_url_finder import AdminURLFinder
-
-
-def is_usage_count_enabled():
-    if WAGTAIL_VERSION >= (4, 1, 0):
-        # Usage count is always on as of Wagtail 4.1 and its references index
-        # Ref: https://github.com/wagtail/wagtail/pull/9279
-        return True
-    else:
-        return getattr(settings, "WAGTAIL_USAGE_COUNT_ENABLED", False)
 
 
 permission_checker = PermissionPolicyChecker(permission_policy)
@@ -101,9 +82,7 @@ def index(request):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return render(
             request,
-            "wagtailmedia/media/results.html"
-            if WAGTAIL_VERSION >= (4, 0, 0)
-            else "wagtailmedia/media/legacy/results.html",
+            "wagtailmedia/media/results.html",
             {
                 "ordering": ordering,
                 "media_files": media,
@@ -115,9 +94,7 @@ def index(request):
     else:
         return render(
             request,
-            "wagtailmedia/media/index.html"
-            if WAGTAIL_VERSION >= (4, 0, 0)
-            else "wagtailmedia/media/legacy/index.html",
+            "wagtailmedia/media/index.html",
             {
                 "ordering": ordering,
                 "media_files": media,
@@ -253,7 +230,6 @@ def edit(request, media_id):
             "user_can_delete": permission_policy.user_has_permission_for_instance(
                 request.user, "delete", media
             ),
-            "usage_count_enabled": is_usage_count_enabled(),
         },
     )
 
@@ -278,33 +254,12 @@ def delete(request, media_id):
         "wagtailmedia/media/confirm_delete.html",
         {
             "media": media,
-            "usage_count_enabled": is_usage_count_enabled(),
         },
     )
 
 
 @permission_checker.require_any("add", "change", "delete")
 def usage(request, media_id):
-    if WAGTAIL_VERSION >= (4, 1, 0):
-        return usage_next(request, media_id)
-    else:
-        return usage_legacy(request, media_id)
-
-
-def usage_legacy(request, media_id):
-    Media = get_media_model()
-    media = get_object_or_404(Media, id=media_id)
-
-    paginator, used_by = paginate(request, media.get_usage())
-
-    return render(
-        request,
-        "wagtailmedia/media/legacy/usage.html",
-        {"media": media, "used_by": used_by},
-    )
-
-
-def usage_next(request, media_id):
     Media = get_media_model()
     media_item = get_object_or_404(Media, id=media_id)
 

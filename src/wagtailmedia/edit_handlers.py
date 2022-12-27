@@ -1,21 +1,16 @@
 from __future__ import absolute_import, annotations, unicode_literals
 
-from typing import TYPE_CHECKING, Optional, Type
+from typing import TYPE_CHECKING
 
 from django.template.loader import render_to_string
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.compare import ForeignObjectComparison
+from wagtail.admin.panels import FieldPanel
 
 from .models import MediaType
 from .utils import format_audio_html, format_video_html
 from .widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.admin.panels import FieldPanel
-else:
-    from wagtail.admin.edit_handlers import BaseChooserPanel as FieldPanel
 
 if TYPE_CHECKING:
     from .models import AbstractMedia
@@ -42,28 +37,14 @@ class MediaChooserPanel(FieldPanel):
             return AdminVideoChooser
         return AdminMediaChooser
 
-    if WAGTAIL_VERSION >= (3, 0):
+    def get_form_options(self) -> dict:
+        opts = super().get_form_options()
+        if "widgets" in opts:
+            opts["widgets"][self.field_name] = self._widget_class
+        else:
+            opts["widgets"] = {self.field_name: self._widget_class}
 
-        def get_form_options(self) -> dict:
-            opts = super().get_form_options()
-            if "widgets" in opts:
-                opts["widgets"][self.field_name] = self._widget_class
-            else:
-                opts["widgets"] = {self.field_name: self._widget_class}
-
-            return opts
-
-    else:
-
-        def widget_overrides(self) -> dict:
-            return {self.field_name: self._widget_class}
-
-        def get_comparison_class(self) -> Optional[Type[MediaFieldComparison]]:
-            comparison_class = super().get_comparison_class()
-            if comparison_class is None:
-                return
-
-            return MediaFieldComparison
+        return opts
 
 
 class MediaFieldComparison(ForeignObjectComparison):
