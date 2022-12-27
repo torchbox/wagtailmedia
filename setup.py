@@ -11,8 +11,7 @@ from src.wagtailmedia import __version__
 testing_extras = [
     # Required for running the tests
     "mock>=1.0.0",
-    # For coverage and PEP8 linting
-    "coverage>=3.7.0",
+    "coverage>=7.0,<8.0",
     "tox>=4.0,<5.0",
 ]
 
