@@ -13,7 +13,7 @@ testing_extras = [
     "mock>=1.0.0",
     # For coverage and PEP8 linting
     "coverage>=3.7.0",
-    "tox~=3.24",
+    "tox>=4.0,<5.0",
 ]
 
 with io.open("README.md", encoding="utf-8") as readme_file:
