@@ -11,16 +11,11 @@ from wagtail.admin.forms.collections import (
     CollectionChoiceField,
     collection_member_permission_formset_factory,
 )
+from wagtail.models import Collection
 
 from wagtailmedia.models import Media
 from wagtailmedia.permissions import permission_policy as media_permission_policy
 from wagtailmedia.settings import wagtailmedia_settings
-
-
-try:
-    from wagtail.models import Collection
-except ImportError:
-    from wagtail.core.models import Collection
 
 
 # Callback to allow us to override the default form field for the collection field

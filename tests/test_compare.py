@@ -1,9 +1,5 @@
-from unittest import skipUnless
-
 from django.test import TestCase
 from django.utils.safestring import SafeString
-
-from wagtail import VERSION as WAGTAIL_VERSION
 
 from tests.testapp.models import BlogStreamPage
 from wagtailmedia.blocks import (
@@ -122,9 +118,6 @@ class MediaFieldComparisonTest(MediaBlockComparisonTestCase):
 
         self.assertHTMLEqual(comparison.htmldiff(), "")
 
-    @skipUnless(
-        WAGTAIL_VERSION >= (3, 0), "comparison_class_registry only added in Wagtail 3.0"
-    )
     def test_our_class_in_comparison_class_registry(self):
         from wagtail.admin.compare import comparison_class_registry
 

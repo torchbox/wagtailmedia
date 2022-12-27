@@ -10,15 +10,8 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.staticfiles import versioned_static
 from wagtail.admin.widgets import AdminChooser
-from wagtail.utils.version import get_main_version
-
-
-try:
-    from wagtail.telepath import register
-    from wagtail.widget_adapters import WidgetAdapter
-except ImportError:
-    from wagtail.core.telepath import register
-    from wagtail.core.widget_adapters import WidgetAdapter
+from wagtail.telepath import register
+from wagtail.widget_adapters import WidgetAdapter
 
 from wagtailmedia.models import get_media_model
 
@@ -65,7 +58,6 @@ class AdminMediaChooser(AdminChooser):
                 "title": value_data.get("title", ""),
                 "edit_url": value_data.get("edit_link", ""),
                 "chooser_url": chooser_url,
-                "wagtail_version": get_main_version(),
             },
         )
 
