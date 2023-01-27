@@ -192,7 +192,7 @@ class TestMediaBlock(AbstractMediaChooserBlock):
         if value.type == "video":
             player_code = """
             <div>
-                <video width="320" height="240" controls>
+                <video width="{1}" height="{2}" controls>
                     {0}
                     Your browser does not support the video tag.
                 </video>
@@ -213,6 +213,8 @@ class TestMediaBlock(AbstractMediaChooserBlock):
             format_html_join(
                 "\n", "<source{0}>", [[flatatt(s)] for s in value.sources]
             ),
+            value.width,
+            value.height,
         )
 
 
