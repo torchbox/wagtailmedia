@@ -1,8 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from wagtail.core.models import Page
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail import VERSION as WAGTAIL_VERSION
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.models import Page
+    from wagtail.test.utils import WagtailTestUtils
+else:
+    from wagtail.core.models import Page
+    from wagtail.tests.utils import WagtailTestUtils
 
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 

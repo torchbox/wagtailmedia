@@ -107,7 +107,7 @@ The callable passed into the hook will receive the current media QuerySet and th
 and must return a Media QuerySet (either the original one, or a new one).
 
 ```python
-from wagtail.core import hooks
+from wagtail import hooks
 
 
 @hooks.register("construct_media_chooser_queryset")

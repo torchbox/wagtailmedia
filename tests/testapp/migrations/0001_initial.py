@@ -9,10 +9,14 @@ from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.fields
 import taggit.managers
-import wagtail.core.models
-import wagtail.search.index
+from wagtail import VERSION as WAGTAIL_VERSION
 
-from wagtail.core import fields
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail import fields, models as wagtail_models
+else:
+    from wagtail.core import fields, models as wagtail_models
+
+import wagtail.search.index
 
 
 class Migration(migrations.Migration):
@@ -158,7 +162,7 @@ class Migration(migrations.Migration):
                 (
                     "collection",
                     models.ForeignKey(
-                        default=wagtail.core.models.get_root_collection_id,
+                        default=wagtail_models.get_root_collection_id,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
                         to="wagtailcore.Collection",
@@ -186,7 +190,7 @@ class Migration(migrations.Migration):
                         verbose_name="uploaded by user",
                     ),
                 ),
-                ("fancy_caption", wagtail.core.fields.RichTextField(blank=True)),
+                ("fancy_caption", fields.RichTextField(blank=True)),
             ],
             options={"verbose_name": "media", "abstract": False},
             bases=(wagtail.search.index.Indexed, models.Model),

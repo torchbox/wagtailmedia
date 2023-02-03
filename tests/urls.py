@@ -3,9 +3,16 @@ from django.conf.urls import include
 from django.urls import path
 from django.views.static import serve
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.api.v2.router import WagtailAPIRouter
-from wagtail.core import urls as wagtail_urls
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail import urls as wagtail_urls
+else:
+    from wagtail.core import urls as wagtail_urls
+
 from wagtail.documents import urls as wagtaildocs_urls
 
 from wagtailmedia.api.views import MediaAPIViewSet
