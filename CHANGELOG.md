@@ -3,6 +3,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Testing against Wagtail 4.2
+
 ## [0.12] - 2022-11-01
 
 ### Added
