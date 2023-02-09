@@ -3,10 +3,10 @@ from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.core import blocks
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.models import Orderable, Page
+from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail import blocks
+from wagtail.fields import RichTextField, StreamField
+from wagtail.models import Orderable, Page
 
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,

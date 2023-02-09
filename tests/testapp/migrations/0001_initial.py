@@ -9,12 +9,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.fields
 import taggit.managers
-from wagtail import VERSION as WAGTAIL_VERSION
 
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import fields, models as wagtail_models
-else:
-    from wagtail.core import fields, models as wagtail_models
+from wagtail import fields, models as wagtail_models
 
 import wagtail.search.index
 

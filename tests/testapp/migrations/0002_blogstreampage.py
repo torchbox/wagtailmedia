@@ -3,12 +3,8 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import tests.testapp.models
-from wagtail import VERSION as WAGTAIL_VERSION
 
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import blocks, fields
-else:
-    from wagtail.core import blocks, fields
+from wagtail import blocks, fields
 
 import wagtailmedia.blocks
 
@@ -20,8 +16,6 @@ class Migration(migrations.Migration):
         ("wagtailmedia", "0004_duration_optional_floatfield"),
         ("wagtailmedia_tests", "0001_initial"),
     ]
-
-    sf_kwargs = {"use_json_field": True} if WAGTAIL_VERSION >= (4, 0) else {}
 
     operations = [
         migrations.CreateModel(
@@ -65,7 +59,7 @@ class Migration(migrations.Migration):
                                 wagtailmedia.blocks.AudioChooserBlock(icon="media"),
                             ),
                         ],
-                        **sf_kwargs,
+                        use_json_field=True,
                     ),
                 ),
                 (

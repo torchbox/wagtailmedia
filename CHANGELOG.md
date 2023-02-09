@@ -5,7 +5,11 @@
 
 ### Changed
 
-- Testing against Wagtail 4.2
+- Testing against Wagtail 4.2 ([#193](https://github.com/torchbox/wagtailmedia/pull/193)) by @katdom13
+
+### Removed
+
+- Support for Wagtail < 4.1 ([#193](https://github.com/torchbox/wagtailmedia/pull/193)) by @katdom13
 
 ## [0.12] - 2022-11-01
 

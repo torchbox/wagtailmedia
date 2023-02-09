@@ -2,9 +2,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from wagtail.admin.edit_handlers import ObjectList
-from wagtail.admin.panels import FieldPanel
-from wagtail.core.models import Page
+from wagtail.admin.panels import FieldPanel, ObjectList
+from wagtail.models import Page
 
 from tests.testapp.models import BlogStreamPage
 from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison

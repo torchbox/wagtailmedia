@@ -17,7 +17,7 @@ Install using pip:
 pip install wagtailmedia
 ```
 
-`wagtailmedia` is compatible with Wagtail 2.15 and above. Check out older releases for compatibility with older versions of Wagtail.
+`wagtailmedia` is compatible with Wagtail 4.1 and above. Check out older releases for compatibility with older versions of Wagtail.
 
 ### Settings
 

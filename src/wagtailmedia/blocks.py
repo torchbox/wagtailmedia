@@ -6,14 +6,8 @@ from django.forms import ModelChoiceField
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.compare import BlockComparison
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.blocks import ChooserBlock
-else:
-    from wagtail.core.blocks import ChooserBlock
+from wagtail.blocks import ChooserBlock
 
 from .utils import format_audio_html, format_video_html
 

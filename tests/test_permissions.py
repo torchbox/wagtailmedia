@@ -6,8 +6,8 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.urls import reverse
 
-from wagtail.core.models import Collection, GroupCollectionPermission
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.test.utils import WagtailTestUtils
 
 from wagtailmedia import models
 

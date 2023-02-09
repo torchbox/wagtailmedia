@@ -1,14 +1,4 @@
-from wagtail import VERSION as WAGTAIL_VERSION
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.permission_policies.collections import (
-        CollectionOwnershipPermissionPolicy,
-    )
-else:
-    from wagtail.core.permission_policies.collections import (
-        CollectionOwnershipPermissionPolicy,
-    )
+from wagtail.permission_policies.collections import CollectionOwnershipPermissionPolicy
 
 from wagtailmedia.models import Media, get_media_model
 

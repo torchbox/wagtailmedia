@@ -9,12 +9,6 @@ from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.admin.staticfiles import versioned_static
 
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import hooks
-else:
-    from wagtail.core import hooks
-
 from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model

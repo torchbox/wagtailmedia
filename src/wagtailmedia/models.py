@@ -11,8 +11,7 @@ from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core.models import CollectionMember
-from wagtail.models import ReferenceIndex
+from wagtail.models import CollectionMember, ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
