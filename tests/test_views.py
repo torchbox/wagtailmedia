@@ -22,13 +22,10 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
-    def assertIndexTemplateUsed(self, response):
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
-
     def test_simple(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
 
@@ -63,7 +60,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -75,7 +72,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -87,7 +84,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got the last page
         self.assertEqual(
@@ -606,9 +603,6 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.user = self.login()
 
-    def assertListTemplateUsed(self, response):
-        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
-
     def test_simple(self):
         response = self.client.get(self.chooser_url)
         self.assertEqual(response.status_code, 200)
@@ -649,7 +643,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -661,7 +655,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -673,7 +667,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
 
         # Check that we got the last page
         self.assertEqual(
