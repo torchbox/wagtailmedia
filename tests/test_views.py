@@ -852,7 +852,8 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         self.login()
 
         response = self.client.get(
-            self.chooser_url, {"collection_id": self.root_collection.id}
+            self.chooser_url,
+            {"collection_id": self.root_collection.id, "q": "test-song.mp3"},
         )
         self.assertIn("test-song.mp3", str(response.content))
 

@@ -85,7 +85,7 @@ def chooser(request, media_type=None):
             media_files = media_files.filter(collection=collection_id)
 
         searchform = SearchForm(request.GET)
-        if searchform.is_valid():
+        if searchform.is_valid() and searchform.cleaned_data["q"]:
             q = searchform.cleaned_data["q"]
 
             media_files = media_files.search(q)
