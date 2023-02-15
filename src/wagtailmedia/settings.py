@@ -90,6 +90,7 @@ class WagtailMediaSettings:
                     f"The '{setting}' setting is deprecated and will be removed in the next release, "
                     f'use WAGTAILMEDIA["{new_setting}"] instead.',
                     category=category,
+                    stacklevel=2,
                 )
                 user_settings[new_setting] = user_settings[setting]
         for setting in REMOVED_SETTINGS:

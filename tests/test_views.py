@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import json
 import os
 
@@ -148,7 +146,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertNotContains(response, "Add audio or video")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("audio",))
             ),
             count=1,
@@ -162,7 +160,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertNotContains(response, "Add audio or video")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("video",))
             ),
             count=1,
@@ -196,7 +194,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, "Add audio")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("audio",))
             ),
             count=1,
@@ -215,7 +213,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertContains(response, "Add video")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("video",))
             ),
             count=1,
@@ -375,7 +373,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         self.assertContains(response, "Add audio")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("audio",))
             ),
             count=1,
@@ -392,7 +390,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         self.assertContains(response, "Add video")
         self.assertContains(
             response,
-            '<form action="{0}" method="POST" enctype="multipart/form-data" novalidate>'.format(
+            '<form action="{}" method="POST" enctype="multipart/form-data" novalidate>'.format(
                 reverse("wagtailmedia:add", args=("video",))
             ),
             count=1,
@@ -745,8 +743,6 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
             type="video",
         )
         video.save()
-
-        cls.tab_prefix = "tab-"
 
     def setUp(self):
         self.user = self.login()

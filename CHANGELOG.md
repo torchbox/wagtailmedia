@@ -3,6 +3,8 @@
 
 ## Unreleased
 
+## [0.13] - 2023-02-15
+
 ### Changed
 
 - Testing against Wagtail 4.2 ([#193](https://github.com/torchbox/wagtailmedia/pull/193)) by @katdom13
@@ -216,6 +218,7 @@ Initial release
 
 ---
 
+[0.13.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.13.0
 [0.12.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.12.0
 [0.11.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.1
 [0.11.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.0

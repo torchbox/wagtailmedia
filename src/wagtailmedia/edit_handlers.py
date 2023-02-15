@@ -1,4 +1,4 @@
-from __future__ import absolute_import, annotations, unicode_literals
+from __future__ import annotations
 
 from typing import TYPE_CHECKING
 

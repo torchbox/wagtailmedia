@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django import VERSION as DJANGO_VERSION
 from django.db import migrations
 
@@ -56,7 +53,6 @@ def remove_media_permissions(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailmedia", "0001_initial"),
         # Need to run wagtailcores initial data migration to make sure the groups are created
