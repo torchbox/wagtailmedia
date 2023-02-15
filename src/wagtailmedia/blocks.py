@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from typing import TYPE_CHECKING, Type
 
 from django.forms import ModelChoiceField

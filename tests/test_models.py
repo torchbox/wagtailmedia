@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
@@ -259,7 +257,7 @@ class TestMediaModel(TestCase):
     def test_media_model(self):
         cls = get_media_model()
         self.assertEqual(
-            "%s.%s" % (cls._meta.app_label, cls.__name__),
+            "{}.{}".format(cls._meta.app_label, cls.__name__),
             "wagtailmedia_tests.CustomMedia",
         )
 

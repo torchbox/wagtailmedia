@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django import forms
 from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
@@ -43,7 +41,7 @@ class BaseMediaForm(BaseCollectionMemberForm):
     permission_policy = media_permission_policy
 
     def __init__(self, *args, **kwargs):
-        super(BaseMediaForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if self.instance.type == "audio":
             for name in ("width", "height"):

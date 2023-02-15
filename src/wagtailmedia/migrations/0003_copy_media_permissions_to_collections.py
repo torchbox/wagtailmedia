@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import migrations
 
 
@@ -40,7 +37,6 @@ def remove_media_permissions_from_collections(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailmedia", "0002_initial_data"),
         ("wagtailcore", "0026_group_collection_permission"),

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import io
-
 from setuptools import find_packages, setup
 
 from src.wagtailmedia import __version__
@@ -10,12 +8,11 @@ from src.wagtailmedia import __version__
 # Testing dependencies
 testing_extras = [
     # Required for running the tests
-    "mock>=1.0.0",
     "coverage>=7.0,<8.0",
     "tox>=4.0,<5.0",
 ]
 
-with io.open("README.md", encoding="utf-8") as readme_file:
+with open("README.md", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
 
 setup(
