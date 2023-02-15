@@ -746,8 +746,6 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         )
         video.save()
 
-        cls.tab_prefix = "tab-"
-
     def setUp(self):
         self.user = self.login()
 
