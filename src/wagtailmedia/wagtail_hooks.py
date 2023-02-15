@@ -1,5 +1,4 @@
-from django.conf.urls import include
-from django.urls import path, reverse
+from django.urls import include, path, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
