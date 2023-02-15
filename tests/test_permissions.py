@@ -6,9 +6,8 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.urls import reverse
 
-from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.core.models import Collection, GroupCollectionPermission
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.test.utils import WagtailTestUtils
 
 from wagtailmedia import models
 
@@ -96,10 +95,7 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
 
         cls.user.user_permissions.add(admin_permission)
 
-        if WAGTAIL_VERSION >= (4, 0):
-            cls.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
-        else:
-            cls.collection_label_tag = '<label for="id_collection">'
+        cls.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
 
     def setUp(self):
         self.client.force_login(self.user)
@@ -107,10 +103,7 @@ class TestEditOnlyPermissions(TestCase, WagtailTestUtils):
     def test_get_index(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        if WAGTAIL_VERSION >= (4, 0, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
-        else:
-            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # user should not get an "Add audio" and "Add video" buttons
         self.assertNotContains(response, "Add audio")

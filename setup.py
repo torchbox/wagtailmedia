@@ -11,9 +11,8 @@ from src.wagtailmedia import __version__
 testing_extras = [
     # Required for running the tests
     "mock>=1.0.0",
-    # For coverage and PEP8 linting
-    "coverage>=3.7.0",
-    "tox~=3.24",
+    "coverage>=7.0,<8.0",
+    "tox>=4.0,<5.0",
 ]
 
 with io.open("README.md", encoding="utf-8") as readme_file:
@@ -47,7 +46,6 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -57,12 +55,10 @@ setup(
         "Framework :: Django :: 4.0",
         "Framework :: Django :: 4.1",
         "Framework :: Wagtail",
-        "Framework :: Wagtail :: 2",
-        "Framework :: Wagtail :: 3",
         "Framework :: Wagtail :: 4",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
     ],
-    install_requires=["wagtail>=2.15", "Django>=3.2"],
+    install_requires=["wagtail>=4.1", "Django>=3.2"],
     extras_require={
         "testing": testing_extras,
     },

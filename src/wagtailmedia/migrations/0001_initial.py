@@ -7,7 +7,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import taggit.managers
 
-from wagtail.core import models as wagtail_models
+from wagtail import models as wagtail_models
+
 from wagtail.search import index
 
 

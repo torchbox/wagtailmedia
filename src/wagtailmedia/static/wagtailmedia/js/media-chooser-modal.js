@@ -93,14 +93,6 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
                     errors.appendChild(errorElement);
                 }
                 setTimeout(cancelSpinner, 500);
-            // Support for WAGTAIL_VERSION < (4, 0, 0)
-            } else if ($('#id_title', modal.body).val() == '') {
-                var li = $('#id_title', modal.body).closest('li');
-                if (!li.hasClass('error')) {
-                    li.addClass('error');
-                    $('#id_title', modal.body).closest('.field-content').append('<p class="error-message"><span>This field is required.</span></p>')
-                }
-                setTimeout(cancelSpinner, 500);
             } else {
                 $.ajax({
                     url: this.action,

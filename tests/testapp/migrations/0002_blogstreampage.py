@@ -3,8 +3,9 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import tests.testapp.models
-import wagtail.core.blocks
-import wagtail.core.fields
+
+from wagtail import blocks, fields
+
 import wagtailmedia.blocks
 
 
@@ -35,17 +36,15 @@ class Migration(migrations.Migration):
                 ("date", models.DateField(verbose_name="Post date")),
                 (
                     "body",
-                    wagtail.core.fields.StreamField(
+                    fields.StreamField(
                         [
                             (
                                 "heading",
-                                wagtail.core.blocks.CharBlock(
-                                    form_classname="title", icon="title"
-                                ),
+                                blocks.CharBlock(form_classname="title", icon="title"),
                             ),
                             (
                                 "paragraph",
-                                wagtail.core.blocks.RichTextBlock(icon="pilcrow"),
+                                blocks.RichTextBlock(icon="pilcrow"),
                             ),
                             (
                                 "media",
@@ -59,7 +58,8 @@ class Migration(migrations.Migration):
                                 "audio",
                                 wagtailmedia.blocks.AudioChooserBlock(icon="media"),
                             ),
-                        ]
+                        ],
+                        use_json_field=True,
                     ),
                 ),
                 (

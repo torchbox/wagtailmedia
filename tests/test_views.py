@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 import json
 import os
 
-from unittest import skipUnless
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
@@ -13,37 +11,24 @@ from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 
-from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.core.models import Collection, GroupCollectionPermission, Page
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.test.utils import WagtailTestUtils
 
 from tests.testapp.models import EventPage, EventPageRelatedMedia
 from wagtailmedia import models
-from wagtailmedia.views.media import is_usage_count_enabled
-
-
-if WAGTAIL_VERSION >= (4, 1, 0):
-    from wagtail.models import ReferenceIndex
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
-    def assertIndexTemplateUsed(self, response):
-        if WAGTAIL_VERSION >= (4, 0, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
-        else:
-            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
-
     def test_simple(self):
         response = self.client.get(reverse("wagtailmedia:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
 
-    @skipUnless(WAGTAIL_VERSION >= (4, 0, 0), "Wagtail 4.0+ only")
     @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
     def test_extends(self):
         response = self.client.get(reverse("wagtailmedia:index"))
@@ -52,16 +37,6 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertNotContains(response, "Add audio")
         self.assertNotContains(response, "Add video")
         self.assertContains(response, "You shan't act")
-
-    @skipUnless(WAGTAIL_VERSION < (4, 0, 0), "Wagtail < 4.0, legacy templates")
-    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends_legacy"})
-    def test_extends_legacy(self):
-        response = self.client.get(reverse("wagtailmedia:index"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/legacy/index.html")
-        self.assertContains(response, "You shan't act")
-        self.assertNotContains(response, "Add audio")
-        self.assertNotContains(response, "Add video")
 
     def test_search(self):
         response = self.client.get(reverse("wagtailmedia:index"), {"q": "Hello"})
@@ -85,7 +60,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -97,7 +72,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -109,7 +84,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertIndexTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
 
         # Check that we got the last page
         self.assertEqual(
@@ -130,10 +105,7 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
 
-        if WAGTAIL_VERSION >= (4, 0):
-            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
-        else:
-            self.collection_label_tag = '<label for="id_collection">'
+        self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
 
     def test_action_block(self):
         with self.settings(
@@ -390,10 +362,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
 
         self.client.login(username="moriarty", password="password")
 
-        if WAGTAIL_VERSION >= (4, 0):
-            self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
-        else:
-            self.collection_label_tag = '<label for="id_collection">'
+        self.collection_label_tag = '<label class="w-field__label" for="id_collection" id="id_collection-label">'
 
     def test_get_audio(self):
         response = self.client.get(reverse("wagtailmedia:add", args=("audio",)))
@@ -634,12 +603,6 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.user = self.login()
 
-    def assertListTemplateUsed(self, response):
-        if WAGTAIL_VERSION >= (4, 0, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/media/list.html")
-        else:
-            self.assertTemplateUsed(response, "wagtailmedia/media/legacy/list.html")
-
     def test_simple(self):
         response = self.client.get(self.chooser_url)
         self.assertEqual(response.status_code, 200)
@@ -649,12 +612,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             set(json_data.keys()),
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
-        if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
-        else:
-            self.assertTemplateUsed(
-                response, "wagtailmedia/chooser/chooser-legacy.html"
-            )
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
@@ -685,7 +643,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/results.html")
 
         # Check that we got the correct page
         self.assertEqual(response.context["media_files"].number, 2)
@@ -697,7 +655,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/results.html")
 
         # Check that we got page one
         self.assertEqual(response.context["media_files"].number, 1)
@@ -709,7 +667,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # Check response
         self.assertEqual(response.status_code, 200)
-        self.assertListTemplateUsed(response)
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/results.html")
 
         # Check that we got the last page
         self.assertEqual(
@@ -788,7 +746,7 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         )
         video.save()
 
-        cls.tab_prefix = "tab-" if WAGTAIL_VERSION >= (3, 0) else ""
+        cls.tab_prefix = "tab-"
 
     def setUp(self):
         self.user = self.login()
@@ -804,12 +762,7 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
             set(json_data.keys()),
             {"html", "step", "error_label", "error_message", "tag_autocomplete_url"},
         )
-        if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
-        else:
-            self.assertTemplateUsed(
-                response, "wagtailmedia/chooser/chooser-legacy.html"
-            )
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
         self.assertEqual(json_data["step"], "chooser")
         self.assertEqual(
             json_data["tag_autocomplete_url"], reverse("wagtailadmin_tag_autocomplete")
@@ -818,14 +771,14 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         html = response.json().get("html")
         for expected in [
             "Test audio",
-            f'href="#{self.tab_prefix}upload-audio"',
+            'href="#tab-upload-audio"',
             "Upload Audio",
         ]:
             self.assertIn(expected, html)
 
         for unexpected in [
             "Test video",
-            f'href="#{self.tab_prefix}upload-video"',
+            'href="#tab-upload-video"',
             "Upload Video",
         ]:
             self.assertNotIn(unexpected, html)
@@ -839,14 +792,14 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         html = response.json().get("html")
         for expected in [
             "Test video",
-            f'href="#{self.tab_prefix}upload-video"',
+            'href="#tab-upload-video"',
             "Upload Video",
         ]:
             self.assertIn(expected, html)
 
         for unexpected in [
             "Test audio",
-            f'href="#{self.tab_prefix}upload-audio"',
+            'href="#tab-upload-audio"',
             "Upload Audio",
         ]:
             self.assertNotIn(unexpected, html)
@@ -899,7 +852,8 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         self.login()
 
         response = self.client.get(
-            self.chooser_url, {"collection_id": self.root_collection.id}
+            self.chooser_url,
+            {"collection_id": self.root_collection.id, "q": "test-song.mp3"},
         )
         self.assertIn("test-song.mp3", str(response.content))
 
@@ -1025,12 +979,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
 
         # Shouldn't redirect anywhere
         self.assertEqual(response.status_code, 200)
-        if WAGTAIL_VERSION >= (3, 0):
-            self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
-        else:
-            self.assertTemplateUsed(
-                response, "wagtailmedia/chooser/chooser-legacy.html"
-            )
+        self.assertTemplateUsed(response, "wagtailmedia/chooser/chooser.html")
 
         # The video form should have an error
         self.assertIn("uploadforms", response.context)
@@ -1062,7 +1011,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(video_form.instance.type, "video")
 
     @override_settings(
-        DEFAULT_FILE_STORAGE="wagtail.tests.dummy_external_storage.DummyExternalStorage"
+        DEFAULT_FILE_STORAGE="wagtail.test.dummy_external_storage.DummyExternalStorage"
     )
     def test_upload_with_external_storage(self):
         response = self.client.post(
@@ -1144,82 +1093,3 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 0 times")
-
-    @skipUnless(WAGTAIL_VERSION < (4, 1, 0), "Usage count is always on as of 4.1")
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False)
-    def test_usage_count_does_not_appear_with_usage_count_disabled(self):
-        media = models.Media.objects.get(id=1)
-        page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
-        response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
-        self.assertNotContains(response, "Used 1 time")
-
-
-# TODO: Remove once support for Wagtail < 4.1 is dropped
-@override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
-class TestGetUsage(TestCase, WagtailTestUtils):
-    fixtures = ["test.json"]
-
-    def setUp(self):
-        self.login()
-
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False)
-    def test_media_get_usage_not_enabled(self):
-        media = models.Media.objects.get(id=1)
-        self.assertEqual(list(media.get_usage()), [])
-
-    def test_unused_media_get_usage(self):
-        media = models.Media.objects.get(id=1)
-        self.assertEqual(list(media.get_usage()), [])
-
-    def test_used_media_get_usage(self):
-        media = models.Media.objects.get(id=1)
-        page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
-        usage = media.get_usage()
-
-        if WAGTAIL_VERSION >= (4, 1, 0):
-            self.assertIsInstance(usage[0], tuple)
-            self.assertIsInstance(usage[0][0], Page)
-            self.assertIsInstance(usage[0][1], list)
-            self.assertIsInstance(usage[0][1][0], ReferenceIndex)
-        else:
-            self.assertTrue(issubclass(Page, type(usage[0])))
-
-    def test_usage_page(self):
-        media = models.Media.objects.get(id=1)
-        page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
-        response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))
-        self.assertContains(response, "Christmas")
-        self.assertContains(response, EventPage.get_verbose_name())
-
-        if WAGTAIL_VERSION >= (4, 1, 0):
-            self.assertTemplateUsed("wagtailmedia/media/usage.html")
-        else:
-            self.assertTemplateUsed("wagtailmedia/media/legacy/usage.html")
-
-    def test_usage_page_no_usage(self):
-        response = self.client.get(reverse("wagtailmedia:media_usage", args=(1,)))
-        # There's no usage so there should be no table rows
-        self.assertRegex(response.content.decode("utf-8"), r"<tbody>(\s|\n)*</tbody>")
-
-    def test_is_usage_count_enabled(self):
-        if WAGTAIL_VERSION >= (4, 1, 0):
-            self.assertTrue(is_usage_count_enabled())
-        else:
-            self.assertTrue(is_usage_count_enabled())
-
-            # TODO: Remove once support for Wagtail < 4.1 is dropped
-            with override_settings(WAGTAIL_USAGE_COUNT_ENABLED=False):
-                self.assertFalse(is_usage_count_enabled())

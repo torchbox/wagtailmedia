@@ -1,15 +1,13 @@
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail import hooks
 from wagtail.admin.auth import PermissionPolicyChecker
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.models import popular_tags_for_model
-from wagtail.core import hooks
-from wagtail.core.models import Collection
+from wagtail.models import Collection
 from wagtail.search.backends import get_search_backends
-from wagtail.utils.version import get_main_version
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
@@ -87,7 +85,7 @@ def chooser(request, media_type=None):
             media_files = media_files.filter(collection=collection_id)
 
         searchform = SearchForm(request.GET)
-        if searchform.is_valid():
+        if searchform.is_valid() and searchform.cleaned_data["q"]:
             q = searchform.cleaned_data["q"]
 
             media_files = media_files.search(q)
@@ -106,9 +104,7 @@ def chooser(request, media_type=None):
 
         return render(
             request,
-            "wagtailmedia/chooser/results.html"
-            if WAGTAIL_VERSION >= (4, 0, 0)
-            else "wagtailmedia/chooser/legacy/results.html",
+            "wagtailmedia/chooser/results.html",
             {
                 "media_files": media_files,
                 "query_string": q,
@@ -130,9 +126,7 @@ def chooser(request, media_type=None):
 
     return render_modal_workflow(
         request,
-        "wagtailmedia/chooser/chooser.html"
-        if WAGTAIL_VERSION >= (3, 0)
-        else "wagtailmedia/chooser/chooser-legacy.html",
+        "wagtailmedia/chooser/chooser.html",
         None,
         {
             "media_files": media_files,
@@ -143,7 +137,6 @@ def chooser(request, media_type=None):
             "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
             "media_type": media_type,
-            "wagtail_version": get_main_version(),
             "ordering": ordering,
         },
         json_data={
@@ -241,14 +234,11 @@ def chooser_upload(request, media_type):
         "is_searching": False,
         "pagination_template": pagination_template,
         "media_type": media_type,
-        "wagtail_version": get_main_version(),
         "ordering": ordering,
     }
     return render_modal_workflow(
         request,
-        "wagtailmedia/chooser/chooser.html"
-        if WAGTAIL_VERSION >= (3, 0)
-        else "wagtailmedia/chooser/chooser-legacy.html",
+        "wagtailmedia/chooser/chooser.html",
         None,
         context,
         json_data={"step": "chooser"},

@@ -4,12 +4,11 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail import hooks
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.admin.staticfiles import versioned_static
-from wagtail.core import hooks
 
 from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
@@ -33,30 +32,18 @@ class MediaMenuItem(MenuItem):
 
 @hooks.register("register_admin_menu_item")
 def register_media_menu_item():
-    if WAGTAIL_VERSION >= (4, 0, 0):
-        return MediaMenuItem(
-            _("Media"),
-            reverse("wagtailmedia:index"),
-            name="media",
-            icon_name="media",
-            order=300,
-        )
-    else:
-        return MediaMenuItem(
-            _("Media"),
-            reverse("wagtailmedia:index"),
-            name="media",
-            classnames="icon icon-media",
-            order=300,
-        )
+    return MediaMenuItem(
+        _("Media"),
+        reverse("wagtailmedia:index"),
+        name="media",
+        icon_name="media",
+        order=300,
+    )
 
 
 class MediaSummaryItem(SummaryItem):
     order = 300
-    if WAGTAIL_VERSION >= (4, 0, 0):
-        template_name = "wagtailmedia/homepage/site_summary_media.html"
-    else:
-        template_name = "wagtailmedia/homepage/legacy_site_summary_media.html"
+    template_name = "wagtailmedia/homepage/site_summary_media.html"
 
     def get_context_data(self, parent_context):
         context = super().get_context_data(parent_context)

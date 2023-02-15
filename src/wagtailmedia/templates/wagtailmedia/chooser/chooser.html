@@ -40,7 +40,7 @@
         </div>
     {% endif %}
 
-    <div class="tab-content {% if wagtail_version < "4.0" %}nice-padding{% endif %}">
+    <div class="tab-content">
         <section id="tab-search" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-search">
             <form class="media-search search-bar" action="{% url 'wagtailmedia:chooser' %}" method="GET" novalidate>
                 <ul class="fields">
@@ -61,11 +61,7 @@
                 </ul>
             </form>
             <div id="search-results" class="listing media">
-                {% if wagtail_version >= "4.0" %}
-                    {% include "wagtailmedia/chooser/results.html" %}
-                {% else %}
-                    {% include "wagtailmedia/chooser/legacy/results.html" %}
-                {% endif %}
+                {% include "wagtailmedia/chooser/results.html" %}
             </div>
         </section>
         {% if uploadforms %}

@@ -2,9 +2,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.admin.edit_handlers import ObjectList
-from wagtail.core.models import Page
+from wagtail.admin.panels import FieldPanel, ObjectList
+from wagtail.models import Page
 
 from tests.testapp.models import BlogStreamPage
 from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison
@@ -26,12 +25,7 @@ class MediaChooserPanelTest(TestCase):
 
         # a MediaChooserPanel class that works on BlogStreamPage's 'video' field
         cls.edit_handler = ObjectList([MediaChooserPanel("featured_media")])
-        if WAGTAIL_VERSION >= (3, 0):
-            cls.edit_handler = cls.edit_handler.bind_to_model(BlogStreamPage)
-        else:
-            cls.edit_handler = cls.edit_handler.bind_to(
-                model=BlogStreamPage, request=cls.request
-            )
+        cls.edit_handler = cls.edit_handler.bind_to_model(BlogStreamPage)
         cls.my_media_chooser_panel = cls.edit_handler.children[0]
 
         # build a form class containing the fields that MyPageChooserPanel wants
@@ -48,53 +42,30 @@ class MediaChooserPanelTest(TestCase):
         root_page.add_child(instance=cls.test_instance)
 
         cls.form = cls.MediaChooserForm(instance=cls.test_instance)
-        if WAGTAIL_VERSION >= (3, 0):
-            cls.media_chooser_panel = cls.my_media_chooser_panel.get_bound_panel(
-                instance=cls.test_instance, form=cls.form
-            )
-        else:
-            cls.media_chooser_panel = cls.my_media_chooser_panel.bind_to(
-                instance=cls.test_instance, form=cls.form
-            )
+        cls.media_chooser_panel = cls.my_media_chooser_panel.get_bound_panel(
+            instance=cls.test_instance, form=cls.form
+        )
 
     def _init_edit_handler(self, media_type=None):
         my_page_object_list = ObjectList(
             [MediaChooserPanel("featured_media", media_type=media_type)]
         )
-        if WAGTAIL_VERSION >= (3, 0):
-            my_page_object_list = my_page_object_list.bind_to_model(BlogStreamPage)
-        else:
-            my_page_object_list = my_page_object_list.bind_to(model=BlogStreamPage)
+        my_page_object_list = my_page_object_list.bind_to_model(BlogStreamPage)
 
         my_media_chooser_panel = my_page_object_list.children[0]
         form = my_page_object_list.get_form_class()(instance=self.test_instance)
-        if WAGTAIL_VERSION >= (3, 0):
-            media_chooser_panel = my_media_chooser_panel.get_bound_panel(
-                instance=self.test_instance, form=form, request=self.request
-            )
-        else:
-            media_chooser_panel = my_media_chooser_panel.bind_to(
-                instance=self.test_instance, form=form, request=self.request
-            )
+        media_chooser_panel = my_media_chooser_panel.get_bound_panel(
+            instance=self.test_instance, form=form, request=self.request
+        )
+
         return form, media_chooser_panel
 
     def test_panel_definition(self):
-        if WAGTAIL_VERSION >= (3, 0):
-            from wagtail.admin.panels import FieldPanel
-
-            self.assertIsInstance(self.my_media_chooser_panel, FieldPanel)
-            self.assertEqual(
-                self.my_media_chooser_panel.get_form_options()["widgets"],
-                {"featured_media": AdminMediaChooser},
-            )
-        else:
-            from wagtail.admin.edit_handlers import BaseChooserPanel
-
-            self.assertIsInstance(self.my_media_chooser_panel, BaseChooserPanel)
-            self.assertEqual(
-                self.my_media_chooser_panel.widget_overrides(),
-                {"featured_media": AdminMediaChooser},
-            )
+        self.assertIsInstance(self.my_media_chooser_panel, FieldPanel)
+        self.assertEqual(
+            self.my_media_chooser_panel.get_form_options()["widgets"],
+            {"featured_media": AdminMediaChooser},
+        )
 
         for media_type, widget_class in {
             "audio": AdminAudioChooser,
@@ -131,13 +102,10 @@ class MediaChooserPanelTest(TestCase):
         )
 
     def test_get_chosen_item(self):
-        if WAGTAIL_VERSION >= (3, 0):
-            self.assertEqual(
-                self.media_chooser_panel.bound_field.form.initial["featured_media"],
-                self.video.pk,
-            )
-        else:
-            self.assertEqual(self.media_chooser_panel.get_chosen_item(), self.video)
+        self.assertEqual(
+            self.media_chooser_panel.bound_field.form.initial["featured_media"],
+            self.video.pk,
+        )
 
     def test_render_as_field(self):
         result = self.media_chooser_panel.render_as_field()
@@ -146,25 +114,12 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
         self.assertIn('<span class="title">Test video</span>', result)
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (4, 0):
-            self.assertIn(
-                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
-                f'class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this media item</a>',
-                result,
-            )
-        elif WAGTAIL_VERSION >= (3, 0):
-            self.assertIn(
-                f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this media item</a>',
-                result,
-            )
-        else:
-            self.assertIn(
-                f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noopener noreferrer">Edit this media item</a>',
-                result,
-            )
+        self.assertIn(
+            f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
+            f'class="edit-link button button-small button-secondary" '
+            f'target="_blank" rel="noreferrer">Edit this media item</a>',
+            result,
+        )
         self.assertIn("Choose a media item", result)
 
     def test_render_as_field_with_media_type(self):
@@ -175,25 +130,12 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
         self.assertIn('<span class="title">Test video</span>', result)
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (4, 0):
-            self.assertIn(
-                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
-                f'class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this video</a>',
-                result,
-            )
-        elif WAGTAIL_VERSION >= (3, 0):
-            self.assertIn(
-                f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this video</a>',
-                result,
-            )
-        else:
-            self.assertIn(
-                f'<a href="{edit_url}" class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noopener noreferrer">Edit this video</a>',
-                result,
-            )
+        self.assertIn(
+            f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
+            f'class="edit-link button button-small button-secondary" '
+            f'target="_blank" rel="noreferrer">Edit this video</a>',
+            result,
+        )
         self.assertIn("Choose video", result)
 
     def test_render_as_empty_field(self):
@@ -206,25 +148,12 @@ class MediaChooserPanelTest(TestCase):
 
         self.assertIn('<span class="title"></span>', result)
 
-        if WAGTAIL_VERSION >= (4, 0):
-            self.assertIn(
-                '<a href="" aria-describedby="id_featured_media-title" '
-                'class="edit-link button button-small button-secondary w-hidden" target="_blank" '
-                'rel="noreferrer">Edit this media item</a>',
-                result,
-            )
-        elif WAGTAIL_VERSION >= (3, 0):
-            self.assertIn(
-                '<a href="" class="edit-link button button-small button-secondary" target="_blank" '
-                'rel="noreferrer">Edit this media item</a>',
-                result,
-            )
-        else:
-            self.assertIn(
-                '<a href="" class="edit-link button button-small button-secondary" target="_blank" '
-                'rel="noopener noreferrer">Edit this media item</a>',
-                result,
-            )
+        self.assertIn(
+            '<a href="" aria-describedby="id_featured_media-title" '
+            'class="edit-link button button-small button-secondary w-hidden" target="_blank" '
+            'rel="noreferrer">Edit this media item</a>',
+            result,
+        )
         self.assertIn("Choose a media item", result)
 
     def test_render_error(self):
@@ -233,25 +162,14 @@ class MediaChooserPanelTest(TestCase):
         )
         self.assertFalse(form.is_valid())
 
-        if WAGTAIL_VERSION >= (3, 0):
-            media_chooser_panel = self.my_media_chooser_panel.get_bound_panel(
-                instance=self.test_instance, form=form, request=self.request
-            )
-        else:
-            media_chooser_panel = self.my_media_chooser_panel.bind_to(
-                instance=self.test_instance, form=form, request=self.request
-            )
+        media_chooser_panel = self.my_media_chooser_panel.get_bound_panel(
+            instance=self.test_instance, form=form, request=self.request
+        )
 
-        if WAGTAIL_VERSION >= (4, 0):
-            self.assertInHTML(
-                '<p class="error-message">This field is required.</p>',
-                media_chooser_panel.render_as_field(),
-            )
-        else:
-            self.assertIn(
-                "<span>This field is required.</span>",
-                media_chooser_panel.render_as_field(),
-            )
+        self.assertInHTML(
+            '<p class="error-message">This field is required.</p>',
+            media_chooser_panel.render_as_field(),
+        )
 
     def test_comparison_class(self):
         self.assertIs(

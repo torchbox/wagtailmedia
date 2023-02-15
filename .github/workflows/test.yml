@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
         experimental: [false]
         include:
           - python-version: "3.x"
@@ -43,13 +43,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox tox-py tox-venv
+          python -m pip install --upgrade pip setuptools wheel tox
 
       - name: Run tox targets for Python ${{ matrix.python-version }}
         if: ${{ matrix.toxenv != 'wagtailmain' }}
         continue-on-error: ${{ matrix.experimental }}
-        run: tox --py current
+        run: python -m tox run -f py$(echo ${{ matrix.python-version }} | tr -d .)
         env:
           DATABASE_ENGINE: django.db.backends.postgresql
           DATABASE_HOST: localhost
@@ -59,7 +58,7 @@ jobs:
       - name: Run wagtailmain tox targets
         if: ${{ matrix.toxenv == 'wagtailmain' }}
         continue-on-error: ${{ matrix.experimental }}
-        run: tox -e ${{ matrix.toxenv }}
+        run: python -m tox run -f ${{ matrix.toxenv }}
 
       - name: Upload coverage reports to Codecov
         run: |

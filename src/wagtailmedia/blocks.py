@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 
 from wagtail.admin.compare import BlockComparison
-from wagtail.core.blocks import ChooserBlock
+from wagtail.blocks import ChooserBlock
 
 from .utils import format_audio_html, format_video_html
 

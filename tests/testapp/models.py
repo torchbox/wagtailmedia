@@ -3,11 +3,10 @@ from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 
 from modelcluster.fields import ParentalKey
-from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
-from wagtail.core import blocks
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.models import Orderable, Page
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.fields import RichTextField, StreamField
+from wagtail.models import Orderable, Page
 
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
@@ -113,7 +112,6 @@ class TestMediaBlock(AbstractMediaChooserBlock):
 class BlogStreamPage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField("Post date")
-    sf_kwargs = {"use_json_field": True} if WAGTAIL_VERSION >= (4, 0) else {}
 
     body = StreamField(
         [
@@ -123,7 +121,7 @@ class BlogStreamPage(Page):
             ("video", VideoChooserBlock(icon="media")),
             ("audio", AudioChooserBlock(icon="media")),
         ],
-        **sf_kwargs,
+        use_json_field=True,
     )
 
     featured_media = models.ForeignKey(
@@ -133,7 +131,7 @@ class BlogStreamPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("author"),
         FieldPanel("date"),
-        FieldPanel("body") if WAGTAIL_VERSION >= (3, 0) else StreamFieldPanel("body"),
+        FieldPanel("body"),
         MediaChooserPanel("featured_media"),
         # the following are left here for local testing convenience
         # MediaChooserPanel("featured_media", media_type="audio"),

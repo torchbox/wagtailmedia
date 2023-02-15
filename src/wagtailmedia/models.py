@@ -11,19 +11,13 @@ from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import VERSION as WAGTAIL_VERSION
-from wagtail.admin.models import get_object_usage
-from wagtail.core.models import CollectionMember
+from wagtail.models import CollectionMember, ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
 from taggit.managers import TaggableManager
 
 from wagtailmedia.settings import wagtailmedia_settings
-
-
-if WAGTAIL_VERSION >= (4, 1, 0):
-    from wagtail.models import ReferenceIndex
 
 
 ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
@@ -127,10 +121,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         ]
 
     def get_usage(self):
-        if WAGTAIL_VERSION >= (4, 1, 0):
-            return ReferenceIndex.get_references_to(self).group_by_source_object()
-        else:
-            return get_object_usage(self)
+        return ReferenceIndex.get_references_to(self).group_by_source_object()
 
     @property
     def usage_url(self):

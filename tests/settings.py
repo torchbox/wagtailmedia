@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     "wagtail.users",
     "wagtail.documents",
     "wagtail.admin",
-    "wagtail.core",
+    "wagtail",
     "wagtail.search",
 ]
 
