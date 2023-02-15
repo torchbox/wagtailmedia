@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailmedia", "0003_copy_media_permissions_to_collections"),
     ]
