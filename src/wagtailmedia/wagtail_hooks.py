@@ -108,8 +108,8 @@ def describe_collection_media(collection):
 
 
 class MediaAdminURLFinder(ModelAdminURLFinder):
-    permission_policy = permission_policy
     edit_url_name = "wagtailmedia:edit"
+    permission_policy = permission_policy
 
 
 register_admin_url_finder(get_media_model(), MediaAdminURLFinder)
