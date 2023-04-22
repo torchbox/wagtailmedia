@@ -89,3 +89,4 @@ ENV/
 
 # SQLite database
 *.sqlite3
+.ruff_cache
