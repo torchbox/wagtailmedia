@@ -1,63 +1,39 @@
 import json
 
 from django import forms
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.staticfiles import versioned_static
-from wagtail.admin.widgets import AdminChooser
+from wagtail.admin.widgets import BaseChooser, BaseChooserAdapter
 from wagtail.telepath import register
-from wagtail.widget_adapters import WidgetAdapter
 
 from wagtailmedia.models import get_media_model
 
 
-class AdminMediaChooser(AdminChooser):
+class AdminMediaChooser(BaseChooser):
     media_type = None
     choose_one_text = _("Choose a media item")
     choose_another_text = _("Choose another media item")
     link_to_chosen_text = _("Edit this media item")
+    icon = "media"
+    classname = "media-chooser"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.media_model = get_media_model()
+        self.model = get_media_model()
 
-    def get_value_data(self, value):
-        if value is None:
-            return value
-        if not isinstance(value, self.media_model):
-            value = self.media_model.objects.get(pk=value)
-        return {
-            "id": value.pk,
-            "title": value.title,
-            "edit_link": reverse("wagtailmedia:edit", args=[value.pk]),
-        }
-
-    def render_html(self, name, value, attrs):
-        value_data = value if value is not None else {}
-
-        original_field_html = super().render_html(name, value_data.get("id"), attrs)
-
+    @property
+    def chooser_modal_url_name(self):
         if self.media_type:
-            chooser_url = reverse("wagtailmedia:chooser_typed", args=(self.media_type,))
-        else:
-            chooser_url = reverse("wagtailmedia:chooser")
+            return "wagtailmedia:chooser_typed"
+        return "wagtailmedia:chooser"
 
-        return render_to_string(
-            "wagtailmedia/widgets/media_chooser.html",
-            {
-                "widget": self,
-                "original_field_html": original_field_html,
-                "attrs": attrs,
-                "icon": "media",
-                "value": value_data != {},  # only used to identify blank values
-                "title": value_data.get("title", ""),
-                "edit_url": value_data.get("edit_link", ""),
-                "chooser_url": chooser_url,
-            },
-        )
+    def get_chooser_modal_url(self):
+        if self.media_type:
+            return reverse("wagtailmedia:chooser_typed", args=(self.media_type,))
+        return reverse("wagtailmedia:chooser")
 
     def render_js_init(self, id_, name, value):
         return f"createMediaChooser({json.dumps(id_)});"
@@ -87,14 +63,8 @@ class AdminVideoChooser(AdminMediaChooser):
     link_to_chosen_text = _("Edit this video")
 
 
-class MediaChooserAdapter(WidgetAdapter):
+class MediaChooserAdapter(BaseChooserAdapter):
     js_constructor = "wagtailmedia.MediaChooser"
-
-    def js_args(self, widget):
-        return [
-            widget.render_html("__NAME__", None, attrs={"id": "__ID__"}),
-            widget.id_for_label("__ID__"),
-        ]
 
     @cached_property
     def media(self):

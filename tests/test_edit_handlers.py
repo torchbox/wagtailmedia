@@ -89,7 +89,7 @@ class MediaChooserPanelTest(TestCase):
     def test_render_js_init(self):
         self.assertIn(
             'createMediaChooser("id_featured_media");',
-            self.media_chooser_panel.render_as_field(),
+            self.media_chooser_panel.render_html(),
         )
 
     def test_render_js_init_with_media_type(self):
@@ -98,7 +98,7 @@ class MediaChooserPanelTest(TestCase):
         form, media_chooser_panel = self._init_edit_handler(media_type="audio")
         self.assertIn(
             'createMediaChooser("id_featured_media")',
-            media_chooser_panel.render_as_field(),
+            media_chooser_panel.render_html(),
         )
 
     def test_get_chosen_item(self):
@@ -108,11 +108,14 @@ class MediaChooserPanelTest(TestCase):
         )
 
     def test_render_as_field(self):
-        result = self.media_chooser_panel.render_as_field()
+        result = self.media_chooser_panel.render_html()
 
         chooser_url = reverse("wagtailmedia:chooser")
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
-        self.assertIn('<span class="title">Test video</span>', result)
+        self.assertIn(
+            '<div class="chooser__title" data-chooser-title id="id_featured_media-title">Test video</div>',
+            result,
+        )
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
         self.assertIn(
             f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
@@ -124,11 +127,14 @@ class MediaChooserPanelTest(TestCase):
 
     def test_render_as_field_with_media_type(self):
         form, media_chooser_panel = self._init_edit_handler(media_type="video")
-        result = media_chooser_panel.render_as_field()
+        result = media_chooser_panel.render_html()
 
         chooser_url = reverse("wagtailmedia:chooser_typed", args=("video",))
         self.assertIn(f'data-chooser-url="{chooser_url}"', result)
-        self.assertIn('<span class="title">Test video</span>', result)
+        self.assertIn(
+            '<div class="chooser__title" data-chooser-title id="id_featured_media-title">Test video</div>',
+            result,
+        )
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
         self.assertIn(
             f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
@@ -141,12 +147,15 @@ class MediaChooserPanelTest(TestCase):
     def test_render_as_empty_field(self):
         test_instance = BlogStreamPage()
         form = self.MediaChooserForm(instance=test_instance)
-        media_chooser_panel = self.my_media_chooser_panel.bind_to(
+        media_chooser_panel = self.my_media_chooser_panel.get_bound_panel(
             instance=test_instance, form=form, request=self.request
         )
-        result = media_chooser_panel.render_as_field()
+        result = media_chooser_panel.render_html()
 
-        self.assertIn('<span class="title"></span>', result)
+        self.assertIn(
+            '<div class="chooser__title" data-chooser-title id="id_featured_media-title"></div>',
+            result,
+        )
 
         self.assertIn(
             '<a href="" aria-describedby="id_featured_media-title" '
@@ -168,7 +177,7 @@ class MediaChooserPanelTest(TestCase):
 
         self.assertInHTML(
             '<p class="error-message">This field is required.</p>',
-            media_chooser_panel.render_as_field(),
+            media_chooser_panel.render_html(),
         )
 
     def test_comparison_class(self):

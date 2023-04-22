@@ -28,7 +28,7 @@ def get_media_json(media):
     return {
         "id": media.id,
         "title": media.title,
-        "edit_link": reverse("wagtailmedia:edit", args=(media.id,)),
+        "edit_url": reverse("wagtailmedia:edit", args=(media.id,)),
     }
 
 

@@ -51,3 +51,6 @@ class TestAdminInterface(TestCase, WagtailTestUtils):
         self.assertContains(
             response, "class=\\&quot;chooser media-chooser blank\\&quot;"
         )
+        self.assertContains(
+            response, "data-chooser-url=\\&quot;/admin/media/chooser/\\&quot;"
+        )
