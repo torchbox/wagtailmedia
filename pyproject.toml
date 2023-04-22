@@ -20,5 +20,11 @@ exclude = '''
 )
 '''
 
-[tool.check-manifest]
-ignore-bad-ideas = ["*.mo"]
+[tool.ruff]
+target-version = "py311"
+
+# Never enforce `E501` (line length violations).
+ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
