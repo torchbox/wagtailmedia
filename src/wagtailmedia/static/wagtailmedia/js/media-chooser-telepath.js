@@ -1,5 +1,5 @@
 (function() {
-    function MediaChooser(html, idPattern) {
+    function MediaChooser(html, idPattern, _opts) {
         this.html = html;
         this.idPattern = idPattern;
     }

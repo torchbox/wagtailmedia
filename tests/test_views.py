@@ -905,7 +905,7 @@ class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
                 "result": {
                     "id": self.media.id,
                     "title": self.media.title,
-                    "edit_link": reverse("wagtailmedia:edit", args=[self.media.id]),
+                    "edit_url": reverse("wagtailmedia:edit", args=[self.media.id]),
                 },
             },
         )

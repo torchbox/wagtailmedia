@@ -4,6 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
 from wagtail import hooks
+from wagtail.admin.admin_url_finder import (
+    ModelAdminURLFinder,
+    register_admin_url_finder,
+)
 from wagtail.admin.menu import MenuItem
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
@@ -96,6 +100,14 @@ def describe_collection_media(collection):
             % {"count": media_count},
             "url": url,
         }
+
+
+class MediaAdminURLFinder(ModelAdminURLFinder):
+    permission_policy = permission_policy
+    edit_url_name = "wagtailmedia:edit"
+
+
+register_admin_url_finder(get_media_model(), MediaAdminURLFinder)
 
 
 @hooks.register("insert_editor_css")

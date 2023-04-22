@@ -1,39 +1,40 @@
-from unittest.mock import patch
-
 from django.test import TestCase
 from django.urls import reverse
 
 from wagtailmedia import widgets
 from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
+from .utils import create_video
+
 
 class WidgetTests(TestCase):
     def test_get_value_data(self):
-        class StubModelManager:
-            def get(self, pk):
-                return StubMediaModel(pk)
-
-        class StubMediaModel:
-            objects = StubModelManager()
-
-            def __init__(self, pk):
-                self.pk = pk
-                self.id = pk
-                self.title = "foo"
+        item = create_video(title="foo")
 
         test_data = [
             # (input value, expected output value)
             (None, None),
-            (3, {"id": 3, "title": "foo", "edit_link": "/edit/3/"}),
-            (StubMediaModel(3), {"id": 3, "title": "foo", "edit_link": "/edit/3/"}),
+            (
+                item.pk,
+                {
+                    "id": item.pk,
+                    "title": "foo",
+                    "edit_url": f"/admin/media/edit/{item.pk}/",
+                },
+            ),
+            (
+                item,
+                {
+                    "id": item.pk,
+                    "title": "foo",
+                    "edit_url": f"/admin/media/edit/{item.pk}/",
+                },
+            ),
         ]
 
         media_chooser = widgets.AdminMediaChooser()
-        media_chooser.media_model = StubMediaModel
         for input_value, expected_output in test_data:
-            with patch("wagtailmedia.widgets.reverse", return_value="/edit/3/"):
-                actual = media_chooser.get_value_data(input_value)
-                self.assertEqual(expected_output, actual)
+            self.assertEqual(media_chooser.get_value_data(input_value), expected_output)
 
 
 class AdminMediaChooserTest(TestCase):
@@ -55,25 +56,15 @@ class AdminMediaChooserTest(TestCase):
         self.assertEqual(chooser.choose_another_text, "Choose another video")
         self.assertEqual(chooser.link_to_chosen_text, "Edit this video")
 
-    @patch("wagtailmedia.widgets.render_to_string")
-    def test_render_html_uses_the_generic_chooser_url_by_default(
-        self, mock_render_to_string
-    ):
+    def test_render_html_uses_the_generic_chooser_url_by_default(self):
         chooser = AdminMediaChooser()
-        chooser.render_html("test", None, {})
-
-        render_context = mock_render_to_string.call_args[0][1]
-        self.assertEqual(render_context["chooser_url"], reverse("wagtailmedia:chooser"))
-
-    @patch("wagtailmedia.widgets.render_to_string")
-    def test_render_html_uses_the_typed_chooser_url_when_using_media_type(
-        self, mock_render_to_string
-    ):
-        chooser = AdminAudioChooser()
-        chooser.render_html("test", None, {})
-
-        render_context = mock_render_to_string.call_args[0][1]
         self.assertEqual(
-            render_context["chooser_url"],
+            chooser.get_chooser_modal_url(), reverse("wagtailmedia:chooser")
+        )
+
+    def test_render_html_uses_the_typed_chooser_url_when_using_media_type(self):
+        chooser = AdminAudioChooser()
+        self.assertEqual(
+            chooser.get_chooser_modal_url(),
             reverse("wagtailmedia:chooser_typed", args=("audio",)),
         )

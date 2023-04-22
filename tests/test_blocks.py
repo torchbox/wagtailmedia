@@ -47,21 +47,20 @@ class BlockTests(TestCase):
         self.assertEqual(self.audio.id, form_state["id"])
         self.assertEqual(self.audio.title, form_state["title"])
         edit_link = reverse("wagtailmedia:edit", args=(self.audio.id,))
-        self.assertEqual(edit_link, form_state["edit_link"])
+        self.assertEqual(edit_link, form_state["edit_url"])
 
     def test_abstract_media_block_queryset(self):
         block = AbstractMediaChooserBlock()
 
-        # note: can't use self.assertQuerysetEqual() as it is funky in Django < 3.2
-        self.assertListEqual(
-            list(block.field.queryset.order_by("pk").values_list("pk", flat=True)),
-            list(Media.objects.order_by("pk").values_list("pk", flat=True)),
+        self.assertQuerysetEqual(
+            block.field.queryset.order_by("pk"),
+            Media.objects.order_by("pk"),
         )
 
         block = AbstractMediaChooserBlock(media_type="audio")
-        self.assertListEqual(
-            list(block.field.queryset.values_list("pk", flat=True)),
-            list(Media.objects.filter(type="audio").values_list("pk", flat=True)),
+        self.assertQuerysetEqual(
+            block.field.queryset.order_by("pk"),
+            Media.objects.filter(type="audio").order_by("pk"),
         )
 
         block = AbstractMediaChooserBlock(media_type="subspace-transmission")
