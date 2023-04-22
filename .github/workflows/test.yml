@@ -83,7 +83,7 @@ jobs:
           # Use latest Python, so it understands all syntax.
           python-version: ${{env.PYTHON_LATEST}}
 
-      - run: python -Im pip install --upgrade coverage
+      - run: python -Im pip install --upgrade coverage[toml]
 
       - name: Download coverage data
         uses: actions/download-artifact@v3
