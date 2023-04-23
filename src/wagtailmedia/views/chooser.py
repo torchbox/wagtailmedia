@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from wagtail import hooks
 from wagtail.admin.auth import PermissionPolicyChecker
@@ -124,6 +125,13 @@ def chooser(request, media_type=None):
         media_files = media_files.order_by(ordering)
         paginator, media_files = paginate(request, media_files, per_page=10)
 
+    if media_type == "audio":
+        title = _("Choose audio")
+    elif media_type == "video":
+        title = _("Choose video")
+    else:
+        title = _("Choose a media item")
+
     return render_modal_workflow(
         request,
         "wagtailmedia/chooser/chooser.html",
@@ -138,6 +146,8 @@ def chooser(request, media_type=None):
             "popular_tags": popular_tags_for_model(Media),
             "media_type": media_type,
             "ordering": ordering,
+            "title": title,
+            "icon": f"wagtailmedia-{media_type}" if media_type is not None else "media",
         },
         json_data={
             "step": "chooser",

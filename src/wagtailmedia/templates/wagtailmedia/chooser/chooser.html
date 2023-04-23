@@ -1,6 +1,5 @@
 {% load i18n wagtailadmin_tags %}
-{% trans "Choose a media file" as  choose_str %}
-{% include "wagtailadmin/shared/header.html" with title=choose_str merged=1 icon="media" %}
+{% include "wagtailadmin/shared/header.html" with title=title icon=icon merged=1 %}
 
 {# TODO: drop data-wmtabs and the tabs.js include when a better tabs framework is in place #}
 {# See https://github.com/wagtail/wagtail/issues/8408. #}

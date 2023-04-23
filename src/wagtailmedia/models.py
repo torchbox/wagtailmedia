@@ -93,6 +93,10 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         return self.title
 
     @property
+    def icon(self):
+        return f"wagtailmedia-{self.type}"
+
+    @property
     def filename(self):
         return os.path.basename(self.file.name)
 

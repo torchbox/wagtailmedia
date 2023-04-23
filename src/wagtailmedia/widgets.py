@@ -51,6 +51,7 @@ class AdminMediaChooser(BaseChooser):
 
 class AdminAudioChooser(AdminMediaChooser):
     media_type = "audio"
+    icon = "wagtailmedia-audio"
     choose_one_text = _("Choose audio")
     choose_another_text = _("Choose another audio item")
     link_to_chosen_text = _("Edit this audio item")
@@ -58,6 +59,7 @@ class AdminAudioChooser(AdminMediaChooser):
 
 class AdminVideoChooser(AdminMediaChooser):
     media_type = "video"
+    icon = "wagtailmedia-video"
     choose_one_text = _("Choose video")
     choose_another_text = _("Choose another video")
     link_to_chosen_text = _("Edit this video")
