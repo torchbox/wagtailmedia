@@ -1,9 +1,21 @@
 
 # Changelog
 
-## Unreleased
+## [Unreleased]
 
-## [0.13] - 2023-02-15
+## [0.14.0] - 2023-02-15
+
+### Added
+
+- Audio/Video icons. you can use them with `{% icon "wagtailmedia-audio" %}` and `{% icon "wagtailmedia-video" %}`
+- Support for Wagtail 5.0
+
+### Changed
+
+- Started using [ruff](https://github.com/charliermarsh/ruff) instead of isort/flake8
+- Switched to [flit](https://flit.pypa.io/en/latest/) for packaging
+
+## [0.13.0] - 2023-02-15
 
 ### Changed
 
@@ -13,7 +25,7 @@
 
 - Support for Wagtail < 4.1 ([#193](https://github.com/torchbox/wagtailmedia/pull/193)) by @katdom13
 
-## [0.12] - 2022-11-01
+## [0.12.0] - 2022-11-01
 
 ### Added
 
@@ -218,24 +230,26 @@ Initial release
 
 ---
 
-[0.13.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.13.0
-[0.12.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.12.0
-[0.11.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.1
-[0.11.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.11.0
-[0.10.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.1
-[0.10.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.10.0
-[0.9.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.9.0
-[0.8.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.8.0
-[0.7.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.1
-[0.7.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.7.0
-[0.6.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.6.0
-[0.5.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.5.0
-[0.4.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.4.0
-[0.3.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.3.1
-[0.3.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.3.0
-[0.2.0]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.2.0
-[0.1.5]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.5
-[0.1.4]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.4
-[0.1.3]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.3
-[0.1.2]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.2
-[0.1.1]: https://github.com/torchbox/wagtailmedia/releases/tag/v0.1.1
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/torchbox/wagtailmedia/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/torchbox/wagtailmedia/compare/v0.12.0..v0.13.0
+[0.12.0]: https://github.com/torchbox/wagtailmedia/compare/v0.11.0..v0.12.0
+[0.11.1]: https://github.com/torchbox/wagtailmedia/compare/v0.11.0..v0.11.1
+[0.11.0]: https://github.com/torchbox/wagtailmedia/compare/v0.10.1..0.11.0
+[0.10.1]: https://github.com/torchbox/wagtailmedia/compare/v0.10.0..v0.10.1
+[0.10.0]: https://github.com/torchbox/wagtailmedia/compare/v0.9.0..v0.10.0
+[0.9.0]: https://github.com/torchbox/wagtailmedia/compare/v0.8.0..v0.9.0
+[0.8.0]: https://github.com/torchbox/wagtailmedia/compare/v0.7.1..v0.8.0
+[0.7.1]: https://github.com/torchbox/wagtailmedia/compare/v0.7.0..v0.7.1
+[0.7.0]: https://github.com/torchbox/wagtailmedia/compare/v0.6.0..v0.7.0
+[0.6.0]: https://github.com/torchbox/wagtailmedia/compare/v0.5.0..v0.6.0
+[0.5.0]: https://github.com/torchbox/wagtailmedia/compare/v0.4.0..v0.5.0
+[0.4.0]: https://github.com/torchbox/wagtailmedia/compare/v0.3.1..v0.4.0
+[0.3.1]: https://github.com/torchbox/wagtailmedia/compare/v0.3.0..v0.3.1
+[0.3.0]: https://github.com/torchbox/wagtailmedia/compare/v0.2.0..v0.3.0
+[0.2.0]: https://github.com/torchbox/wagtailmedia/compare/v0.1.5..v0.2.0
+[0.1.5]: https://github.com/torchbox/wagtailmedia/compare/v0.1.4..v0.1.5
+[0.1.4]: https://github.com/torchbox/wagtailmedia/compare/v0.1.3..v0.1.4
+[0.1.3]: https://github.com/torchbox/wagtailmedia/compare/v0.1.2..v0.1.3
+[0.1.2]: https://github.com/torchbox/wagtailmedia/compare/v0.1.1..v0.1.2
+[0.1.1]: https://github.com/torchbox/wagtailmedia/compare/3baf37cb..v0.1.1
