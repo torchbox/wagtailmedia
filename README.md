@@ -127,9 +127,9 @@ You can use `Media` as a regular Django field. Here’s an example:
 ```python
 from django.db import models
 
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.fields import RichTextField
+from wagtail.models import Page
+from wagtail.admin.panels import FieldPanel
 
 from wagtailmedia.edit_handlers import MediaChooserPanel
 
@@ -176,10 +176,10 @@ from django.db import models
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel
+from wagtail.fields import StreamField
+from wagtail.models import Page
 
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
@@ -232,7 +232,7 @@ class BlogPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("author"),
         FieldPanel("date"),
-        StreamFieldPanel("body"),
+        FieldPanel("body"),
     ]
 ```
 
@@ -240,6 +240,8 @@ You can also use audio or video-specific choosers:
 
 ```python
 # ...
+from wagtail.models import Page
+from wagtail.fields import StreamField
 from wagtailmedia.blocks import AudioChooserBlock, VideoChooserBlock
 
 
@@ -249,8 +251,8 @@ class BlogPage(Page):
     body = StreamField(
         [
             # ... other block definitions
-            ("audio", AudioChooserBlock(icon="media")),
-            ("video", VideoChooserBlock(icon="media")),
+            ("audio", AudioChooserBlock()),
+            ("video", VideoChooserBlock()),
         ]
     )
 ```
@@ -319,7 +321,7 @@ Now you can run tests as shown below:
 tox
 ```
 
-or, you can run them for a specific environment `tox -e py310-dj41-wagtail40` or specific test
-`tox -e py310-dj41-wagtail40 tests.test_views.TestMediaChooserUploadView`
+or, you can run them for a specific environment `tox -e py310-dj41-wagtail41` or specific test
+`tox -e py310-dj41-wagtail41 tests.test_views.TestMediaChooserUploadView`
 
 To run the test app interactively, use `tox -e interactive`, visit `http://127.0.0.1:8020/admin/` and log in with `admin`/`changeme`.
