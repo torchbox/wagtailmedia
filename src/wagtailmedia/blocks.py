@@ -105,6 +105,9 @@ class AudioChooserBlock(AbstractMediaChooserBlock):
 
         return format_audio_html(value)
 
+    class Meta:
+        icon = "wagtailmedia-audio"
+
 
 class VideoChooserBlock(AbstractMediaChooserBlock):
     def __init__(self, required=True, help_text=None, validators=(), **kwargs):
@@ -130,3 +133,6 @@ class VideoChooserBlock(AbstractMediaChooserBlock):
             return ""
 
         return format_video_html(value)
+
+    class Meta:
+        icon = "wagtailmedia-video"

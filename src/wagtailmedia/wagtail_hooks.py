@@ -124,3 +124,11 @@ def add_media_comparison_css():
         '<link rel="stylesheet" href="{}">',
         versioned_static("wagtailmedia/css/wagtailmedia-comparison.css"),
     )
+
+
+@hooks.register("register_icons")
+def register_icons(icons):
+    return icons + [
+        "wagtailmedia/icons/wagtailmedia-audio.svg",  # {% icon "wagtailmedia-audio" %}
+        "wagtailmedia/icons/wagtailmedia-video.svg",  # {% icon "wagtailmedia-video" %}
+    ]
