@@ -223,13 +223,14 @@ class TestApiMediaListing(ApiTestBase):
         self.assertEqual(item_id_list, [self.tng.pk])
 
     def test_filtering_tags(self):
-        Media.objects.get(id=3).tags.add("test")
+        item = Media.objects.last()
+        item.tags.add("test")
 
         response = self.get_response(tags="test")
         content = json.loads(response.content.decode("UTF-8"))
 
         item_id_list = self.get_media_id_list(content)
-        self.assertEqual(item_id_list, [3])
+        self.assertEqual(item_id_list, [item.pk])
 
     def test_filtering_unknown_field_gives_error(self):
         response = self.get_response(not_a_field="abc")
@@ -408,7 +409,7 @@ class TestApiMediaListing(ApiTestBase):
 
         item_id_list = self.get_media_id_list(content)
 
-        self.assertEqual(item_id_list, [2])
+        self.assertEqual(item_id_list, [self.tng.pk])
 
     @override_settings(WAGTAILAPI_SEARCH_ENABLED=False)
     def test_search_when_disabled_gives_error(self):
@@ -436,7 +437,7 @@ class TestApiMediaDetail(ApiTestBase):
         )
 
     def test_basic(self):
-        response = self.get_response(1)
+        response = self.get_response(self.a_space_odyssey.pk)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-type"], "application/json")
@@ -446,7 +447,7 @@ class TestApiMediaDetail(ApiTestBase):
 
         # Check the id field
         self.assertIn("id", content)
-        self.assertEqual(content["id"], 1)
+        self.assertEqual(content["id"], self.a_space_odyssey.pk)
 
         # Check that the meta section is there
         self.assertIn("meta", content)
@@ -469,17 +470,18 @@ class TestApiMediaDetail(ApiTestBase):
 
         # Check the title field
         self.assertIn("title", content)
-        self.assertEqual(content["title"], "2001: A Space Odyssey")
+        self.assertEqual(content["title"], self.a_space_odyssey.title)
 
         # Check the tags field
         self.assertIn("tags", content["meta"])
         self.assertEqual(content["meta"]["tags"], [])
 
     def test_tags(self):
-        Media.objects.get(id=1).tags.add("hello")
-        Media.objects.get(id=1).tags.add("world")
+        item = Media.objects.first()
+        item.tags.add("hello")
+        item.tags.add("world")
 
-        response = self.get_response(1)
+        response = self.get_response(item.pk)
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertIn("tags", content["meta"])
@@ -499,28 +501,28 @@ class TestApiMediaDetail(ApiTestBase):
     # FIELDS
 
     def test_remove_fields(self):
-        response = self.get_response(2, fields="-title")
+        response = self.get_response(self.tng.pk, fields="-title")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertIn("id", set(content.keys()))
         self.assertNotIn("title", set(content.keys()))
 
     def test_remove_meta_fields(self):
-        response = self.get_response(2, fields="-download_url")
+        response = self.get_response(self.tng.pk, fields="-download_url")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertIn("detail_url", set(content["meta"].keys()))
         self.assertNotIn("download_url", set(content["meta"].keys()))
 
     def test_remove_id_field(self):
-        response = self.get_response(2, fields="-id")
+        response = self.get_response(self.tng.pk, fields="-id")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertIn("title", set(content.keys()))
         self.assertNotIn("id", set(content.keys()))
 
     def test_remove_all_fields(self):
-        response = self.get_response(2, fields="_,id,type")
+        response = self.get_response(self.tng.pk, fields="_,id,type")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertEqual(set(content.keys()), {"id", "meta"})
@@ -550,14 +552,14 @@ class TestApiMediaDetail(ApiTestBase):
         self.assertEqual(content, {"message": "unknown fields: 123, abc"})
 
     def test_fields_remove_unknown_field_gives_error(self):
-        response = self.get_response(2, fields="-123,-title,-abc")
+        response = self.get_response(self.tng.pk, fields="-123,-title,-abc")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(content, {"message": "unknown fields: 123, abc"})
 
     def test_nested_fields_on_non_relational_field_gives_error(self):
-        response = self.get_response(2, fields="title(foo,bar)")
+        response = self.get_response(self.tng.pk, fields="title(foo,bar)")
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertEqual(response.status_code, 400)
