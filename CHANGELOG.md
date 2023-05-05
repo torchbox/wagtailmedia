@@ -3,7 +3,14 @@
 
 ## [Unreleased]
 
-## [0.14.0] - 2023-02-15
+## [0.14.1] - 2023-05-05
+
+### Changed
+
+- Updated the `SearchField` definition to remove `partial_match` and add corresponding `AutocompleteField`. by @jamesbiggs
+  Reference: https://docs.wagtail.org/en/stable/releases/5.0.html#elasticsearch-backend-no-longer-performs-partial-matching-on-search
+
+## [0.14.0] - 2023-04-23
 
 ### Added
 
@@ -230,7 +237,8 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.1...HEAD
+[0.14.0]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/torchbox/wagtailmedia/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/torchbox/wagtailmedia/compare/v0.12.0..v0.13.0
 [0.12.0]: https://github.com/torchbox/wagtailmedia/compare/v0.11.0..v0.12.0
