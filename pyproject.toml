@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Framework :: Wagtail",
     "Framework :: Wagtail :: 4",
-#    "Framework :: Wagtail :: 5",
+    "Framework :: Wagtail :: 5",
 ]
 
 dynamic = ["version"]
