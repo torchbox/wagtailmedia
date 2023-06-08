@@ -48,9 +48,6 @@ class AbstractMediaChooserBlock(ChooserBlock):
 
         return AdminMediaChooser()
 
-    def get_form_state(self, value):
-        return self.widget.get_value_data(value)
-
     def render_basic(self, value, context=None):
         raise NotImplementedError(
             "You need to implement %s.render_basic" % self.__class__.__name__
