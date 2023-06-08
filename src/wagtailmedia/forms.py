@@ -2,7 +2,6 @@ from django import forms
 from django.forms.models import modelform_factory
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
-
 from wagtail.admin import widgets
 from wagtail.admin.forms.collections import (
     BaseCollectionMemberForm,

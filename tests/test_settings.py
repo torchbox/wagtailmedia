@@ -1,7 +1,6 @@
 from unittest import mock
 
 from django.test import TestCase, override_settings
-
 from wagtailmedia.settings import WagtailMediaSettings, wagtailmedia_settings
 
 

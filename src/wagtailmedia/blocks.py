@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Type
 from django.forms import ModelChoiceField
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
-
 from wagtail.admin.compare import BlockComparison
 from wagtail.blocks import ChooserBlock
 

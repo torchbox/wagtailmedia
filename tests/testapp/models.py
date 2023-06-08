@@ -1,13 +1,11 @@
 from django.db import models
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
-
 from modelcluster.fields import ParentalKey
 from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
-
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
     AudioChooserBlock,

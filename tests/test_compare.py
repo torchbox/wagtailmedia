@@ -1,7 +1,5 @@
 from django.test import TestCase
 from django.utils.safestring import SafeString
-
-from tests.testapp.models import BlogStreamPage
 from wagtailmedia.blocks import (
     AudioChooserBlock,
     MediaChooserBlockComparison,
@@ -10,6 +8,8 @@ from wagtailmedia.blocks import (
 from wagtailmedia.edit_handlers import MediaFieldComparison
 from wagtailmedia.models import get_media_model
 from wagtailmedia.utils import format_audio_html, format_video_html
+
+from tests.testapp.models import BlogStreamPage
 
 from .utils import create_audio, create_video
 

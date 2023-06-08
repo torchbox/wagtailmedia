@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
-
 from wagtail.admin import messages
 from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.auth import PermissionPolicyChecker, permission_denied

@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.template.loader import render_to_string
-
 from wagtail.admin.compare import ForeignObjectComparison
 from wagtail.admin.panels import FieldPanel
 
@@ -19,8 +18,8 @@ if TYPE_CHECKING:
 class MediaChooserPanel(FieldPanel):
     object_type_name = "media"
 
-    def __init__(self, field_name, media_type=None, *args, **kwargs):
-        super().__init__(field_name=field_name, *args, **kwargs)
+    def __init__(self, field_name, *args, media_type=None, **kwargs):
+        super().__init__(field_name, *args, **kwargs)
 
         self.media_type = media_type
 

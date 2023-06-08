@@ -4,7 +4,9 @@ Called by GitHub Action when the nightly build fails.
 This reports an error to the #nightly-build-failures Slack channel.
 """
 import os
+
 import requests
+
 
 if "SLACK_WEBHOOK_URL" in os.environ:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
@@ -13,7 +15,7 @@ if "SLACK_WEBHOOK_URL" in os.environ:
     url = f"https://github.com/{repository}/actions/runs/{run_id}"
 
     print("Reporting to #nightly-build-failures slack channel")
-    response = requests.post(
+    response = requests.post(  # noqa: S113
         os.environ["SLACK_WEBHOOK_URL"],
         json={
             "text": f"A Nightly build failed. See {url}",

@@ -2,7 +2,6 @@ import json
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
-
 from wagtailmedia.models import get_media_model
 
 from .utils import create_audio, create_video

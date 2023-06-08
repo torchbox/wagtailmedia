@@ -1,6 +1,5 @@
 from django.core.files.base import ContentFile
 from django.test import TestCase
-
 from wagtailmedia.models import get_media_model
 from wagtailmedia.utils import format_audio_html, format_video_html
 
