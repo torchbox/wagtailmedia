@@ -3,7 +3,6 @@ import re
 from typing import Optional
 
 from django.core.files.base import ContentFile
-
 from wagtailmedia.models import MediaType, get_media_model
 
 

@@ -1,12 +1,10 @@
 from django.conf import settings
 from django.urls import include, path
 from django.views.static import serve
-
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.api.v2.router import WagtailAPIRouter
 from wagtail.documents import urls as wagtaildocs_urls
-
 from wagtailmedia.api.views import MediaAPIViewSet
 
 

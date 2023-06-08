@@ -1,9 +1,8 @@
-from wagtail.api.v2.serializers import BaseSerializer
-from wagtail.api.v2.utils import get_full_url
-
 import rest_framework.fields
 
 from rest_framework.fields import ReadOnlyField
+from wagtail.api.v2.serializers import BaseSerializer
+from wagtail.api.v2.utils import get_full_url
 
 
 class MediaDownloadUrlField(ReadOnlyField):

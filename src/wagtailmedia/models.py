@@ -8,12 +8,10 @@ from django.db import models
 from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
+from taggit.managers import TaggableManager
 from wagtail.models import CollectionMember, ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
-
-from taggit.managers import TaggableManager
 
 from wagtailmedia.settings import wagtailmedia_settings
 
@@ -170,10 +168,10 @@ def get_media_model():
         app_label, model_name = wagtailmedia_settings.MEDIA_MODEL.split(".")
     except AttributeError:
         return Media
-    except ValueError:
+    except ValueError as err:
         raise ImproperlyConfigured(
             "WAGTAILMEDIA[\"MEDIA_MODEL\"] must be of the form 'app_label.model_name'"
-        )
+        ) from err
 
     media_model = apps.get_model(app_label, model_name)
     if media_model is None:
