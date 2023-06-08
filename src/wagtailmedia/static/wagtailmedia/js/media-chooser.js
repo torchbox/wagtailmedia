@@ -1,6 +1,6 @@
 function createMediaChooser(id) {
     const chooserElement = $('#' + id + '-chooser');
-    const mediaTitle = chooserElement.find('.title');
+    const mediaTitle = chooserElement.find('[data-chooser-title]');
     const input = $('#' + id);
     const editLink = chooserElement.find('.edit-link');
     const chooserBaseUrl = chooserElement.data('chooserUrl');
@@ -42,7 +42,7 @@ function createMediaChooser(id) {
             }
             input.val(mediaData.id);
             mediaTitle.text(mediaData.title);
-            editLink.attr('href', mediaData.edit_link);
+            editLink.attr('href', mediaData.edit_url);
             editLink.removeClass('w-hidden');
             chooserElement.removeClass('blank');
             state = mediaData;
