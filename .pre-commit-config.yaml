@@ -21,8 +21,8 @@ repos:
     rev: 23.3.0
     hooks:
       - id: black
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.264'
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.0.272'
     hooks:
       - id: ruff
   - repo: https://github.com/adamchainz/blacken-docs
