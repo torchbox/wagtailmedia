@@ -31,21 +31,39 @@ INSTALLED_APPS = [
 ]
 ```
 
-All wagtailmedia settings are defined in a single `WAGTAILMEDIA` dictionary in your settings file:
+All wagtailmedia settings are defined in a single `WAGTAILMEDIA` dictionary in your settings file. The
+defaults are:
 
 ```python
 # settings.py
 
 WAGTAILMEDIA = {
-    "MEDIA_MODEL": "",  # string, dotted-notation. Defaults to "wagtailmedia.Media"
+    "MEDIA_MODEL": "wagtailmedia.Media",  # string, dotted-notation.
     "MEDIA_FORM_BASE": "",  # string, dotted-notation. Defaults to an empty string
-    "AUDIO_EXTENSIONS": [],  # list of extensions
-    "VIDEO_EXTENSIONS": [],  # list of extensions
+    "AUDIO_EXTENSIONS": [
+        "aac",
+        "aiff",
+        "flac",
+        "m4a",
+        "m4b",
+        "mp3",
+        "ogg",
+        "wav",
+    ],  # list of extensions
+    "VIDEO_EXTENSIONS": [
+        "avi",
+        "h264",
+        "m4v",
+        "mkv",
+        "mov",
+        "mp4",
+        "mpeg",
+        "mpg",
+        "ogv",
+        "webm",
+    ],  # list of extensions
 }
 ```
-
-`AUDIO_EXTENSIONS` defaults to "aac", "aiff", "flac", "m4a", "m4b", "mp3", "ogg" and "wav".
-`VIDEO_EXTENSIONS` defaults to "avi", "h264", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "ogv" and "webm".
 
 ### URL configuration
 
