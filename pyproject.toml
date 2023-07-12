@@ -60,24 +60,6 @@ exclude = [
 [tool.black]
 line_length = 88
 target-version = ["py38"]
-exclude = '''
-(
-  /(
-    \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | __pycache__
-    | _build
-    | build
-    | dist
-    | docs
-    | venv
-    | node_modules
-  )/
-)
-'''
 
 [tool.ruff]
 target-version = "py38"
