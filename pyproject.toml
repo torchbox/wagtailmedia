@@ -89,12 +89,12 @@ lines-after-imports = 2
 [tool.coverage.run]
 branch = true
 parallel = true
-source_pkgs = ["wagtailmedia"]
+source = ["wagtailmedia"]
 
-omit = ["**/migrations/*", "tests/*"]
+omit = ["**/migrations/*", "tests/*", "src/wagtailmedia/admin.py", "src/wagtailmedia/deprecation.py"]
 
 [tool.coverage.paths]
-source = ["src", ".tox/*/site-packages"]
+source = ["src", ".tox/py*/**/site-packages"]
 
 [tool.coverage.report]
 show_missing = true
