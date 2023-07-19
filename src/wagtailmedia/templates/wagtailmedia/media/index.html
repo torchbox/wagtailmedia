@@ -23,6 +23,7 @@
 
 {% block content %}
     {% trans "Media" as media_str %}
+    {% url "wagtailmedia:index" as search_results_url %}
     {% if user_can_add %}
         {% fragment as media_actions %}
             {% block add_actions %}
@@ -36,14 +37,15 @@
             {% endblock %}
         {% endfragment %}
 
-        {% include "wagtailadmin/shared/header.html" with title=media_str icon="media" search_url="wagtailmedia:index" extra_actions=media_actions %}
+        {% include "wagtailadmin/shared/header.html" with title=media_str icon="media" search_url="wagtailmedia:index" search_results_url=search_results_url search_target="#media-results" extra_actions=media_actions %}
     {% else %}
-        {% include "wagtailadmin/shared/header.html" with title=media_str icon="media" search_url="wagtailmedia:index" %}
+        {% include "wagtailadmin/shared/header.html" with title=media_str icon="media" search_url="wagtailmedia:index" search_results_url=search_results_url search_target="#media-results" %}
     {% endif %}
 
     <div class="nice-padding">
         {% if collections %}
-            <form class="image-search search-bar" action="{% url 'wagtailmedia:index' %}" method="GET" novalidate>
+            {% url "wagtailmedia:index" as index_url %}
+            <form role="search" class="image-search search-bar" action="{{ index_url }}" method="GET" novalidate>
                 <input type="hidden" name="q" id="id_q"  value="{{ query_string }}">
                 <ul class="fields">
                     <li>{% include "wagtailadmin/shared/collection_chooser.html" %}</li>
@@ -52,10 +54,10 @@
                         <fieldset class="tagfilter">
                             <legend>{% trans 'Popular Tags:' %}</legend>
                             {% for tag in popular_tags %}
-                                <a class="button button-small bicolor button--icon{% if tag.name != current_tag %} button-secondary{% endif %}" href="{% url 'wagtailmedia:index' %}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                                <a class="button button-small bicolor button--icon{% if tag.name != current_tag %} button-secondary{% endif %}" href="{{ index_url }}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
                             {% endfor %}
                             {% if current_tag %}
-                                <a class="button button-small bicolor button-secondary button--icon" href="{% url 'wagtailmedia:index' %}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
+                                <a class="button button-small bicolor button-secondary button--icon" href="{{ index_url }}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear' %}</a>
                             {% endif %}
                         </fieldset>
                     </li>
