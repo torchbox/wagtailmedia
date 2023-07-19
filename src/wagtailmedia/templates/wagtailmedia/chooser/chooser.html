@@ -41,19 +41,20 @@
 
     <div class="tab-content">
         <section id="tab-search" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-search">
-            <form class="media-search search-bar" action="{% url 'wagtailmedia:chooser' %}" method="GET" novalidate>
+            <form action="{% url 'wagtailmedia:chooser' %}" method="GET" role="search" class="media-search search-bar" novalidate data-chooser-modal-search>
                 <ul class="fields">
                     {% for field in searchform %}
-                        <li>{% include "wagtailadmin/shared/field.html" with field=field %}</li>
+                        <li>{% include "wagtailadmin/shared/field.html" with field=field only %}</li>
                     {% endfor %}
                     {% if collections %}
-                        {% include "wagtailadmin/shared/collection_chooser.html" %}
+                        <li>{% include "wagtailadmin/shared/collection_chooser.html" %}</li>
                     {% endif %}
                     {% if popular_tags %}
+                        {% url 'wagtailmedia:index' as index_url %}
                         <li class="taglist">
                             <h3>{% trans 'Popular tags' %}</h3>
                             {% for tag in popular_tags %}
-                                <a class="suggested-tag tag" href="{% url 'wagtailmedia:index' %}?tag={{ tag.name|urlencode }}">{{ tag.name }}</a>
+                                <a class="suggested-tag tag" href="{{ index_url }}?tag={{ tag.name|urlencode }}">{{ tag.name }}</a>
                             {% endfor %}
                         </li>
                     {% endif %}
@@ -74,7 +75,7 @@
                             {% if field.is_hidden %}
                                 {{ field }}
                             {% else %}
-                                <li>{% include "wagtailadmin/shared/field.html" with field=field %}</li>
+                                <li>{% include "wagtailadmin/shared/field.html" with field=field only %}</li>
                             {% endif %}
                         {% endfor %}
                         <li>
