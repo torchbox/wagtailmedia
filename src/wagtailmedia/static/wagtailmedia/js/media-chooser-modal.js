@@ -148,27 +148,26 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             return false;
         });
 
-        function populateTitle(context) {
-            // Note: There are two inputs with `#id_title` on the page.
-            // The page title and media title. Select the input inside the modal body.
-            var fileWidget = $('#id_file', context);
+        // Note: There are two inputs with `#id_title` on the page.
+        // The page title and media title. Select the input inside the modal body.
+        $('[name="media-chooser-upload-file"]', modal.body).each(function() {
+            const fileWidget = $(this);
             fileWidget.on('change', function () {
-                var titleWidget = $('#id_title', context);
-                var title = titleWidget.val();
-                if (title === '') {
+                let titleWidget = $('#id_media-chooser-upload-title', fileWidget.closest('form'));
+                if (titleWidget.val() === '') {
                     // The file widget value example: `C:\fakepath\media.jpg`
-                    var parts = fileWidget.val().split('\\');
-                    var fileName = parts[parts.length - 1];
-                    titleWidget.val(fileName);
+                    const parts = fileWidget.val().split('\\');
+                    const filename = parts[parts.length - 1];
+                    titleWidget.val(filename.replace(/\.[^.]+$/, ''));
                 }
             });
-        }
-
-        populateTitle(modal.body);
+        });
 
         /* Add tag entry interface (with autocompletion) to the tag field of the media upload form */
-        $('#id_tags', modal.body).tagit({
-            autocomplete: {source: jsonData['tag_autocomplete_url']}
+        $('[name="media-chooser-upload-tags"]', modal.body).each(function() {
+           $(this).tagit({
+                autocomplete: {source: jsonData['tag_autocomplete_url']}
+            });
         });
     },
     'media_chosen': function(modal, jsonData) {
