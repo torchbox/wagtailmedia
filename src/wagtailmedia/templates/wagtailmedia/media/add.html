@@ -20,6 +20,17 @@
             $('#id_tags').tagit({
                 autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
             });
+
+            const fileWidget = document.getElementById("id_file");
+            const titleWidget = document.getElementById("id_title");
+            fileWidget.addEventListener('change', function () {
+                if (titleWidget.value === '') {
+                    // The file widget value example: `C:\fakepath\media.jpg`
+                    var parts = fileWidget.value.split('\\');
+                    var filename = parts[parts.length - 1].replace(/\.[^.]+$/, '');
+                    titleWidget.value = filename;
+                }
+            });
         });
     </script>
 {% endblock %}
