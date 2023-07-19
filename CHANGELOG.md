@@ -1,7 +1,25 @@
-
 # Changelog
 
 ## [Unreleased]
+
+## [0.14.3] - 2023-07-19
+
+### Added
+
+- Support for Wagtail 5.1
+
+### Changed
+
+- Switched to trusted PyPI publishing
+- Clarified the defaults for `WAGTAILMEDIA` in README
+- Improved coverage configuration
+
+### Fixed
+
+- Long-running buttons for Wagtail 5+
+- Tag field initialisation when using the generic media chooser
+- Title population from file name.
+
 
 ## [0.14.2] - 2023-06-08
 
