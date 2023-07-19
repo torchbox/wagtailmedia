@@ -1,10 +1,17 @@
 MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
     'chooser': function(modal, jsonData) {
-        var searchUrl = $('form.media-search', modal.body).attr('action');
+        const searchUrl = $('form.media-search', modal.body).attr('action');
+        const searchInput = $('#id_q', modal.body);
+        const resultsContainer = $('#search-results', modal.body);
+        const collectionChooser = $('#collection_chooser_collection_id', modal.body);
+        /* save initial page browser HTML, so that we can restore it if the search box gets cleared */
+        const initialPageResultsHtml = resultsContainer.html();
 
         /* currentTag stores the tag currently being filtered on, so that we can
         preserve this when paginating */
-        var currentTag;
+        let currentTag;
+
+        let request;
 
         function ajaxifyLinks (context) {
             $('a.media-choice', context).on('click', function(e) {
@@ -13,59 +20,65 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
             });
 
             $('.pagination a', context).on('click', function(e) {
-                var page = this.getAttribute("data-page");
-                setPage(page);
+                let params = {
+                    p: this.getAttribute("data-page"),
+                    collection_id: collectionChooser.val()
+                };
+                const query = searchInput.val();
+                if (query.length) {
+                    params['q'] = query;
+                }
+                if (currentTag) {
+                    params['tag'] = currentTag;
+                }
+
+                request = fetchResults(params);
                 e.preventDefault();
             });
 
             $('a[data-ordering]', context).on('click', function(e) {
-                sortResults(this.dataset["ordering"]);
+                request = fetchResults({
+                    q: searchInput.val(),
+                    collection_id: collectionChooser.val(),
+                    ordering: this.dataset["ordering"]
+                });
                 e.preventDefault();
             });
         }
 
         function fetchResults(requestData) {
-            $.ajax({
+            return $.ajax({
                 url: searchUrl,
                 data: requestData,
-                success: function(data, status) {
-                    $('#search-results').html(data);
-                    ajaxifyLinks($('#search-results'));
-                    initWMTabs();
-                }
+                success(data) {
+                    request = null;
+                    resultsContainer.html(data);
+                    ajaxifyLinks(resultsContainer);
+                },
+                error() {
+                    request = null;
+                },
             });
         }
 
         function search() {
-            /* Searching causes currentTag to be cleared - otherwise there's
-            no way to de-select a tag */
-            currentTag = null;
-            fetchResults({
-                q: $('#id_q').val(),
-                collection_id: $('#collection_chooser_collection_id').val()
-            });
-            return false;
-        }
-
-        function setPage(page) {
-            params = {p: page};
-            if ($('#id_q').val().length){
-                params['q'] = $('#id_q').val();
+            const query = searchInput.val();
+            const collection_id = collectionChooser.val()
+            if (query !== '' || collection_id !== '') {
+                /* Searching causes currentTag to be cleared - otherwise there's
+                no way to de-select a tag */
+                currentTag = null;
+                request = fetchResults({
+                    q: query,
+                    collection_id: collection_id
+                });
             }
-            if (currentTag) {
-                params['tag'] = currentTag;
+            else {
+                /* search box is empty - restore original page browser HTML */
+                resultsContainer.html(initialPageResultsHtml);
+                ajaxifyLinks();
             }
-            params['collection_id'] = $('#collection_chooser_collection_id').val();
-            fetchResults(params);
             return false;
-        }
-
-        function sortResults(order) {
-            fetchResults({
-                q: $('#id_q').val(),
-                collection_id: $('#collection_chooser_collection_id').val(),
-                ordering: order
-            });
         }
 
         ajaxifyLinks(modal.body);
@@ -116,18 +129,21 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
 
         $('form.media-search', modal.body).on('submit', search);
 
-        $('#id_q').on('input', function() {
+        searchInput.on('input', function() {
+            if (request) {
+                request.abort();
+            }
             clearTimeout($.data(this, 'timer'));
             var wait = setTimeout(search, 200);
             $(this).data('timer', wait);
         });
-        $('#collection_chooser_collection_id').on('change', search);
+        collectionChooser.on('change', search);
         $('a.suggested-tag').on('click', function() {
             currentTag = $(this).text();
-            $('#id_q').val('');
-            fetchResults({
+            searchInput.val('');
+            request = fetchResults({
                 'tag': currentTag,
-                collection_id: $('#collection_chooser_collection_id').val()
+                collection_id: collectionChooser.val()
             });
             return false;
         });
