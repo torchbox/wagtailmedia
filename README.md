@@ -340,6 +340,6 @@ tox
 ```
 
 or, you can run them for a specific environment `tox -e py310-dj41-wagtail41` or specific test
-`tox -e py310-dj41-wagtail41 tests.test_views.TestMediaChooserUploadView`
+`tox -e py310-dj41-wagtail41 -- tests.test_views.TestMediaChooserUploadView`
 
 To run the test app interactively, use `tox -e interactive`, visit `http://127.0.0.1:8020/admin/` and log in with `admin`/`changeme`.
