@@ -109,7 +109,7 @@ class MediaAdminURLFinder(ModelAdminURLFinder):
 register_admin_url_finder(get_media_model(), MediaAdminURLFinder)
 
 
-@hooks.register("insert_editor_css")
+@hooks.register("insert_global_admin_css")
 def add_media_css_tweaks():
     return format_html(
         '<link rel="stylesheet" href="{}">',
