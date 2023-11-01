@@ -76,7 +76,7 @@ def register_media_search_area():
         _("Media"),
         reverse("wagtailmedia:index"),
         name="media",
-        classnames="icon icon-media",
+        classname="icon icon-media",
         order=400,
     )
 
