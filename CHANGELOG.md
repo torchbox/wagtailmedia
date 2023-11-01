@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [0.14.5] - 2023-11-01
+
+### Added
+
+- Support for Wagtail 5.2 (and Python 3.12) @zerolab
+
+### Changed
+
+- Switched to using `icon_name` instead of `classnames` in `MediaSearchArea` @zerolab, @jamesbiggs
+- Cleaned up static files ([#221](https://github.com/torchbox/wagtailmedia/pull/221)) @kiranrokkam09
+
+### Removed
+
+- Official support for Wagtail 4.2/5.0 (they still work just fine)
+
 ## [0.14.4] - 2023-08-01
 
 ### Changed
@@ -268,7 +283,8 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.4...HEAD
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.5...HEAD
+[0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.4...v0.14.5
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.3...v0.14.4
 [0.14.3]: https://github.com/torchbox/wagtailmedia/compare/v0.14.2...v0.14.3
 [0.14.2]: https://github.com/torchbox/wagtailmedia/compare/v0.14.1...v0.14.2
