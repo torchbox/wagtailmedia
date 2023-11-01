@@ -28,7 +28,7 @@ class TestAdminInterface(TestCase, WagtailTestUtils):
         )
         self.assertContains(
             response,
-            '<script>createMediaChooser("id_related_media-__prefix__-link_media");<-/script>',
+            '<script>createMediaChooser("id_related_media-__prefix__-link_media");</script>',
         )
         self.assertContains(response, "media-chooser.js")
 
