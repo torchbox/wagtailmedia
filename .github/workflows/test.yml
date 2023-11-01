@@ -28,16 +28,17 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: 🔒 Harden Runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
         with:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
             files.pythonhosted.org:443
+            objects.githubusercontent.com:443
             github.com:443
             pypi.org:443
             api.github.com:443
@@ -73,7 +74,7 @@ jobs:
 
     steps:
       - name: 🔒 Harden Runner
-        uses: step-security/harden-runner@v2
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
         with:
           disable-sudo: true
           egress-policy: block
