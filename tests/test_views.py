@@ -468,6 +468,37 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertContains(response, "sweet-form-row")
         self.assertContains(response, "sweet-stats")
 
+    def test_action_block(self):
+        with self.settings(
+            TEMPLATES=[
+                {
+                    "BACKEND": "django.template.backends.django.DjangoTemplates",
+                    "DIRS": [os.path.join(os.path.dirname(__file__), "templates")],
+                    "APP_DIRS": True,
+                    "OPTIONS": {
+                        "context_processors": [
+                            "django.template.context_processors.debug",
+                            "django.template.context_processors.request",
+                            "django.contrib.auth.context_processors.auth",
+                            "django.contrib.messages.context_processors.messages",
+                            "django.template.context_processors.request",
+                            "wagtail.contrib.settings.context_processors.settings",
+                        ],
+                        "debug": True,
+                    },
+                }
+            ]
+        ):
+            response = self.client.get(
+                reverse("wagtailmedia:edit", args=(self.media.id,))
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
+            self.assertContains(
+                response,
+                '<form action="/somewhere/else/edit" method="POST" enctype="multipart/form-data" novalidate>',
+            )
+
     def test_post(self):
         # Build a fake file
         fake_file = ContentFile("A boring example song", name="song.mp3")
