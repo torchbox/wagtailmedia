@@ -4,9 +4,9 @@
     {% icon name="media" %}
     <a href="{% url 'wagtailmedia:index' %}">
         {% blocktrans trimmed count counter=total_media with total_media|intcomma as total %}
-            <span>{{ total }}</span> Media file <span class="visuallyhidden">created in {{ site_name }}</span>
+            <span>{{ total }}</span> Media file <span class="visuallyhidden w-sr-only">created in {{ site_name }}</span>
         {% plural %}
-            <span>{{ total }}</span> Media files <span class="visuallyhidden">created in {{ site_name }}</span>
+            <span>{{ total }}</span> Media files <span class="visuallyhidden w-sr-only">created in {{ site_name }}</span>
         {% endblocktrans %}
     </a>
 </li>

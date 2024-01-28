@@ -8,6 +8,7 @@ from wagtail.admin.admin_url_finder import (
     register_admin_url_finder,
 )
 from wagtail.admin.menu import MenuItem
+from wagtail.admin.navigation import get_site_for_user
 from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.admin.staticfiles import versioned_static
@@ -48,9 +49,13 @@ class MediaSummaryItem(SummaryItem):
     template_name = "wagtailmedia/homepage/site_summary_media.html"
 
     def get_context_data(self, parent_context):
-        context = super().get_context_data(parent_context)
-        context["total_media"] = get_media_model().objects.count()
-        return context
+        site_name = get_site_for_user(self.request.user)["site_name"]
+        return {
+            "total_media": permission_policy.instances_user_has_any_permission_for(
+                self.request.user, {"add", "change", "delete", "choose"}
+            ).count(),
+            "site_name": site_name,
+        }
 
     def is_shown(self):
         return permission_policy.user_has_any_permission(
