@@ -1,0 +1,38 @@
+[run]
+branch = true
+parallel = true
+concurrency = multiprocessing, thread
+source = wagtailmedia
+
+omit = **/migrations/*,tests/*,src/wagtailmedia/admin.py,src/wagtailmedia/deprecation.py
+
+[paths]
+source = src,.tox/py*/**/site-packages
+
+[report]
+show_missing = true
+ignore_errors = true
+skip_empty = true
+skip_covered = true
+
+exclude_also =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self.debug
+    if settings.DEBUG
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+
+    # Nor complain about type checking
+    "if TYPE_CHECKING:",
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
