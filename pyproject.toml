@@ -32,6 +32,14 @@ dependencies = [
     "Django>=3.2",
 ]
 
+[project.optional-dependencies]
+testing = [
+    "coverage>=7.4.0",
+]
+linting = [
+    "pre-commit>=3.6.0",
+]
+
 [project.urls]
 Repository = "https://github.com/torchbox/wagtailmedia"
 Changelog = "https://github.com/torchbox/wagtailmedia/blob/main/CHANGELOG.md"
