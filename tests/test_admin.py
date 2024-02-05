@@ -26,10 +26,19 @@ class TestAdminInterface(TestCase, WagtailTestUtils):
                 args=("wagtailmedia_tests", "eventpage", self.root_page.id),
             )
         )
-        self.assertContains(
-            response,
-            '<script>createMediaChooser("id_related_media-__prefix__-link_media");</script>',
-        )
+
+        from wagtail import VERSION as WAGTAIL_VERSION
+
+        if WAGTAIL_VERSION >= (4, 2):
+            self.assertContains(
+                response,
+                '<script>createMediaChooser("id_related_media-__prefix__-link_media");</script>',
+            )
+        else:
+            self.assertContains(
+                response,
+                '<script>createMediaChooser("id_related_media-__prefix__-link_media");<-/script>',
+            )
         self.assertContains(response, "media-chooser.js")
 
     def test_media_block_in_admin(self):
