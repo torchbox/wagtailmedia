@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.15.0] - 2024-02-5
+
+### Added
+
+- Means to override the edit form action ([#229](https://github.com/torchbox/wagtailmedia/pull/229)) @davidwtbuxton
+- Official compatibility with Wagtail 6
+
+### Changed
+
+- Switched to Ruff for everything
+- Tidied up configuration
+
 ## [0.14.5] - 2023-11-01
 
 ### Added
@@ -284,6 +296,7 @@ Initial release
 ---
 
 [unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.14.5...HEAD
+[0.15.0]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...v0.15.0
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.4...v0.14.5
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.3...v0.14.4
 [0.14.3]: https://github.com/torchbox/wagtailmedia/compare/v0.14.2...v0.14.3
