@@ -1,0 +1,28 @@
+[lint]
+extend-select = [
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "S",  # flake8-bandit
+    "W",  # pycodestyle warnings
+    "UP", # pyupgrade
+]
+
+extend-ignore = [
+    "E501",  # no line length errors
+]
+
+fixable = ["C4", "E", "F", "I", "UP"]
+
+[lint.per-file-ignores]
+"tests/**.py" = ["S105", "S106"]
+
+[lint.isort]
+known-first-party = ["src"]
+lines-between-types = 1
+lines-after-imports = 2
+
+[format]
+docstring-code-format = true
