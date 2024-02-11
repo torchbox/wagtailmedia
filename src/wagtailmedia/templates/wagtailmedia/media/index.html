@@ -1,25 +1,7 @@
 {% extends "wagtailadmin/base.html" %}
-{% load wagtailadmin_tags %}
-{% load i18n %}
-{% block titletag %}Media{% endblock %}
-{% block extra_js %}
-    {{ block.super }}
-    <script>
-        window.headerSearch = {
-            url: "{% url 'wagtailmedia:index' %}",
-            termInput: "#id_q",
-            targetOutput: "#media-results"
-        };
+{% load i18n wagtailadmin_tags %}
 
-        $(function() {
-            $('#collection_chooser_collection_id').change(function() {
-                const params = new URLSearchParams(window.location.search);
-                this.form["q"].value = params.get("q");
-                this.form.submit();
-            });
-        });
-    </script>
-{% endblock %}
+{% block titletag %}{% trans "Media" %}{% endblock %}
 
 {% block content %}
     {% trans "Media" as media_str %}
@@ -27,13 +9,8 @@
     {% if user_can_add %}
         {% fragment as media_actions %}
             {% block add_actions %}
-            <div class="dropdown dropdown-button match-width">
-                <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button bicolor button--icon">{% icon name="plus" wrapped=1 %}{% trans "Add audio" %}</a>
-                <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
-                <ul>
-                    <li><a class="button bicolor button--icon" href="{% url 'wagtailmedia:add' 'video' %}">{% icon name="plus" wrapped=1 %}{% trans "Add video" %}</a></li>
-                </ul>
-            </div>
+                <a href="{% url 'wagtailmedia:add' 'audio' %}" class="button button--icon bicolor">{% icon name="plus" wrapped=1 %}{% trans "Add audio" %}</a>
+                <a class="button button--icon bicolor" href="{% url 'wagtailmedia:add' 'video' %}">{% icon name="plus" wrapped=1 %}{% trans "Add video" %}</a>
             {% endblock %}
         {% endfragment %}
 
@@ -70,4 +47,23 @@
             {% include "wagtailmedia/media/results.html" %}
         </div>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        window.headerSearch = {
+            url: "{% url 'wagtailmedia:index' %}",
+            termInput: "#id_q",
+            targetOutput: "#media-results"
+        };
+
+        $(function() {
+            $('#collection_chooser_collection_id').change(function() {
+                const params = new URLSearchParams(window.location.search);
+                this.form["q"].value = params.get("q");
+                this.form.submit();
+            });
+        });
+    </script>
 {% endblock %}
