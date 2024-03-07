@@ -28,10 +28,26 @@ class MediaQuerySet(SearchableQuerySetMixin, models.QuerySet):
     pass
 
 
-class AbstractMedia(CollectionMember, index.Indexed, models.Model):
+class AbstractMediaFieldAdditions(CollectionMember, models.Model):
     title = models.CharField(max_length=255, verbose_name=_("title"))
     file = models.FileField(upload_to="media", verbose_name=_("file"))
+    created_at = models.DateTimeField(verbose_name=_("created at"), auto_now_add=True)
+    uploaded_by_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("uploaded by user"),
+        null=True,
+        blank=True,
+        editable=False,
+        on_delete=models.SET_NULL,
+    )
+    tags = TaggableManager(help_text=None, blank=True, verbose_name=_("tags"))
 
+    class Meta:
+        abstract = True
+        verbose_name = _("media")
+
+
+class AbstractMediaBase(index.Indexed, models.Model):
     type = models.CharField(
         choices=MediaType.choices, max_length=255, blank=False, null=False
     )
@@ -49,18 +65,6 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     thumbnail = models.FileField(
         upload_to="media_thumbnails", blank=True, verbose_name=_("thumbnail")
     )
-
-    created_at = models.DateTimeField(verbose_name=_("created at"), auto_now_add=True)
-    uploaded_by_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=_("uploaded by user"),
-        null=True,
-        blank=True,
-        editable=False,
-        on_delete=models.SET_NULL,
-    )
-
-    tags = TaggableManager(help_text=None, blank=True, verbose_name=_("tags"))
 
     objects = MediaQuerySet.as_manager()
 
@@ -150,6 +154,12 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
             validate = FileExtensionValidator(wagtailmedia_settings.VIDEO_EXTENSIONS)
             validate(self.file)
 
+    class Meta:
+        abstract = True
+        verbose_name = _("media")
+
+
+class AbstractMedia(AbstractMediaBase, AbstractMediaFieldAdditions):
     class Meta:
         abstract = True
         verbose_name = _("media")
