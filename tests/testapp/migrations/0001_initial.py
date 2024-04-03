@@ -6,12 +6,17 @@ import modelcluster.fields
 import taggit.managers
 import wagtail.blocks
 import wagtail.fields
-import wagtail.models.collections
 import wagtail.search.index
 import wagtailmedia.blocks
 
 from django.conf import settings
 from django.db import migrations, models
+
+
+try:
+    import wagtail.models.media as collections
+except ImportError:
+    import wagtail.models.collections as collections
 
 import tests.testapp.models
 
@@ -169,7 +174,7 @@ class Migration(migrations.Migration):
                 (
                     "collection",
                     models.ForeignKey(
-                        default=wagtail.models.collections.get_root_collection_id,
+                        default=collections.get_root_collection_id,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
                         to="wagtailcore.collection",
