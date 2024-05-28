@@ -21,7 +21,7 @@
     {% block form_row %}
         <div class="row row-flush nice-padding">
 
-            {% wagtail_version 6 1 as wagtail61 %}
+            {% is_wagtail_version_gte 6 1 as wagtail61 %}
 
             <div class="col10 {% if not wagtail61 %}divider-after{% endif %}">
                 <form action="{% block action %}{% url 'wagtailmedia:edit' media.pk %}{% endblock %}" method="POST" enctype="multipart/form-data" novalidate>

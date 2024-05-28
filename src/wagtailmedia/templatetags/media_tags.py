@@ -6,5 +6,5 @@ register = Library()
 
 
 @register.simple_tag
-def wagtail_version(*version):
+def is_wagtail_version_gte(*version):
     return WAGTAIL_VERSION >= version
