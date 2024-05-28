@@ -48,22 +48,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block extra_js %}
-    {{ block.super }}
-    <script>
-        window.headerSearch = {
-            url: "{% url 'wagtailmedia:index' %}",
-            termInput: "#id_q",
-            targetOutput: "#media-results"
-        };
-
-        $(function() {
-            $('#collection_chooser_collection_id').change(function() {
-                const params = new URLSearchParams(window.location.search);
-                this.form["q"].value = params.get("q");
-                this.form.submit();
-            });
-        });
-    </script>
-{% endblock %}
