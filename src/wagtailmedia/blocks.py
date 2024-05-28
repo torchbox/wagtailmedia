@@ -49,7 +49,7 @@ class AbstractMediaChooserBlock(ChooserBlock):
 
     def render_basic(self, value, context=None):
         raise NotImplementedError(
-            "You need to implement %s.render_basic" % self.__class__.__name__
+            f"You need to implement {self.__class__.__name__}.render_basic"
         )
 
     def get_comparison_class(self) -> Type["MediaChooserBlockComparison"]:
