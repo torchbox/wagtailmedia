@@ -14,13 +14,8 @@
     {{ block.super }}
     {{ form.media.js }}
 
-    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
     <script>
         $(function() {
-            $('#id_tags').tagit({
-                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
-            });
-
             const fileWidget = document.getElementById("id_file");
             const titleWidget = document.getElementById("id_title");
             fileWidget.addEventListener('change', function () {
