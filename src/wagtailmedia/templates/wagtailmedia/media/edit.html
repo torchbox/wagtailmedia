@@ -1,5 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
-{% load i18n %}
+{% load i18n media_tags %}
 {% block titletag %}{% blocktrans with title=media.title %}Editing {{ title }}{% endblocktrans %}{% endblock %}
 
 {% block extra_js %}
@@ -29,7 +29,9 @@
     {% block form_row %}
         <div class="row row-flush nice-padding">
 
-            <div class="col10 divider-after">
+            {% wagtail_version 6 1 as wagtail61 %}
+
+            <div class="col10 {% if not wagtail61 %}divider-after{% endif %}">
                 <form action="{% block action %}{% url 'wagtailmedia:edit' media.pk %}{% endblock %}" method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     {% if next %}<input type="hidden" value="{{ next }}" name="next">{% endif %}
