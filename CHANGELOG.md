@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Add support for Wagtail 6.1
+- Drop support for Wagtail < 5.2
+- Drop support for Django < 4.2
+
 ## [0.15.1] - 2024-02-5
 
 ### Fixed
