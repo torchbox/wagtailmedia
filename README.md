@@ -307,6 +307,20 @@ wagtailmedia has translations in French and Chinese. More translations welcome!
 
 All contributions are welcome!
 
+## Upgrading
+
+When upgrading the Wagtail version, it is good practice to also check that the template styles and formatting are up-to-date with the current supported version of Wagtail.
+
+The following templates should be checked:
+
+- `src/wagtailmedia/templates/wagtailmedia/media/add.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/confirm_delete.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/edit.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/index.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/media_chooser.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/media_permissions_formset.html`
+- `src/wagtailmedia/templates/wagtailmedia/media/usage.html`
+
 ### Install
 
 To make changes to this project, first clone this repository:
