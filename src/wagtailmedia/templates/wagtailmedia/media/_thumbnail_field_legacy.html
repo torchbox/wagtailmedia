@@ -1,0 +1,11 @@
+{% extends "wagtailadmin/shared/field.html" %}
+{% load i18n %}
+{% block form_field %}
+<div class="w-field__wrapper">
+    {% if media.thumbnail %}
+        <a href="{{ media.thumbnail.url }}" class="icon icon-image">{{ media.thumbnail_filename }}</a><br /><br />
+    {% endif %}
+
+    {{ field }}
+</div>
+{% endblock %}

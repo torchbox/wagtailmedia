@@ -1,19 +1,11 @@
 {% extends "wagtailadmin/base.html" %}
-{% load i18n %}
+{% load i18n media_tags %}
 {% block titletag %}{% blocktrans with title=media.title %}Editing {{ title }}{% endblocktrans %}{% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
     {{ form.media.js }}
 
-    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
-    <script>
-        $(function() {
-            $('#id_tags').tagit({
-                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block extra_css %}
@@ -26,10 +18,11 @@
     {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=media.title icon=media.icon %}
     {% include "wagtailadmin/shared/non_field_errors.html" %}
 
+    {% wagtail_version_gte "6.1" as wagtail_gte_61 %}
+
     {% block form_row %}
         <div class="row row-flush nice-padding">
-
-            <div class="col10 divider-after">
+            <div class="col10{% if not wagtail_gte_61 %} divider-after{% endif %}">
                 <form action="{% block action %}{% url 'wagtailmedia:edit' media.pk %}{% endblock %}" method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     {% if next %}<input type="hidden" value="{{ next }}" name="next">{% endif %}

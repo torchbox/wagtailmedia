@@ -176,8 +176,7 @@ def get_media_model():
     media_model = apps.get_model(app_label, model_name)
     if media_model is None:
         raise ImproperlyConfigured(
-            "WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '%s' that has not been installed"
-            % wagtailmedia_settings.MEDIA_MODEL
+            f"WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '{wagtailmedia_settings.MEDIA_MODEL}' that has not been installed"
         )
 
     return media_model

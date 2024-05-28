@@ -68,7 +68,7 @@ class WagtailMediaSettings:
 
     def __getattr__(self, attr):
         if attr not in self.defaults:
-            raise AttributeError("Invalid wagtailmedia setting: '%s'" % attr)
+            raise AttributeError(f"Invalid wagtailmedia setting: '{attr}'")
 
         try:
             # Check if present in user settings

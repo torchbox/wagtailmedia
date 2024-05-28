@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+-
+- Add support for Wagtail 6.1 ([#243](https://github.com/torchbox/wagtailmedia/pull/243)) @katdom13
+
+### Removed
+
+- Drop support for Wagtail < 5.2 and Django < 4.2. ([#243](https://github.com/torchbox/wagtailmedia/pull/243)) @katdom13
+
 ## [0.15.1] - 2024-02-5
 
 ### Fixed

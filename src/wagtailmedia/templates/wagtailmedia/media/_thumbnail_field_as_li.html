@@ -1,4 +1,11 @@
-{% load wagtailadmin_tags %}
+{% load wagtailadmin_tags media_tags %}
+
+{% wagtail_version_gte "6.0" as wagtail_gte_60 %}
+
 <li class="{% if field.field.required %}required{% endif %} {{ wrapper_classes }} {{ li_classes }} {% if field.errors %}error{% endif %}">
-    {% include "wagtailmedia/media/_thumbnail_field.html" %}
+    {% if wagtail_gte_60 %}
+        {% include "wagtailmedia/media/_thumbnail_field.html" %}
+    {% else %}
+        {% include "wagtailmedia/media/_thumbnail_field_legacy.html" %}
+    {% endif %}
 </li>
