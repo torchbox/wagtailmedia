@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.15.2] - 2024-06-12
+
 ### Added
 
 - Add support for Wagtail 6.1 ([#243](https://github.com/torchbox/wagtailmedia/pull/243)) @katdom13
@@ -15,13 +17,13 @@
 
 - Drop support for Wagtail < 5.2 and Django < 4.2. ([#243](https://github.com/torchbox/wagtailmedia/pull/243)) @katdom13
 
-## [0.15.1] - 2024-02-5
+## [0.15.1] - 2024-02-05
 
 ### Fixed
 
 - The action buttons on the Media index in Wagtail 6.0
 
-## [0.15.0] - 2024-02-5
+## [0.15.0] - 2024-02-05
 
 ### Added
 
@@ -314,8 +316,9 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.15.1...HEAD
-[0.15.0]: https://github.com/torchbox/wagtailmedia/compare/v0.15.0...v0.15.1
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.15.2...HEAD
+[0.15.1]: https://github.com/torchbox/wagtailmedia/compare/v0.15.1...v0.15.2
+[0.15.1]: https://github.com/torchbox/wagtailmedia/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...v0.15.0
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.4...v0.14.5
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.3...v0.14.4
