@@ -3,8 +3,13 @@
 ## [Unreleased]
 
 ### Added
--
+
 - Add support for Wagtail 6.1 ([#243](https://github.com/torchbox/wagtailmedia/pull/243)) @katdom13
+- Romanian translation
+
+### Changed
+
+- Updated Russian translation ([#242](https://github.com/torchbox/wagtailmedia/pull/242)) @ACK1D
 
 ### Removed
 
