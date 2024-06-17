@@ -1,6 +1,6 @@
-class RemovedInWagtailMedia015Warning(PendingDeprecationWarning):
+class RemovedInWagtailMedia016Warning(PendingDeprecationWarning):
     pass
 
 
-class RemovedInWagtailMedia016Warning(DeprecationWarning):
+class RemovedInWagtailMedia017Warning(DeprecationWarning):
     pass

@@ -17,6 +17,7 @@ from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
+from wagtailmedia.views.viewsets import media_chooser_viewset
 
 
 @hooks.register("register_admin_urls")
@@ -107,8 +108,8 @@ def describe_collection_media(collection):
 
 
 class MediaAdminURLFinder(ModelAdminURLFinder):
-    permission_policy = permission_policy
     edit_url_name = "wagtailmedia:edit"
+    permission_policy = permission_policy
 
 
 register_admin_url_finder(get_media_model(), MediaAdminURLFinder)
@@ -136,3 +137,8 @@ def register_icons(icons):
         "wagtailmedia/icons/wagtailmedia-audio.svg",  # {% icon "wagtailmedia-audio" %}
         "wagtailmedia/icons/wagtailmedia-video.svg",  # {% icon "wagtailmedia-video" %}
     ]
+
+
+@hooks.register("register_admin_viewset")
+def register_viewset():
+    return media_chooser_viewset
