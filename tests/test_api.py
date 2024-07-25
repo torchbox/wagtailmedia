@@ -73,7 +73,7 @@ class TestApiMediaListing(ApiTestBase):
             media = Media.objects.get(pk=item["id"])
             # Check download_url
             self.assertEqual(
-                item["meta"]["download_url"], "http://localhost/media/%s" % media.file
+                item["meta"]["download_url"], f"http://localhost/media/{media.file}"
             )
 
             self.assertEqual(item["media_type"], media.type)

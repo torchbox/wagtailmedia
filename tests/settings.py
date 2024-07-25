@@ -94,7 +94,7 @@ if REDIS_PORT:
     CACHES = {
         "default": {
             "BACKEND": "redis_cache.RedisCache",
-            "LOCATION": "localhost:%s" % REDIS_PORT,
+            "LOCATION": f"localhost:{REDIS_PORT}",
         },
     }
 else:
