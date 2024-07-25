@@ -182,7 +182,7 @@ msgstr[0] ""
 "<span>%(total)s</span> Медиафайл <span class=\"visuallyhidden w-sr-only\"> "
 "создан на %(site_name)s</span>"
 msgstr[1] ""
-"<span>%(total)s</span> Медиафайлы <span class=\"visuallyhiddenw-sr-only\"> "
+"<span>%(total)s</span> Медиафайлы <span class=\"visuallyhidden w-sr-only\"> "
 "созданы на %(site_name)s</span>"
 
 #: src/wagtailmedia/templates/wagtailmedia/media/_file_field.html:4
