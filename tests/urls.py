@@ -18,7 +18,7 @@ urlpatterns = [
     path("", include(wagtail_urls)),
 ] + [
     path(
-        f"{prefix.lstrip("/")}<path:path>",
+        f"{prefix.lstrip('/')}<path:path>",
         serve,
         kwargs={"document_root": document_root},
     )
