@@ -15,8 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - run: python -Im pip install --user ruff
+    - run: python -Im pip install --user ruff==0.5.4
 
     - name: Run ruff
       working-directory: ./src
-      run: ruff --output-format=github wagtailmedia
+      run: ruff check --output-format=github wagtailmedia
