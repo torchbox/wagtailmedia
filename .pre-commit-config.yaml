@@ -1,5 +1,6 @@
 ci:
   autofix_prs: false
+  autoupdate_schedule: 'quarterly'
 
 default_language_version:
   python: python3.11
