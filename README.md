@@ -9,12 +9,13 @@
 A module for Wagtail that provides functionality similar to `wagtail.documents` module,
 but for audio and video files.
 
-## Join the Community at Wagtail Space!
+## Requirements
 
-We'll be at Wagtail Space US this year! The Call for Participation and Registration for both Wagtail Space 2024 events is open. We would love to have you give a talk, or just us as an attendee in June.
+wagtailmedia requires the following:
 
-* [Wagtail Space NL](https://nl.wagtail.space/), Arnhem, The Netherlands. 2024-06-14
-* [Wagtail Space US](https://us.wagtail.space/), Philadelphia, PA. 2024-06-20 to 2024-06-22
+- Python (3.8, 3.9, 3.10, 3.11, 3.12)
+- Django (4.2, 5.0, 5.1)
+- Wagtail (5.2, 6.1)
 
 ## Install
 
