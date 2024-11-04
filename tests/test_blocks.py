@@ -51,19 +51,19 @@ class BlockTests(TestCase):
     def test_abstract_media_block_queryset(self):
         block = AbstractMediaChooserBlock()
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             block.field.queryset.order_by("pk"),
             Media.objects.order_by("pk"),
         )
 
         block = AbstractMediaChooserBlock(media_type="audio")
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             block.field.queryset.order_by("pk"),
             Media.objects.filter(type="audio").order_by("pk"),
         )
 
         block = AbstractMediaChooserBlock(media_type="subspace-transmission")
-        self.assertQuerysetEqual(block.field.queryset, Media.objects.none())
+        self.assertQuerySetEqual(block.field.queryset, Media.objects.none())
 
     def test_audio_chooser_block_type(self):
         block = AudioChooserBlock()
