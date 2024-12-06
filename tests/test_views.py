@@ -10,9 +10,9 @@ from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 from wagtail.models import Collection, GroupCollectionPermission
 from wagtail.test.utils import WagtailTestUtils
-from wagtailmedia import models
 
 from tests.testapp.models import EventPage, EventPageRelatedMedia
+from wagtailmedia import models
 
 
 class TestMediaIndexView(TestCase, WagtailTestUtils):

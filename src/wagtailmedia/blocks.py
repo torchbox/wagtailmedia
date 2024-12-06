@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 from django.forms import ModelChoiceField
 from django.template.loader import render_to_string
@@ -52,7 +52,7 @@ class AbstractMediaChooserBlock(ChooserBlock):
             f"You need to implement {self.__class__.__name__}.render_basic"
         )
 
-    def get_comparison_class(self) -> Type["MediaChooserBlockComparison"]:
+    def get_comparison_class(self) -> type["MediaChooserBlockComparison"]:
         return MediaChooserBlockComparison
 
 

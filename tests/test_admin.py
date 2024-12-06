@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from wagtail.models import Page
 from wagtail.test.utils import WagtailTestUtils
+
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 

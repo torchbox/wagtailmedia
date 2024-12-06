@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+
 from wagtailmedia import widgets
 from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 

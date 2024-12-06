@@ -95,7 +95,7 @@ def register_media_permissions_panel():
 def describe_collection_media(collection):
     media_count = get_media_model().objects.filter(collection=collection).count()
     if media_count:
-        url = reverse("wagtailmedia:index") + ("?collection_id=%d" % collection.id)
+        url = reverse("wagtailmedia:index") + f"?collection_id={collection.id}"
         return {
             "count": media_count,
             "count_text": ngettext(

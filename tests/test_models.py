@@ -4,6 +4,7 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django.template import Context, Template
 from django.test import TestCase, override_settings
+
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 

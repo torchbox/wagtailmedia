@@ -2,6 +2,7 @@ import json
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
+
 from wagtailmedia.models import get_media_model
 
 from .utils import create_audio, create_video
@@ -66,8 +67,7 @@ class TestApiMediaListing(ApiTestBase):
 
             # Check detail_url
             self.assertEqual(
-                item["meta"]["detail_url"],
-                "http://localhost/api/media/%d/" % item["id"],
+                item["meta"]["detail_url"], f"http://localhost/api/media/{item['id']}/"
             )
 
             media = Media.objects.get(pk=item["id"])

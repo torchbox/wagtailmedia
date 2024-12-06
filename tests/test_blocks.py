@@ -1,6 +1,7 @@
 from django.core.files.base import ContentFile
 from django.test import TestCase
 from django.urls import reverse
+
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
     AudioChooserBlock,
