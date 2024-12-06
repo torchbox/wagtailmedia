@@ -19,7 +19,7 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
   PIP_NO_PYTHON_VERSION_WARNING: "1"
   # Keep in sync with .pre-commit-config.yaml/default_language_version/python.
-  PYTHON_LATEST: "3.11"
+  PYTHON_LATEST: "3.13"
 
 jobs:
   tests:
@@ -43,6 +43,8 @@ jobs:
             pypi.org:443
             api.github.com:443
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: 🐍 Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
