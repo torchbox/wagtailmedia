@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.test import TestCase
+
 from wagtailmedia.templatetags.media_tags import wagtail_version_gte
 
 

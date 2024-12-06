@@ -7,10 +7,11 @@ import taggit.managers
 import wagtail.blocks
 import wagtail.fields
 import wagtail.search.index
-import wagtailmedia.blocks
 
 from django.conf import settings
 from django.db import migrations, models
+
+import wagtailmedia.blocks
 
 
 try:

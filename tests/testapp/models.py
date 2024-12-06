@@ -6,6 +6,7 @@ from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
+
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
     AudioChooserBlock,

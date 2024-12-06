@@ -4,10 +4,10 @@ from django.urls import reverse
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.panels import FieldPanel, ObjectList
 from wagtail.models import Page
-from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison
-from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 from tests.testapp.models import BlogStreamPage
+from wagtailmedia.edit_handlers import MediaChooserPanel, MediaFieldComparison
+from wagtailmedia.widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
 
 from .utils import create_audio, create_video
 

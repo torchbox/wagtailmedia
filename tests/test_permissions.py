@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from wagtail.models import Collection, GroupCollectionPermission
 from wagtail.test.utils import WagtailTestUtils
+
 from wagtailmedia import models
 
 
