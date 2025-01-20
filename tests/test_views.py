@@ -723,15 +723,16 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         self.assertEqual(response.context["media_files"][0], media)
 
     def test_construct_queryset_hook_search(self):
-        media = models.Media.objects.create(
-            title="Test media shown",
-            duration=100,
-            type="audio",
-            uploaded_by_user=self.user,
-        )
-        models.Media.objects.create(
-            title="Test media not shown", duration=100, type="audio"
-        )
+        with self.captureOnCommitCallbacks(execute=True):
+            media = models.Media.objects.create(
+                title="Test media shown",
+                duration=100,
+                type="audio",
+                uploaded_by_user=self.user,
+            )
+            models.Media.objects.create(
+                title="Test media not shown", duration=100, type="audio"
+            )
 
         def filter_media(media, request):
             return media.filter(uploaded_by_user=self.user)
@@ -1100,19 +1101,21 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def test_used_media_usage_count(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
+        with self.captureOnCommitCallbacks(execute=True):
+            event_page_related_link = EventPageRelatedMedia()
+            event_page_related_link.page = page
+            event_page_related_link.link_media = media
+            event_page_related_link.save()
         self.assertEqual(media.get_usage().count(), 1)
 
     def test_usage_count_appears(self):
         media = models.Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
-        event_page_related_link = EventPageRelatedMedia()
-        event_page_related_link.page = page
-        event_page_related_link.link_media = media
-        event_page_related_link.save()
+        with self.captureOnCommitCallbacks(execute=True):
+            event_page_related_link = EventPageRelatedMedia()
+            event_page_related_link.page = page
+            event_page_related_link.link_media = media
+            event_page_related_link.save()
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 1 time")
 

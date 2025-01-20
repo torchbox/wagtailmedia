@@ -111,15 +111,17 @@ class TestMediaTemplating(TestCase):
 class TestMediaQuerySet(TestCase):
     def test_search_method(self):
         # Make a test media
-        media = Media.objects.create(title="Test media file", duration=100)
+        with self.captureOnCommitCallbacks(execute=True):
+            media = Media.objects.create(title="Test media file", duration=100)
 
         # Search for it
         results = Media.objects.search("Test")
         self.assertEqual(list(results), [media])
 
     def test_operators(self):
-        aaa_media = Media.objects.create(title="AAA Test media", duration=100)
-        zzz_media = Media.objects.create(title="ZZZ Test media", duration=100)
+        with self.captureOnCommitCallbacks(execute=True):
+            aaa_media = Media.objects.create(title="AAA Test media", duration=100)
+            zzz_media = Media.objects.create(title="ZZZ Test media", duration=100)
 
         results = Media.objects.search("aaa test", operator="and")
         self.assertEqual(list(results), [aaa_media])
@@ -129,8 +131,9 @@ class TestMediaQuerySet(TestCase):
         self.assertEqual(sorted_results, [aaa_media, zzz_media])
 
     def test_custom_ordering(self):
-        aaa_media = Media.objects.create(title="AAA Test media", duration=100)
-        zzz_media = Media.objects.create(title="ZZZ Test media", duration=100)
+        with self.captureOnCommitCallbacks(execute=True):
+            aaa_media = Media.objects.create(title="AAA Test media", duration=100)
+            zzz_media = Media.objects.create(title="ZZZ Test media", duration=100)
 
         results = Media.objects.order_by("title").search(
             "Test", order_by_relevance=False
