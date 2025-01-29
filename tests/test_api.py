@@ -14,9 +14,10 @@ Media = get_media_model()
 class ApiTestBase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.a_space_odyssey = create_video("2001: A Space Odyssey")
-        cls.tng = create_video("Star Trek: The Next Generation")
-        cls.pink_floyd_time = create_audio("Pink Floyd: Time")
+        with cls.captureOnCommitCallbacks(execute=True):
+            cls.a_space_odyssey = create_video("2001: A Space Odyssey")
+            cls.tng = create_video("Star Trek: The Next Generation")
+            cls.pink_floyd_time = create_audio("Pink Floyd: Time")
 
     def tearDown(self) -> None:
         for item in Media.objects.all():
