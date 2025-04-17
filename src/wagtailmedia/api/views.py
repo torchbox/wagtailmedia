@@ -14,6 +14,7 @@ class MediaAPIViewSet(BaseAPIViewSet):
         "height",
         "media_type",
         "collection",
+        "full_url",
     ]
     meta_fields = BaseAPIViewSet.meta_fields + [
         "tags",
@@ -28,11 +29,13 @@ class MediaAPIViewSet(BaseAPIViewSet):
         "collection",
         "thumbnail",
         "download_url",
+        "full_url",
     ]
     nested_default_fields = BaseAPIViewSet.nested_default_fields + [
         "title",
         "collection",
         "download_url",
+        "full_url",
     ]
     name = "media"
     model = get_media_model()

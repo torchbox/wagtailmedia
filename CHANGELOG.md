@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added a `full_url` field
+
+### Changed
+
+- Updated the `download_url` format to match images in Wagtail, removing the domain part from the URL (#254)
+
 ## [0.15.2] - 2024-06-12
 
 ### Added
