@@ -524,6 +524,17 @@ class TestApiMediaDetail(ApiTestBase):
         self.assertIn("tags", content["meta"])
         self.assertEqual(content["meta"]["tags"], ["hello", "world"])
 
+    @override_settings(WAGTAILAPI_BASE_URL="http://api.example.com/")
+    def test_full_url_with_custom_base_url(self):
+        response = self.get_response(self.pink_floyd_time.pk)
+        content = json.loads(response.content.decode("UTF-8"))
+
+        self.assertIn("full_url", content)
+        self.assertEqual(
+            content["full_url"],
+            "http://api.example.com/media/media/pink_floyd_time.mp3",
+        )
+
     # FIELDS
 
     def test_remove_fields(self):
