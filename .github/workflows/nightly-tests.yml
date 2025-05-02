@@ -40,7 +40,8 @@ jobs:
         id: test
         continue-on-error: true
         run: |
-          ./runtests.py
+          cd tests
+          python manage.py test
         env:
           DATABASE_ENGINE: django.db.backends.postgresql
           DATABASE_HOST: localhost

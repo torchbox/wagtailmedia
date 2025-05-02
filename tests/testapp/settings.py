@@ -24,7 +24,7 @@ DATABASES = {
 
 SECRET_KEY = "not needed"
 
-ROOT_URLCONF = "tests.urls"
+ROOT_URLCONF = "testapp.urls"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = STATIC_ROOT
@@ -66,7 +66,7 @@ MIDDLEWARE += [
 ]
 
 INSTALLED_APPS = [
-    "tests.testapp",
+    "testapp",
     "wagtailmedia",
     "taggit",
     "django.contrib.auth",

@@ -62,7 +62,5 @@ exclude = [
     "*.yml",
     "CHANGELOG.md",
     "SPECIFICATION.md",
-    "manage.py",
-    "runtests.py",
     "ruff.toml",
 ]

@@ -8,10 +8,10 @@ from django.forms.utils import ErrorDict
 from django.test import TestCase, modify_settings
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
+from testapp.models import EventPage, EventPageRelatedMedia
 from wagtail.models import Collection, GroupCollectionPermission
 from wagtail.test.utils import WagtailTestUtils
 
-from tests.testapp.models import EventPage, EventPageRelatedMedia
 from wagtailmedia import models
 
 

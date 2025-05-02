@@ -1,8 +1,8 @@
 from django import forms
 from django.test import TestCase, override_settings
+from testapp.forms import AlternateMediaForm, OverridenWidget
 from wagtail.admin import widgets
 
-from tests.testapp.forms import AlternateMediaForm, OverridenWidget
 from wagtailmedia import models
 from wagtailmedia.forms import BaseMediaForm, get_media_base_form, get_media_form
 
@@ -24,13 +24,13 @@ class TestFormOverride(TestCase):
         self.assertIsInstance(form.fields["thumbnail"].widget, forms.ClearableFileInput)
 
     @override_settings(
-        WAGTAILMEDIA={"MEDIA_FORM_BASE": "tests.testapp.forms.AlternateMediaForm"}
+        WAGTAILMEDIA={"MEDIA_FORM_BASE": "testapp.forms.AlternateMediaForm"}
     )
     def test_overridden_base_form(self):
         self.assertIs(get_media_base_form(), AlternateMediaForm)
 
     @override_settings(
-        WAGTAILMEDIA={"MEDIA_FORM_BASE": "tests.testapp.forms.AlternateMediaForm"}
+        WAGTAILMEDIA={"MEDIA_FORM_BASE": "testapp.forms.AlternateMediaForm"}
     )
     def test_get_overridden_media_form(self):
         bases = get_media_form(models.Media).__bases__
@@ -38,7 +38,7 @@ class TestFormOverride(TestCase):
         self.assertIn(AlternateMediaForm, bases)
 
     @override_settings(
-        WAGTAILMEDIA={"MEDIA_FORM_BASE": "tests.testapp.forms.AlternateMediaForm"}
+        WAGTAILMEDIA={"MEDIA_FORM_BASE": "testapp.forms.AlternateMediaForm"}
     )
     def test_get_overridden_media_form_widgets(self):
         Form = get_media_form(models.Media)

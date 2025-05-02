@@ -19,7 +19,7 @@ try:
 except ImportError:
     import wagtail.models.collections as collections
 
-import tests.testapp.models
+import testapp.models
 
 
 class Migration(migrations.Migration):
@@ -239,7 +239,7 @@ class Migration(migrations.Migration):
                             ("paragraph", wagtail.blocks.RichTextBlock(icon="pilcrow")),
                             (
                                 "media",
-                                tests.testapp.models.TestMediaBlock(icon="media"),
+                                testapp.models.TestMediaBlock(icon="media"),
                             ),
                             (
                                 "video",
