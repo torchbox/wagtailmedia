@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils.safestring import SafeString
+from testapp.models import BlogStreamPage
 
-from tests.testapp.models import BlogStreamPage
 from wagtailmedia.blocks import (
     AudioChooserBlock,
     MediaChooserBlockComparison,
