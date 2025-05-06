@@ -21,9 +21,17 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
 
             $('.pagination a', context).on('click', function(e) {
                 let params = {
-                    p: this.getAttribute("data-page"),
                     collection_id: collectionChooser.val()
                 };
+
+                if (this.hasAttribute("data-page")) {
+                    params['p'] = this.getAttribute("data-page");
+                }
+                else if (this.parentElement.classList.contains("prev") || this.parentElement.classList.contains("next")) {
+                    const href = new URL(this.href);
+                    params = Object.fromEntries(href.searchParams.entries());
+                }
+
                 const query = searchInput.val();
                 if (query.length) {
                     params['q'] = query;

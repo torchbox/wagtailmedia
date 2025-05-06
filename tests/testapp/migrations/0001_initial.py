@@ -206,6 +206,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 "verbose_name": "media",
+                "verbose_name_plural": "media items",
                 "abstract": False,
             },
             bases=(wagtail.search.index.Indexed, models.Model),
