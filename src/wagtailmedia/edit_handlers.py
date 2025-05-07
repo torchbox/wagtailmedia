@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import warnings
+
 from typing import TYPE_CHECKING
 
 from django.template.loader import render_to_string
 from wagtail.admin.compare import ForeignObjectComparison
 from wagtail.admin.panels import FieldPanel
 
+from .deprecation import RemovedInWagtailMedia018Warning
 from .models import MediaType
 from .utils import format_audio_html, format_video_html
 from .widgets import AdminAudioChooser, AdminMediaChooser, AdminVideoChooser
@@ -22,6 +25,26 @@ class MediaChooserPanel(FieldPanel):
         super().__init__(field_name, *args, **kwargs)
 
         self.media_type = media_type
+
+        if self.media_type is None:
+            warnings.warn(
+                (
+                    "The `MediaChooserPanel` field panel is deprecated. "
+                    "Please use the `FieldPanel()` instead."
+                ),
+                RemovedInWagtailMedia018Warning,
+                stacklevel=2,
+            )
+        else:
+            warnings.warn(
+                (
+                    "The `MediaChooserPanel` field panel is deprecated. Please use the "
+                    "specialised `AudioChooserPanel()` for audio only "
+                    "and `VideoChooserPanel()` for video only."
+                ),
+                RemovedInWagtailMedia018Warning,
+                stacklevel=2,
+            )
 
     def clone_kwargs(self):
         kwargs = super().clone_kwargs()
