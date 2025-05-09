@@ -6,6 +6,9 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   nightly-test:
     # Cannot check the existence of secrets, so limiting to repository name to prevent all forks to run nightly.
@@ -40,7 +43,8 @@ jobs:
         id: test
         continue-on-error: true
         run: |
-          ./runtests.py
+          cd tests
+          python manage.py test
         env:
           DATABASE_ENGINE: django.db.backends.postgresql
           DATABASE_HOST: localhost

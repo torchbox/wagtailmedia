@@ -5,4 +5,4 @@ if DJANGO_VERSION >= (3, 2):
     # The declaration is only needed for older Django versions
     pass
 else:
-    default_app_config = "tests.testapp.apps.WagtailmediaTestsAppConfig"
+    default_app_config = "testapp.apps.WagtailmediaTestsAppConfig"

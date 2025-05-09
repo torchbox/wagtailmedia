@@ -2,19 +2,29 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from django.core.paginator import Paginator
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 
 
+try:
+    from wagtail.admin.paginator import WagtailPaginator as Paginator
+except ImportError:
+    from django.core.paginator import Paginator
+
+
 if TYPE_CHECKING:
+    from django.core.paginator import Page as PaginatorPage
+    from django.http import HttpRequest
+
     from .models import AbstractMedia
 
-DEFAULT_PAGE_KEY = "p"
+DEFAULT_PAGE_KEY: str = "p"
 
 
-def paginate(request, items, page_key=DEFAULT_PAGE_KEY, per_page=20):
+def paginate(
+    request: HttpRequest, items, page_key: str = DEFAULT_PAGE_KEY, per_page: int = 20
+) -> tuple[Paginator, PaginatorPage]:
     paginator = Paginator(items, per_page)
     page = paginator.get_page(request.GET.get(page_key))
     return paginator, page

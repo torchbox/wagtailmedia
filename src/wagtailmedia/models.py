@@ -160,6 +160,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
     class Meta:
         abstract = True
         verbose_name = _("media")
+        verbose_name_plural = _("media items")
 
 
 class Media(AbstractMedia):

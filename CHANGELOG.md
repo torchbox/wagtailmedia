@@ -10,6 +10,14 @@
 
 - Updated the `download_url` format to match images in Wagtail, removing the domain part from the URL (#254)
 
+## [0.16.0] - 2025-05-06
+
+### Added
+
+- Support for Wagtail 7.0 (and 6.3, 6.4) ([#250](https://github.com/torchbox/wagtailmedia/pull/250), [#251](https://github.com/torchbox/wagtailmedia/pull/251), [#255](https://github.com/torchbox/wagtailmedia/pull/255), [#257](https://github.com/torchbox/wagtailmedia/pull/257) @gasman, @JakubMastalerz and @zerolab
+- SPDX license expressions ([#257](https://github.com/torchbox/wagtailmedia/pull/257))
+  More info at https://peps.python.org/pep-0639/, https://hugovk.dev/blog/2025/improving-licence-metadata/
+
 ## [0.15.2] - 2024-06-12
 
 ### Added
@@ -324,8 +332,9 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.15.2...HEAD
-[0.15.1]: https://github.com/torchbox/wagtailmedia/compare/v0.15.1...v0.15.2
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/torchbox/wagtailmedia/compare/v0.15.2...v0.16.0
+[0.15.2]: https://github.com/torchbox/wagtailmedia/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/torchbox/wagtailmedia/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/torchbox/wagtailmedia/compare/v0.14.0...v0.15.0
 [0.14.4]: https://github.com/torchbox/wagtailmedia/compare/v0.14.4...v0.14.5
