@@ -113,6 +113,13 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         return self.file.url
 
     @property
+    def full_url(self):
+        url = self.url
+        if hasattr(settings, "WAGTAILADMIN_BASE_URL") and url.startswith("/"):
+            url = settings.WAGTAILADMIN_BASE_URL + url
+        return url
+
+    @property
     def sources(self):
         return [
             {
