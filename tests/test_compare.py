@@ -75,8 +75,8 @@ class MediaFieldComparisonTest(MediaBlockComparisonTestCase):
         diff = comparison.htmldiff()
         self.assertHTMLEqual(
             diff,
-            f'<div class="comparison--media deletion">{ format_audio_html(self.audio_a) }</div>'
-            f'<div class="comparison--media addition">{ format_audio_html(self.audio_b) }</div>',
+            f'<div class="comparison--media deletion">{format_audio_html(self.audio_a)}</div>'
+            f'<div class="comparison--media addition">{format_audio_html(self.audio_b)}</div>',
         )
         self.assertIsInstance(diff, SafeString)
 
