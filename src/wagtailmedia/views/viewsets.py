@@ -1,25 +1,59 @@
+from typing import TYPE_CHECKING, Any, ClassVar
+
+from django.db.models import QuerySet
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from wagtail.admin.ui.tables import Column
+from wagtail.admin.ui.tables import Column, DateColumn, DownloadColumn
 from wagtail.admin.views.generic.chooser import (
-    ChooseResultsView,
-    ChooseView,
+    BaseChooseView,
+    ChooseResultsViewMixin,
+    ChooseViewMixin,
     ChosenView,
+    CreationFormMixin,
 )
 from wagtail.admin.viewsets.chooser import ChooserViewSet
 
-from ..forms import get_media_form
-from ..models import get_media_model
-from ..permissions import permission_policy
+from wagtailmedia.models import get_media_model
+from wagtailmedia.permissions import permission_policy
 
 
-Media = get_media_model()
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
+
+    from wagtailmedia.models import Media as MediaBase
 
 
-class MediaChooserMixin:
-    construct_queryset_hook_name = "construct_media_chooser_queryset"
+Media: "MediaBase" = get_media_model()
 
-    def get_object_list(self):
+
+class MediaCreationFormMixin(CreationFormMixin):
+    creation_tab_id = "upload"
+
+    def get_creation_form_class(self):
+        from wagtailmedia.forms import get_media_form
+
+        return get_media_form(self.model)
+
+    def get_creation_form_kwargs(self):
+        kwargs = super().get_creation_form_kwargs()
+        kwargs.update(
+            {
+                "user": self.request.user,
+                "prefix": "media-chooser-upload",
+            }
+        )
+        if self.request.method in ("POST", "PUT"):
+            kwargs["instance"] = self.model(uploaded_by_user=self.request.user)
+
+        return kwargs
+
+
+class BaseMediaChooseView(BaseChooseView):
+    per_page = 10
+    ordering = "-created_at"
+    construct_queryset_hook_name: ClassVar[str] = "construct_media_chooser_queryset"
+
+    def get_object_list(self) -> QuerySet["MediaBase"]:
         return (
             permission_policy.instances_user_has_any_permission_for(
                 self.request.user, ["choose"]
@@ -27,15 +61,6 @@ class MediaChooserMixin:
             .select_related("collection")
             .only("title", "file", "type", "collection__name", "created_at")
         )
-
-    @property
-    def columns(self):
-        return super().columns + [
-            Column("file", label="File", accessor="file"),
-            Column("type", label="Type", accessor="type"),
-            Column("collection", label="Collection", accessor="collection"),
-            Column("created_at", label="Uploaded", accessor="created_at"),
-        ]
 
     def get_filter_form(self):
         FilterForm = self.get_filter_form_class()
@@ -51,25 +76,49 @@ class MediaChooserMixin:
 
         return collections
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    @property
+    def columns(self) -> list[Column]:
+        columns = super().columns + [
+            DownloadColumn("file", label="File", accessor="file"),
+            Column("type", label="Type", accessor="type"),
+            Column("collection", label="Collection", accessor="collection"),
+            DateColumn("created_at", label="Uploaded", accessor="created_at"),
+        ]
+
+        if self.collections:
+            columns.insert(2, Column("collection", label=_("Collection")))
+
+        return columns
+
+    def get(self, request: "HttpRequest") -> "HttpResponse":
+        self.model = Media
+        return super().get(request)
+
+
+class MediaChooseViewMixin(ChooseViewMixin):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         context["collections"] = self.collections
         return context
 
 
-class MediaChooseView(MediaChooserMixin, ChooseView):
-    pass
+class MediaChooseView(
+    MediaChooseViewMixin, MediaCreationFormMixin, BaseMediaChooseView
+): ...
 
 
-class MediaChooseResultsView(MediaChooserMixin, ChooseResultsView):
-    pass
+class MediaChooseResultsView(
+    ChooseResultsViewMixin, MediaCreationFormMixin, BaseMediaChooseView
+): ...
 
 
 class MediaChosenView(ChosenView):
-    def get_object(self, pk):
+    def get_object(self, pk: int) -> "MediaBase":
         return Media.objects.only("title", "thumbnail").get(pk=pk)
 
-    def get_chosen_response_data(self, media_item, preview_image_filter="max-165x165"):
+    def get_chosen_response_data(
+        self, media_item: "MediaBase", preview_image_filter: str = "max-165x165"
+    ) -> dict[str, Any]:
         """
         Given a media item, return the json data to pass back to the image chooser panel
         """
@@ -77,12 +126,12 @@ class MediaChosenView(ChosenView):
         if not media_item.thumbnail:
             return response_data
 
-        preview_image = media_item.thumbnail
-        response_data["preview"] = {
-            "url": preview_image.url,
-            "width": 128,
-            "height": 128,
-        }
+        if preview_image := media_item.thumbnail:
+            response_data["preview"] = {
+                "url": preview_image.url,
+                "width": 128,
+                "height": 128,
+            }
         return response_data
 
 
@@ -90,7 +139,6 @@ class MediaChooserViewSet(ChooserViewSet):
     choose_view_class = MediaChooseView
     chosen_view_class = MediaChosenView
     choose_results_view_class = MediaChooseResultsView
-    creation_form_class = get_media_form(Media)
     permission_policy = permission_policy
 
     icon = "media"

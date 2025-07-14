@@ -161,7 +161,7 @@ class Media(AbstractMedia):
     pass
 
 
-def get_media_model():
+def get_media_model() -> type[Media]:
     from django.apps import apps
 
     from wagtailmedia.settings import wagtailmedia_settings
