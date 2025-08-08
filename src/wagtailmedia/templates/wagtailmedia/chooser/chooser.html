@@ -41,7 +41,7 @@
 
     <div class="tab-content">
         <section id="tab-search" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-search">
-            <form action="{% url 'wagtailmedia:chooser' %}" method="GET" role="search" class="media-search search-bar" novalidate data-chooser-modal-search>
+            <form action="{% url 'wagtailmedia:chooser' %}{% if media_type %}{{ media_type }}{% endif %}" method="GET" role="search" class="media-search search-bar" novalidate data-chooser-modal-search>
                 <ul class="fields">
                     {% for field in searchform %}
                         <li>{% include "wagtailadmin/shared/field.html" with field=field only %}</li>
