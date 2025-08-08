@@ -15,7 +15,6 @@ from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
 
 
-pagination_template = "wagtailadmin/shared/pagination_nav.html"
 permission_checker = PermissionPolicyChecker(permission_policy)
 
 
@@ -73,6 +72,9 @@ def chooser(request, media_type=None):
 
     if media_type:
         media_files = media_files.filter(type=media_type)
+        chooser_url = reverse("wagtailmedia:chooser_typed", args=(media_type,))
+    else:
+        chooser_url = reverse("wagtailmedia:chooser")
 
     if (
         "q" in request.GET
@@ -109,10 +111,9 @@ def chooser(request, media_type=None):
                 "media_files": media_files,
                 "query_string": q,
                 "is_searching": is_searching,
-                "pagination_template": pagination_template,
                 "media_type": media_type,
                 "ordering": ordering,
-                "linkurl": reverse("wagtailmedia:chooser"),
+                "chooser_url": chooser_url,
                 "elided_page_range": paginator.get_elided_page_range(
                     request.GET.get("p", 1)
                 ),
@@ -145,13 +146,12 @@ def chooser(request, media_type=None):
             "collections": collections,
             "uploadforms": uploadforms,
             "is_searching": False,
-            "pagination_template": pagination_template,
             "popular_tags": popular_tags_for_model(Media),
             "media_type": media_type,
             "ordering": ordering,
             "title": title,
             "icon": f"wagtailmedia-{media_type}" if media_type is not None else "media",
-            "linkurl": reverse("wagtailmedia:chooser"),
+            "chooser_url": chooser_url,
             "elided_page_range": paginator.get_elided_page_range(
                 request.GET.get("p", 1)
             ),
@@ -241,7 +241,7 @@ def chooser_upload(request, media_type):
         collections = None
 
     media_files = media_files.order_by(ordering)
-    paginator, media_files = paginate(request, media_files, per_page=10)
+    paginator, media_files = paginate(request, media_files)
 
     context = {
         "media_files": media_files,
@@ -249,7 +249,6 @@ def chooser_upload(request, media_type):
         "collections": collections,
         "uploadforms": upload_forms,
         "is_searching": False,
-        "pagination_template": pagination_template,
         "media_type": media_type,
         "ordering": ordering,
     }

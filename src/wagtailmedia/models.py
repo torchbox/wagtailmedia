@@ -76,6 +76,7 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
             ],
         ),
         index.FilterField("uploaded_by_user"),
+        index.FilterField("type"),
     ]
 
     admin_form_fields = (

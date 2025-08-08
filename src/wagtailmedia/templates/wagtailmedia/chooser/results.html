@@ -14,7 +14,7 @@
 
     {% include "wagtailmedia/media/list.html" with choosing=1 %}
 
-    {% include pagination_template with items=media_files link_url=link_url %}
+    {% include "wagtailadmin/shared/pagination_nav.html" with items=media_files linkurl=chooser_url %}
 {% else %}
     {% if is_searching %}
         <p>{% blocktrans %}Sorry, no media files match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
