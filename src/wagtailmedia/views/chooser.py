@@ -112,7 +112,9 @@ def chooser(request, media_type=None):
                 "pagination_template": pagination_template,
                 "media_type": media_type,
                 "ordering": ordering,
-                "linkurl": reverse("wagtailmedia:chooser"),
+                "linkurl": reverse("wagtailmedia:chooser_typed", args=({media_type}))
+                if media_type is not None
+                else reverse("wagtailmedia:chooser"),
                 "elided_page_range": paginator.get_elided_page_range(
                     request.GET.get("p", 1)
                 ),
@@ -151,7 +153,9 @@ def chooser(request, media_type=None):
             "ordering": ordering,
             "title": title,
             "icon": f"wagtailmedia-{media_type}" if media_type is not None else "media",
-            "linkurl": reverse("wagtailmedia:chooser"),
+            "linkurl": reverse("wagtailmedia:chooser_typed", args=({media_type}))
+            if media_type is not None
+            else reverse("wagtailmedia:chooser"),
             "elided_page_range": paginator.get_elided_page_range(
                 request.GET.get("p", 1)
             ),
