@@ -13,7 +13,7 @@ help:											## ⁉️  - Display help comments for each make command
 
 clean:	## 🗑️  - Removes pycache and test media
 	@echo "🗑️ - Removing __pycache__ and test artifacts"
-	rm -rf test-media test-static .tox
+	rm -rf tests/testapp/test-media tests/testapp/test-static .tox
 	find . -type d -name  "__pycache__" -exec rm -r {} +
 
 package-setup:
