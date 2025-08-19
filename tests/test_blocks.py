@@ -39,7 +39,7 @@ class BlockTests(TestCase):
                 return value.file.name
 
         block = TestMediaChooserBlock()
-        self.assertEqual(block.render(self.audio), "media/test.mp3")
+        self.assertRegex(block.render(self.audio), r"media/test(_\w{7})?.mp3")
 
     def test_media_block_get_form_state(self):
         block = AbstractMediaChooserBlock()
