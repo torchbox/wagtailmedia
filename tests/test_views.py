@@ -1038,7 +1038,11 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(video_form.instance.type, "video")
 
     @override_settings(
-        DEFAULT_FILE_STORAGE="wagtail.test.dummy_external_storage.DummyExternalStorage"
+        STORAGES={
+            "default": {
+                "BACKEND": "wagtail.test.dummy_external_storage.DummyExternalStorage",
+            },
+        }
     )
     def test_upload_with_external_storage(self):
         response = self.client.post(
