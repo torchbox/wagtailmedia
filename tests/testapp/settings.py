@@ -1,11 +1,9 @@
 import os
 
+from wagtail.test.settings import MEDIA_ROOT, STATIC_ROOT  # noqa: F401
 
 DEBUG = "INTERACTIVE" in os.environ
 
-WAGTAILMEDIA_ROOT = os.path.dirname(__file__)
-STATIC_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-static")
-MEDIA_ROOT = os.path.join(WAGTAILMEDIA_ROOT, "test-media")
 MEDIA_URL = "/media/"
 
 DATABASES = {
