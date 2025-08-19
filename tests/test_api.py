@@ -2,6 +2,7 @@ import json
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtailmedia.models import get_media_model
 
@@ -295,9 +296,14 @@ class TestApiMediaListing(ApiTestBase):
         content = json.loads(response.content.decode("UTF-8"))
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            content, {"message": "cannot order by 'random' (unknown field)"}
-        )
+        if WAGTAIL_VERSION >= (7, 1):
+            self.assertEqual(
+                content, {"message": "cannot order by '-random' (unknown field)"}
+            )
+        else:
+            self.assertEqual(
+                content, {"message": "cannot order by 'random' (unknown field)"}
+            )
 
     def test_ordering_by_random_with_offset_gives_error(self):
         response = self.get_response(order="random", offset=10)
