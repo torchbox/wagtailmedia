@@ -11,9 +11,9 @@ help:											## ⁉️  - Display help comments for each make command
 		| awk 'BEGIN { FS=":.*?## " }; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'  \
 		| sort
 
-clean:	## 🗑️  - Removes pycache and test media
+clean:	## 🗑️  - Removes pycache and test artifacts
 	@echo "🗑️ - Removing __pycache__ and test artifacts"
-	rm -rf test-media test-static .tox
+	rm -rf .tox
 	find . -type d -name  "__pycache__" -exec rm -r {} +
 
 package-setup:

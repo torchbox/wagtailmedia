@@ -33,6 +33,7 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = [
+    "tox>=4.22",
     "coverage>=7.8.0",
 ]
 linting = [
