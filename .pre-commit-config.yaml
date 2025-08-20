@@ -19,8 +19,8 @@ repos:
     - id: end-of-file-fixer
     - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.8.2'  # keep in sync with .github/workflows/ruff.yml
+    rev: 'v0.12.9'  # keep in sync with .github/workflows/ruff.yml
     hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-check
+        args: [--fix]
       - id: ruff-format

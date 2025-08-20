@@ -33,10 +33,11 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = [
-    "coverage>=7.8.0",
+    "coverage>=7.10.0",
+    "tox>=4.28.4",
 ]
 linting = [
-    "pre-commit>=4.2.0",
+    "pre-commit>=4.3.0",
 ]
 
 [project.urls]

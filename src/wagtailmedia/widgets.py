@@ -45,13 +45,13 @@ class AdminMediaChooser(BaseChooser):
 
     @property
     def media(self):
-        return forms.Media(
-            js=[
-                "wagtailmedia/js/tabs.js",
-                "wagtailmedia/js/media-chooser-modal.js",
-                "wagtailmedia/js/media-chooser.js",
-            ]
-        )
+        tab_js = ["wagtailmedia/js/tabs.js"] if WAGTAIL_VERSION >= (7, 1) else []
+        js = [
+            *tab_js,
+            "wagtailmedia/js/media-chooser-modal.js",
+            "wagtailmedia/js/media-chooser.js",
+        ]
+        return forms.Media(js=js)
 
 
 class AdminAudioChooser(AdminMediaChooser):
