@@ -1,9 +1,10 @@
 {% load i18n wagtailadmin_tags %}
 {% include "wagtailadmin/shared/header.html" with title=title icon=icon merged=1 %}
 
-{# TODO: drop data-wmtabs and the tabs.js include when a better tabs framework is in place #}
-{# See https://github.com/wagtail/wagtail/issues/8408. #}
-<div class="w-tabs wagtailmedia-tabs" data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
+{# TODO: drop data-wmtabs and the tabs.js include once we drop support for Wagtail < 7.1 #}
+<div class="w-tabs wagtailmedia-tabs"
+     data-controller="w-tabs" data-w-tabs-active-class="animate-in"
+     data-tabs data-tabs-animate data-tabs-disable-url data-wm-tabs>
     {% if uploadforms %}
         {# Both auth and video forms are powered by the same media form, so use one of them #}
         {% if uploadforms.video %}
@@ -16,7 +17,10 @@
 
         <div class="w-tabs__wrapper w-overflow-hidden">
             {# Using nice-padding and full width class until the modal header is restyled #}
-            <div role="tablist" class="w-tabs__list w-w-full nice-padding">
+            <div role="tablist"
+                 class="w-tabs__list w-w-full nice-padding"
+                 data-action="keydown.right->w-tabs#selectNext keydown.left->w-tabs#selectPrevious keydown.home->w-tabs#selectFirst keydown.end->w-tabs#selectLast"
+            >
                 {% trans "Search" as search_text %}
                 {% include 'wagtailadmin/shared/tabs/tab_nav_link.html' with tab_id='search' title=search_text %}
                 {% if uploadforms.audio %}
@@ -40,7 +44,7 @@
     {% endif %}
 
     <div class="tab-content">
-        <section id="tab-search" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-search">
+        <section id="tab-search" class="w-tabs__panel" role="tabpanel" data-w-tabs-target="panel" aria-labelledby="tab-label-search">
             <form action="{{ chooser_url }}" method="GET" role="search" class="media-search search-bar" novalidate data-chooser-modal-search>
                 <ul class="fields">
                     {% for field in searchform %}
@@ -66,7 +70,7 @@
         </section>
         {% if uploadforms %}
             {% for form_type, uploadform in uploadforms.items %}
-            <section id="tab-upload-{{ form_type }}" class="w-tabs__panel" role="tabpanel" aria-labelledby="tab-label-upload-{{ form_type }}" hidden>
+            <section id="tab-upload-{{ form_type }}" class="w-tabs__panel" role="tabpanel" data-w-tabs-target="panel" aria-labelledby="tab-label-upload-{{ form_type }}" hidden>
                 {% include "wagtailadmin/shared/non_field_errors.html" with form=uploadform %}
                 <form class="media-upload" action="{% url 'wagtailmedia:chooser_upload' form_type %}" method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
