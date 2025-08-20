@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Wagtail 7.1 ([#262](https://github.com/torchbox/wagtailmedia/pull/262)) @damwaingames
+
 ## [0.16.0] - 2025-05-06
 
 ### Added

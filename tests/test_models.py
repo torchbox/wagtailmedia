@@ -223,8 +223,8 @@ class TestMediaFilenameProperties(TestCase):
         cls.extensionless_media.save()
 
     def test_filename(self):
-        self.assertEqual("example.mp4", self.media.filename)
-        self.assertEqual("example", self.extensionless_media.filename)
+        self.assertRegex(self.media.filename, r"example(_\w{7})?.mp4")
+        self.assertRegex(self.extensionless_media.filename, r"example(_\w{7})?")
 
     def test_file_extension(self):
         self.assertEqual("mp4", self.media.file_extension)
