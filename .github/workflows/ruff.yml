@@ -20,7 +20,7 @@ jobs:
       with:
         persist-credentials: false
 
-    - run: python -Im pip install --user ruff==0.8.2
+    - run: python -Im pip install --user ruff==0.12.9
 
     - name: Run ruff
       working-directory: ./src
