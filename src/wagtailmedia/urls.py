@@ -33,4 +33,3 @@ if wagtailmedia_settings.WEBHOOK_API_KEY:
             name="transcoding_webhook",
         ),
     )
-    print(urlpatterns)
