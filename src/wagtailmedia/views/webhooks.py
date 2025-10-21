@@ -103,7 +103,7 @@ class TranscodingWebhookView(View):
             )
 
         try:
-            MediaTranscodingJob.objects.get(job_id=job_id)
+            media_transcoding_job = MediaTranscodingJob.objects.get(job_id=job_id)
         except MediaTranscodingJob.DoesNotExist:
             logger.warning(
                 f"Webhook received for unknown job_id: {job_id}",
@@ -124,6 +124,10 @@ class TranscodingWebhookView(View):
             f"Webhook received for Job ID: {job_id}, status: {job_status}, with metadata: {job_metadata}"
         )
 
+        # If the transcoding job object is already complete, skip updating
+        if media_transcoding_job.status is not TranscodingJobStatus.COMPLETE:
+            self._update_transcoding_job(job_id, job_status, job_metadata)
+
         return JsonResponse(
             {
                 "success": True,
@@ -131,6 +135,23 @@ class TranscodingWebhookView(View):
                 "status": status,
             },
             status=200,
+        )
+
+    def _update_transcoding_job(self, job_id, job_status, job_metadata):
+        media_transcoding_job = MediaTranscodingJob.objects.get(job_id=job_id)
+
+        old_status = media_transcoding_job.status
+        media_transcoding_job.status = job_status
+        media_transcoding_job.metadata = job_metadata
+        media_transcoding_job.save()
+
+        logger.info(
+            f"Updated job {job_id} status from {old_status} to {media_transcoding_job.status}",
+            extra={
+                "job_id": job_id,
+                "old_status": old_status,
+                "new_status": media_transcoding_job.status,
+            },
         )
 
     def _verify_api_key(self, request):
