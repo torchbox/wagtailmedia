@@ -33,6 +33,7 @@ DEFAULTS = {
         "webm",
     ],
     "TRANSCODING_BACKEND": "",
+    "WEBHOOK_API_KEY": "",
 }
 
 # List of settings that have been deprecated
