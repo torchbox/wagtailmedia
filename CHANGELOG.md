@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Support for Wagtail 7.2
+- Support for Python 3.14
+
 ## [0.17.2] - 2025-10-18
 
 ### Fixed

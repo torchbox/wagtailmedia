@@ -19,7 +19,7 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
   PIP_NO_PYTHON_VERSION_WARNING: "1"
   # Keep in sync with .pre-commit-config.yaml/default_language_version/python.
-  PYTHON_LATEST: "3.13"  # because harden runner fails on the 3.13 download
+  PYTHON_LATEST: "3.14"  # because harden runner fails on the 3.14 download
 
 jobs:
   tests:
@@ -28,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - name: 🔒 Harden Runner
