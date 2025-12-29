@@ -61,9 +61,11 @@ class BaseMediaForm(BaseCollectionMemberForm):
 
     @staticmethod
     def get_file_accept_value(media_type: MediaType) -> str | None:
-        """Dynamically set the accept attribute on the file input based on the media type. If allowed extensions have
+        """Dynamically set the `accept` attribute on the file input based on the media type. If allowed extensions have
         been configured in settings, this will restrict the file input to only those extensions. Otherwise, it will
         fall back to allowing all video or audio file types.
+        See https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file#unique_file_type_specifiers
+        for more information on the `accept` attribute.
         """
 
         if media_type == MediaType.VIDEO:
