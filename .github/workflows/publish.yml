@@ -4,30 +4,40 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: read # to fetch code (actions/checkout)
-
 jobs:
-  build:
+  # https://docs.pypi.org/trusted-publishers/using-a-publisher/
+  release:
     runs-on: ubuntu-latest
+    environment:
+      name: 'release'
+      url: https://pypi.org/p/wagtailmedia
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+      id-token: write  # Mandatory for trusted publishing
     steps:
       - name: 🔒 Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
-            files.pythonhosted.org:443
             github.com:443
-            pypi.org:443
             api.github.com:443
+            ghcr.io:443
+            pkg-containers.githubusercontent.com:443
+            pypi.org:443
+            upload.pypi.org:443
+            files.pythonhosted.org:443
+            fulcio.sigstore.dev:443
+            rekor.sigstore.dev:443
+            tuf-repo-cdn.sigstore.dev:443
 
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
           cache: "pip"
@@ -40,25 +50,5 @@ jobs:
       - name: 🏗️ Build
         run: python -Im flit build
 
-      - uses: actions/upload-artifact@v4
-        with:
-          path: ./dist
-
-  # https://docs.pypi.org/trusted-publishers/using-a-publisher/
-  pypi-publish:
-    needs: build
-    environment: 'release'
-
-    name: ⬆️ Upload release to PyPI
-    runs-on: ubuntu-latest
-    permissions:
-      # Mandatory for trusted publishing
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@v5
-
       - name: 🚀 Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: artifact/
-          print-hash: true

@@ -90,7 +90,9 @@ MEDIA_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         }
 
         ajaxifyLinks(modal.body);
-        initWMTabs();
+        if (typeof initWMTabs !== "undefined") {
+            initWMTabs();
+        }
 
         $('form.media-upload', modal.body).on('submit', function() {
             var formdata = new FormData(this);

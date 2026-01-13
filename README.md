@@ -13,9 +13,9 @@ but for audio and video files.
 
 wagtailmedia requires the following:
 
-- Python (3.9, 3.10, 3.11, 3.12, 3.13)
+- Python (3.10, 3.11, 3.12, 3.13, 3.14)
 - Django (4.2, 5.1, 5.2)
-- Wagtail (6.3, 6.4, 7.0)
+- Wagtail (6.3, 7.0, 7.2)
 
 ## Install
 
