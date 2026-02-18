@@ -10,7 +10,7 @@ from wagtail.admin.forms.collections import (
 )
 from wagtail.models import Collection
 
-from wagtailmedia.models import Media
+from wagtailmedia.models import Media, MediaType
 from wagtailmedia.permissions import permission_policy as media_permission_policy
 from wagtailmedia.settings import wagtailmedia_settings
 
@@ -29,6 +29,14 @@ def formfield_for_dbfield(db_field, **kwargs):
     return db_field.formfield(**kwargs)
 
 
+def format_extensions_for_accept_value(allowed_extensions: list[str]) -> str:
+    """Returns the specified extensions in a format usable in the `accept=""` attribute of a `FileInput` widget.
+    This assumes the list of extensions are the bare extensions e.g., `["mp4", "webm"]` and prefixes each extension with
+    a ".".
+    """
+    return ",".join([f".{e}" for e in allowed_extensions])
+
+
 class BaseMediaForm(BaseCollectionMemberForm):
     class Meta:
         widgets = {
@@ -42,11 +50,40 @@ class BaseMediaForm(BaseCollectionMemberForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if file_accept_value := self.get_file_accept_value(self.instance.type):
+            self.fields["file"].widget.attrs["accept"] = file_accept_value
+
         if self.instance.type == "audio":
             for name in ("width", "height"):
                 # these fields might be editable=False so verify before accessing
                 if name in self.fields:
                     del self.fields[name]
+
+    @staticmethod
+    def get_file_accept_value(media_type: MediaType) -> str | None:
+        """Dynamically set the `accept` attribute on the file input based on the media type. If allowed extensions have
+        been configured in settings, this will restrict the file input to only those extensions. Otherwise, it will
+        fall back to allowing all video or audio file types.
+        See https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file#unique_file_type_specifiers
+        for more information on the `accept` attribute.
+        """
+
+        if media_type == MediaType.VIDEO:
+            return (
+                format_extensions_for_accept_value(
+                    wagtailmedia_settings.VIDEO_EXTENSIONS
+                )
+                or "video/*"
+            )
+        elif media_type == MediaType.AUDIO:
+            return (
+                format_extensions_for_accept_value(
+                    wagtailmedia_settings.AUDIO_EXTENSIONS
+                )
+                or "audio/*"
+            )
+
+        return None
 
 
 def get_media_base_form():
