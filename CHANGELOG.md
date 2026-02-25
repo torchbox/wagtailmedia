@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added a `full_url` field
+
+### Changed
+
+- Updated the `download_url` format to match images in Wagtail, removing the domain part from the URL (#254)
 - Support for Wagtail 7.2
 - Support for Python 3.14
 

@@ -74,8 +74,10 @@ class TestApiMediaListing(ApiTestBase):
 
             media = Media.objects.get(pk=item["id"])
             # Check download_url
+            self.assertEqual(item["meta"]["download_url"], f"/media/{media.file}")
+            # Check full_url
             self.assertEqual(
-                item["meta"]["download_url"], f"http://localhost/media/{media.file}"
+                item["full_url"], f"http://localhost:8020/media/{media.file}"
             )
 
             self.assertEqual(item["media_type"], media.type)
@@ -87,7 +89,16 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"id", "meta", "title", "width", "height", "media_type", "collection"},
+                {
+                    "id",
+                    "meta",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "collection",
+                    "full_url",
+                },
             )
             self.assertEqual(
                 set(item["meta"].keys()),
@@ -101,7 +112,16 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"id", "meta", "title", "width", "height", "media_type", "collection"},
+                {
+                    "id",
+                    "meta",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "collection",
+                    "full_url",
+                },
             )
             self.assertEqual(
                 set(item["meta"].keys()),
@@ -114,7 +134,8 @@ class TestApiMediaListing(ApiTestBase):
 
         for item in content["items"]:
             self.assertEqual(
-                set(item.keys()), {"id", "meta", "width", "height", "media_type"}
+                set(item.keys()),
+                {"id", "meta", "width", "height", "media_type", "full_url"},
             )
 
     def test_remove_meta_fields(self):
@@ -124,7 +145,16 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"id", "meta", "title", "width", "height", "media_type", "collection"},
+                {
+                    "id",
+                    "meta",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "full_url",
+                    "collection",
+                },
             )
             self.assertEqual(set(item["meta"].keys()), {"type", "detail_url", "tags"})
 
@@ -135,7 +165,15 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"id", "title", "width", "height", "media_type", "collection"},
+                {
+                    "id",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "full_url",
+                    "collection",
+                },
             )
 
     def test_remove_id_field(self):
@@ -145,7 +183,15 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"meta", "title", "width", "height", "media_type", "collection"},
+                {
+                    "meta",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "full_url",
+                    "collection",
+                },
             )
 
     def test_all_fields(self):
@@ -155,7 +201,16 @@ class TestApiMediaListing(ApiTestBase):
         for item in content["items"]:
             self.assertEqual(
                 set(item.keys()),
-                {"id", "meta", "title", "width", "height", "media_type", "collection"},
+                {
+                    "id",
+                    "meta",
+                    "title",
+                    "width",
+                    "height",
+                    "media_type",
+                    "collection",
+                    "full_url",
+                },
             )
             self.assertEqual(
                 set(item["meta"].keys()),
@@ -169,7 +224,9 @@ class TestApiMediaListing(ApiTestBase):
         content = json.loads(response.content.decode("UTF-8"))
 
         for item in content["items"]:
-            self.assertEqual(set(item.keys()), {"id", "meta", "width", "height"})
+            self.assertEqual(
+                set(item.keys()), {"id", "meta", "width", "height", "full_url"}
+            )
             self.assertEqual(set(item["meta"].keys()), {"type", "detail_url", "tags"})
 
     def test_fields_tags(self):
@@ -471,7 +528,14 @@ class TestApiMediaDetail(ApiTestBase):
         self.assertIn("download_url", content["meta"])
         self.assertEqual(
             content["meta"]["download_url"],
-            "http://localhost/media/media/2001_a_space_odyssey.mp4",
+            "/media/media/2001_a_space_odyssey.mp4",
+        )
+
+        # Check full_url
+        self.assertIn("full_url", content)
+        self.assertEqual(
+            content["full_url"],
+            "http://localhost:8020/media/media/2001_a_space_odyssey.mp4",
         )
 
         # Check the title field
@@ -494,14 +558,14 @@ class TestApiMediaDetail(ApiTestBase):
         self.assertEqual(content["meta"]["tags"], ["hello", "world"])
 
     @override_settings(WAGTAILAPI_BASE_URL="http://api.example.com/")
-    def test_download_url_with_custom_base_url(self):
+    def test_full_url_with_custom_base_url(self):
         response = self.get_response(self.pink_floyd_time.pk)
         content = json.loads(response.content.decode("UTF-8"))
 
-        self.assertIn("download_url", content["meta"])
+        self.assertIn("full_url", content)
         self.assertEqual(
-            content["meta"]["download_url"],
-            "http://api.example.com/media/media/pink_floyd_time.mp3",
+            content["full_url"],
+            "http://localhost:8020/media/media/pink_floyd_time.mp3",
         )
 
     # FIELDS
