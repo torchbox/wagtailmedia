@@ -577,7 +577,6 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
-    # TODO: Remove once support for Wagtail < 4.1 is dropped
     @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_link(self):
         response = self.client.get(self.delete_media_url)
@@ -1090,7 +1089,6 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             self.assertIn(error, json_data["html"])
 
 
-# TODO: Remove once support for Wagtail < 4.1 is dropped
 @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]

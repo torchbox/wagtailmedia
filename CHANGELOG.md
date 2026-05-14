@@ -2,8 +2,17 @@
 
 ## [Unreleased]
 
-- Support for Wagtail 7.2
+### Added
+
+- Support for Wagtail 7.2, 7.3, and 7.4 LTS
+- Support for Django 6.0
 - Support for Python 3.14
+
+### Removed
+
+- Drop support for Wagtail < 7.0 (6.3, 6.4 are out of the supported Wagtail range)
+- Remove the legacy `_file_field_legacy.html` and `_thumbnail_field_legacy.html` templates and the `wagtail_version_gte` template tag, no longer required now that Wagtail 7.0 is the minimum supported version
+
 
 ## [0.17.2] - 2025-10-18
 

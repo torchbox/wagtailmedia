@@ -2,7 +2,6 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from testapp.models import BlogStreamPage
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.panels import FieldPanel, ObjectList
 from wagtail.models import Page
 
@@ -117,20 +116,12 @@ class MediaChooserPanelTest(TestCase):
             result,
         )
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (5, 1):
-            self.assertIn(
-                f'<a data-chooser-edit-link href="{edit_url}" aria-describedby="id_featured_media-title"  '
-                f'target="_blank" rel="noreferrer">',
-                result,
-            )
-            self.assertIn("Edit this media item", result)
-        else:
-            self.assertIn(
-                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
-                f'class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this media item</a>',
-                result,
-            )
+        self.assertIn(
+            f'<a data-chooser-edit-link href="{edit_url}" aria-describedby="id_featured_media-title"  '
+            f'target="_blank" rel="noreferrer">',
+            result,
+        )
+        self.assertIn("Edit this media item", result)
         self.assertIn("Choose a media item", result)
 
     def test_render_as_field_with_media_type(self):
@@ -144,20 +135,12 @@ class MediaChooserPanelTest(TestCase):
             result,
         )
         edit_url = reverse("wagtailmedia:edit", args=(self.video.pk,))
-        if WAGTAIL_VERSION >= (5, 1):
-            self.assertIn(
-                f'<a data-chooser-edit-link href="{edit_url}" aria-describedby="id_featured_media-title"  '
-                f'target="_blank" rel="noreferrer">',
-                result,
-            )
-            self.assertIn("Edit this video", result)
-        else:
-            self.assertIn(
-                f'<a href="{edit_url}" aria-describedby="id_featured_media-title" '
-                f'class="edit-link button button-small button-secondary" '
-                f'target="_blank" rel="noreferrer">Edit this video</a>',
-                result,
-            )
+        self.assertIn(
+            f'<a data-chooser-edit-link href="{edit_url}" aria-describedby="id_featured_media-title"  '
+            f'target="_blank" rel="noreferrer">',
+            result,
+        )
+        self.assertIn("Edit this video", result)
         self.assertIn("Choose video", result)
 
     def test_render_as_empty_field(self):
@@ -173,20 +156,12 @@ class MediaChooserPanelTest(TestCase):
             result,
         )
 
-        if WAGTAIL_VERSION >= (5, 1):
-            self.assertIn(
-                '<a data-chooser-edit-link href="" aria-describedby="id_featured_media-title" '
-                'hidden target="_blank" rel="noreferrer">',
-                result,
-            )
-            self.assertIn("Edit this media item", result)
-        else:
-            self.assertIn(
-                '<a href="" aria-describedby="id_featured_media-title" '
-                'class="edit-link button button-small button-secondary w-hidden" target="_blank" '
-                'rel="noreferrer">Edit this media item</a>',
-                result,
-            )
+        self.assertIn(
+            '<a data-chooser-edit-link href="" aria-describedby="id_featured_media-title" '
+            'hidden target="_blank" rel="noreferrer">',
+            result,
+        )
+        self.assertIn("Edit this media item", result)
         self.assertIn("Choose a media item", result)
 
     def test_render_error(self):

@@ -21,14 +21,13 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Framework :: Wagtail",
-    "Framework :: Wagtail :: 6",
     "Framework :: Wagtail :: 7",
 ]
 
 dynamic = ["version"]
 requires-python = ">=3.10"
 dependencies = [
-    "Wagtail>=6.3",
+    "Wagtail>=7.0",
     "Django>=4.2",
 ]
 
