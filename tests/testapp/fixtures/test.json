@@ -14,7 +14,8 @@
         ],
         "path": "0001",
         "url_path": "/",
-        "slug": "root"
+        "slug": "root",
+        "locale": 1
     }
 },
 
@@ -30,7 +31,8 @@
         "content_type": ["wagtailcore", "page"],
         "path": "00010001",
         "url_path": "/home/",
-        "slug": "home"
+        "slug": "home",
+        "locale": 1
     }
 },
 {
@@ -45,7 +47,8 @@
         "content_type": ["wagtailmedia_tests", "eventpage"],
         "path": "000100010001",
         "url_path": "/home/events/",
-        "slug": "event"
+        "slug": "event",
+        "locale": 1
     }
 },
 {
