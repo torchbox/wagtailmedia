@@ -4,9 +4,7 @@
 
 ### Added
 
-- Support for Wagtail 7.2, 7.3, and 7.4 LTS
-- Support for Django 6.0
-- Support for Python 3.14
+- Support for Wagtail 7.2, 7.3, and 7.4 LTS, Django 6.0, and Python 3.14
 
 ### Removed
 
