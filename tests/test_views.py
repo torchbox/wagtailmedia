@@ -577,7 +577,6 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         # Media should be deleted
         self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
 
-    @override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
     def test_usage_link(self):
         response = self.client.get(self.delete_media_url)
         self.assertEqual(response.status_code, 200)
