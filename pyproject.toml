@@ -21,24 +21,23 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Framework :: Wagtail",
-    "Framework :: Wagtail :: 6",
     "Framework :: Wagtail :: 7",
 ]
 
 dynamic = ["version"]
 requires-python = ">=3.10"
 dependencies = [
-    "Wagtail>=6.3",
-    "Django>=4.2",
+    "Wagtail>=7.0",
+    "Django>=5.2",
 ]
 
 [project.optional-dependencies]
 testing = [
-    "coverage>=7.10.0",
-    "tox>=4.28.4",
+    "coverage>=7.14.0",
+    "tox>=4.54.0",
 ]
 linting = [
-    "pre-commit>=4.3.0",
+    "pre-commit>=4.6.0",
 ]
 
 [project.urls]

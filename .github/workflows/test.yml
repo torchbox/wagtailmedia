@@ -46,7 +46,7 @@ jobs:
         with:
           persist-credentials: false
       - name: 🐍 Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -62,7 +62,7 @@ jobs:
         run: tox --installpkg ./dist/*.whl
 
       - name: ⬆️ Upload coverage data
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: coverage-data-${{ matrix.python-version }}
           path: .coverage.*
@@ -110,7 +110,7 @@ jobs:
           echo "## Coverage summary" >> $GITHUB_STEP_SUMMARY
           python -Im coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
       - name: 📈 Upload HTML report if check failed.
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: html-report
           path: htmlcov
