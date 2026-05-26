@@ -28,7 +28,7 @@ dynamic = ["version"]
 requires-python = ">=3.10"
 dependencies = [
     "Wagtail>=7.0",
-    "Django>=4.2",
+    "Django>=5.2",
 ]
 
 [project.optional-dependencies]
