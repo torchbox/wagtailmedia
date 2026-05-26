@@ -1088,7 +1088,6 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             self.assertIn(error, json_data["html"])
 
 
-@override_settings(WAGTAIL_USAGE_COUNT_ENABLED=True)
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]
 
