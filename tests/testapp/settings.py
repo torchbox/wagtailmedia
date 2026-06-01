@@ -61,10 +61,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-MIDDLEWARE += [
-    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-]
-
 INSTALLED_APPS = [
     "testapp",
     "wagtailmedia",
@@ -73,8 +69,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "wagtail.contrib.redirects",
-    "wagtail.contrib.search_promotions",
+    "django.contrib.postgres",
     "wagtail.images",
     "wagtail.users",
     "wagtail.documents",
@@ -88,9 +83,7 @@ INSTALLED_APPS = [
 # This prevents false-positives in some wagtail core tests where we are
 # changing the 'wagtail_root_paths' key which may cause future tests to fail.
 
-REDIS_PORT = os.getenv("REDIS_6379_TCP_PORT", "")
-
-if REDIS_PORT:
+if REDIS_PORT := os.getenv("REDIS_PORT", ""):
     CACHES = {
         "default": {
             "BACKEND": "redis_cache.RedisCache",
@@ -116,5 +109,5 @@ WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.databa
 # https://github.com/django/django/commit/adb96617897690b3a01e39e8297ae7d67825d2bc
 ALLOWED_HOSTS = ["*"]
 
-WAGTAIL_SITE_NAME = "Test Site"
+WAGTAIL_SITE_NAME = "wagtailmedia Test Site"
 WAGTAILADMIN_BASE_URL = "http://localhost:8020"
