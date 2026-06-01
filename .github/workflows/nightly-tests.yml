@@ -6,10 +6,15 @@ on:
 
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:  {}
 
 jobs:
   nightly-test:
+    name: Nightly tests against Wagtail main
     # Cannot check the existence of secrets, so limiting to repository name to prevent all forks to run nightly.
     # See: https://github.com/actions/runner/issues/520
     if: ${{ github.repository == 'torchbox/wagtailmedia' }}
@@ -19,7 +24,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:15@sha256-5fbbf7b4bd0c7f7faedb9814ec02cb8b639f44ccd5e81e5332e55e7b6b0f32b4
         env:
           POSTGRES_PASSWORD: postgres
         ports:
