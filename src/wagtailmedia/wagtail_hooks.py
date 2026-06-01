@@ -93,8 +93,7 @@ def register_media_permissions_panel():
 
 @hooks.register("describe_collection_contents")
 def describe_collection_media(collection):
-    media_count = get_media_model().objects.filter(collection=collection).count()
-    if media_count:
+    if media_count := get_media_model().objects.filter(collection=collection).count():
         url = reverse("wagtailmedia:index") + f"?collection_id={collection.id}"
         return {
             "count": media_count,
@@ -104,6 +103,7 @@ def describe_collection_media(collection):
             % {"count": media_count},
             "url": url,
         }
+    return None
 
 
 class MediaAdminURLFinder(ModelAdminURLFinder):
