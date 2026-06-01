@@ -13,6 +13,7 @@ permissions: {}
 jobs:
   # https://docs.pypi.org/trusted-publishers/using-a-publisher/
   release:
+    name: Publish to PyPI
     runs-on: ubuntu-latest
     if: github.repository_owner == 'torchbox' && github.event.action == 'published'
     environment:
