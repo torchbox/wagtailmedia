@@ -24,7 +24,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15@sha256-5fbbf7b4bd0c7f7faedb9814ec02cb8b639f44ccd5e81e5332e55e7b6b0f32b4
+        image: postgres@sha256:5fbbf7b4bd0c7f7faedb9814ec02cb8b639f44ccd5e81e5332e55e7b6b0f32b4  # v15.18
         env:
           POSTGRES_PASSWORD: postgres
         ports:
