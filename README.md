@@ -361,7 +361,7 @@ Now you can run tests as shown below:
 tox
 ```
 
-or, you can run them for a specific environment `tox -e py313-dj51-wagtail70` or specific test
-`tox -e py313-dj51-wagtail70 -- tests.test_views.TestMediaChooserUploadView`
+or, you can run them for a specific environment `tox -e python3.13-django5.2-wagtail7.0` or specific test
+`tox -e python3.14-django5.2-wagtail7.0 -- tests.test_views.TestMediaChooserUploadView`
 
 To run the test app interactively, use `tox -e interactive`, visit `http://127.0.0.1:8020/admin/` and log in with `admin`/`changeme`.
