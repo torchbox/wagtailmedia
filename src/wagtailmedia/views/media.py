@@ -40,12 +40,12 @@ def index(request):
 
     # Filter by collection
     current_collection = None
-    collection_id = request.GET.get("collection_id")
-    if collection_id:
+    if collection_id := request.GET.get("collection_id"):
         try:
             current_collection = Collection.objects.get(id=collection_id)
             media = media.filter(collection=current_collection)
         except (ValueError, Collection.DoesNotExist):
+            # Ignore invalid or unknown collection_id
             pass
 
     # Search
