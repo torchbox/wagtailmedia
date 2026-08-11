@@ -1,6 +1,8 @@
 import json
 import os
 
+from http import HTTPStatus
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
@@ -752,6 +754,89 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
         # form media imports should appear on the page
         self.assertIn("wagtailadmin/js/draftail.js", json_data["html"])
+
+
+class TestMediaChosenViewPermissions(TestCase, WagtailTestUtils):
+    """
+    The ``media_chosen`` view must enforce the collection-level permission
+    check, so that a user cannot retrieve the id/title/edit_url of a media
+    item held in a collection they have no access to.
+    """
+
+    def setUp(self):
+        admin_permission = Permission.objects.get(
+            content_type__app_label="wagtailadmin", codename="access_admin"
+        )
+        change_media_permission = Permission.objects.get(
+            content_type__app_label="wagtailmedia", codename="change_media"
+        )
+
+        root_collection = Collection.get_first_root_node()
+        self.public_collection = root_collection.add_child(name="Public")
+        self.confidential_collection = root_collection.add_child(name="Confidential")
+
+        group = Group.objects.create(name="Public choosers")
+        group.permissions.add(admin_permission)
+        GroupCollectionPermission.objects.create(
+            group=group,
+            collection=self.public_collection,
+            permission=change_media_permission,
+        )
+
+        self.user = get_user_model().objects.create_user(
+            username="restricted", email="restricted@example.com", password="password"
+        )
+        self.user.groups.add(group)
+        self.user.user_permissions.add(change_media_permission)
+
+        self.secret_media = models.Media.objects.create(
+            title="Board Meeting Q3 Recording",
+            duration=100,
+            type="audio",
+            collection=self.confidential_collection,
+        )
+        self.allowed_media = models.Media.objects.create(
+            title="Public jingle",
+            duration=100,
+            type="audio",
+            collection=self.public_collection,
+        )
+
+        self.client.login(username="restricted", password="password")
+
+    def test_cannot_choose_media_from_other_collection(self):
+        response = self.client.get(
+            reverse("wagtailmedia:media_chosen", args=(self.secret_media.id,))
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(
+            response.context["message"],
+            "Sorry, you do not have permission to access this area.",
+        )
+
+    def test_can_choose_media_from_permitted_collection(self):
+        response = self.client.get(
+            reverse("wagtailmedia:media_chosen", args=(self.allowed_media.id,))
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        json_data = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(json_data["step"], "media_chosen")
+        self.assertEqual(json_data["result"]["id"], self.allowed_media.id)
+        self.assertEqual(json_data["result"]["title"], self.allowed_media.title)
+
+    def test_superuser_can_choose_any_media(self):
+        superuser = get_user_model().objects.create_superuser(
+            username="admin", email="admin@example.com", password="password"
+        )
+        self.client.force_login(superuser)
+        response = self.client.get(
+            reverse("wagtailmedia:media_chosen", args=(self.secret_media.id,))
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        json_data = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(json_data["step"], "media_chosen")
+        self.assertEqual(json_data["result"]["id"], self.secret_media.id)
+        self.assertEqual(json_data["result"]["title"], self.secret_media.title)
 
 
 class TestTypedMediaChooserView(TestCase, WagtailTestUtils):

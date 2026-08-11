@@ -11,6 +11,10 @@
 - Drop support for Wagtail < 7.0 (6.3, 6.4 are out of the supported Wagtail range)
 - Remove the legacy `_file_field_legacy.html` and `_thumbnail_field_legacy.html` templates and the `wagtail_version_gte` template tag, no longer required now that Wagtail 7.0 is the minimum supported version
 
+### Fixed
+
+- Apply permission checks in the media chosen view, ensuring only users with access to a given media item can see its id, title and edit url (@afa114)
+
 
 ## [0.17.2] - 2025-10-18
 

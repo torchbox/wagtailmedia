@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from wagtail import hooks
-from wagtail.admin.auth import PermissionPolicyChecker
+from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.models import popular_tags_for_model
@@ -167,6 +167,17 @@ def chooser(request, media_type=None):
 
 def media_chosen(request, media_id):
     media = get_object_or_404(get_media_model(), id=media_id)
+
+    # Only allow the media item to be returned to the chooser if the
+    # requesting user actually has visibility of it. This mirrors the
+    # permissions used to build the browsable queryset in chooser() above
+    # and in the edit view, rather than a dedicated "choose" action - unlike
+    # wagtailimages / wagtaildocs, wagtailmedia does not register a
+    # choose_media permission, so nobody could ever be granted it.
+    if not permission_policy.user_has_any_permission_for_instance(
+        request.user, ["change", "delete"], media
+    ):
+        return permission_denied(request)
 
     return render_modal_workflow(
         request,
