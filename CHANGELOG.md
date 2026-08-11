@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.18.0] - 2026-08-11
+
 ### Added
 
 - Support for Wagtail 7.2, 7.3, and 7.4 LTS, Django 6.0, and Python 3.14
@@ -365,7 +368,8 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.16.0...HEAD
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/torchbox/wagtailmedia/compare/v0.17.2...v0.18.0
 [0.17.2]: https://github.com/torchbox/wagtailmedia/compare/v0.17.1...v0.17.2
 [0.17.1]: https://github.com/torchbox/wagtailmedia/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/torchbox/wagtailmedia/compare/v0.16.0...v0.17.0
