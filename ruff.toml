@@ -12,6 +12,7 @@ extend-select = [
 
 extend-ignore = [
     "E501",  # no line length errors
+    "RUF012",  # mutable class default
 ]
 
 fixable = ["C4", "E", "F", "I", "UP"]

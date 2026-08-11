@@ -66,7 +66,7 @@ def index(request):
             current_tag = None
 
     # Pagination
-    paginator, media = paginate(request, media)
+    _paginator, media = paginate(request, media)
 
     collections = permission_policy.collections_user_has_any_permission_for(
         request.user, ["add", "change"]

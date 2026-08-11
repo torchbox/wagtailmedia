@@ -79,10 +79,10 @@ class MediaChooserPanelTest(TestCase):
             type(self.form.fields["featured_media"].widget), AdminMediaChooser
         )
 
-        form, media_chooser_panel = self._init_edit_handler(media_type="audio")
+        form, _media_chooser_panel = self._init_edit_handler(media_type="audio")
         self.assertEqual(type(form.fields["featured_media"].widget), AdminAudioChooser)
 
-        form, media_chooser_panel = self._init_edit_handler(media_type="video")
+        form, _media_chooser_panel = self._init_edit_handler(media_type="video")
         self.assertEqual(type(form.fields["featured_media"].widget), AdminVideoChooser)
 
     def test_render_js_init(self):
@@ -94,7 +94,7 @@ class MediaChooserPanelTest(TestCase):
     def test_render_js_init_with_media_type(self):
         # construct an alternative page chooser panel object, with can_choose_root=True
 
-        form, media_chooser_panel = self._init_edit_handler(media_type="audio")
+        _form, media_chooser_panel = self._init_edit_handler(media_type="audio")
         self.assertIn(
             'createMediaChooser("id_featured_media")',
             media_chooser_panel.render_html(),
@@ -125,7 +125,7 @@ class MediaChooserPanelTest(TestCase):
         self.assertIn("Choose a media item", result)
 
     def test_render_as_field_with_media_type(self):
-        form, media_chooser_panel = self._init_edit_handler(media_type="video")
+        _form, media_chooser_panel = self._init_edit_handler(media_type="video")
         result = media_chooser_panel.render_html()
 
         chooser_url = reverse("wagtailmedia:chooser_typed", args=("video",))
