@@ -252,7 +252,7 @@ def chooser_upload(request, media_type):
         collections = None
 
     media_files = media_files.order_by(ordering)
-    paginator, media_files = paginate(request, media_files)
+    _paginator, media_files = paginate(request, media_files)
 
     context = {
         "media_files": media_files,

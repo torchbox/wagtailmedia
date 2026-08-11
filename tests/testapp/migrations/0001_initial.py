@@ -4,22 +4,16 @@ import django.core.validators
 import django.db.models.deletion
 import modelcluster.fields
 import taggit.managers
+import testapp.models
 import wagtail.blocks
 import wagtail.fields
+import wagtail.models.media as collections
 import wagtail.search.index
 
 from django.conf import settings
 from django.db import migrations, models
 
 import wagtailmedia.blocks
-
-
-try:
-    import wagtail.models.media as collections
-except ImportError:
-    import wagtail.models.collections as collections
-
-import testapp.models
 
 
 class Migration(migrations.Migration):

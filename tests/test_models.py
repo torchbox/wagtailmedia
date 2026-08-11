@@ -237,21 +237,20 @@ class TestMediaFilenameProperties(TestCase):
 
 class TestMediaFilesDeletion(TestCase):
     def test_media_file_deleted_oncommit(self):
-        with self.captureOnCommitCallbacks(execute=True):
-            with transaction.atomic():
-                media = Media.objects.create(
-                    title="",
-                    file=ContentFile(
-                        "A boring example movie", name="movie-for-deletion.mp4"
-                    ),
-                    duration=1,
-                )
-                filename = media.file.name
+        with self.captureOnCommitCallbacks(execute=True), transaction.atomic():
+            media = Media.objects.create(
+                title="",
+                file=ContentFile(
+                    "A boring example movie", name="movie-for-deletion.mp4"
+                ),
+                duration=1,
+            )
+            filename = media.file.name
 
-                self.assertTrue(media.file.storage.exists(filename))
+            self.assertTrue(media.file.storage.exists(filename))
 
-                media.delete()
-                self.assertTrue(media.file.storage.exists(filename))
+            media.delete()
+            self.assertTrue(media.file.storage.exists(filename))
         self.assertFalse(media.file.storage.exists(filename))
 
 
