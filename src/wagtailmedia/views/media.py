@@ -4,18 +4,27 @@ from django.urls import reverse
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django.views.decorators.vary import vary_on_headers
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import messages
 from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
-from wagtail.models import Collection, Page
+from wagtail.models import Collection
 from wagtail.search.backends import get_search_backends
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import permission_policy
 from wagtailmedia.utils import paginate
+
+
+if WAGTAIL_VERSION >= (8, 0):
+    import swapper
+
+    Page = swapper.load_model("wagtailcore", "Page")
+else:
+    from wagtail.models import Page
 
 
 permission_checker = PermissionPolicyChecker(permission_policy)

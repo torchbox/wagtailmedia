@@ -1,9 +1,17 @@
 from django.test import TestCase
 from django.urls import reverse
-from wagtail.models import Page
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.test.utils import WagtailTestUtils
 
 from wagtailmedia.blocks import AbstractMediaChooserBlock
+
+
+if WAGTAIL_VERSION >= (8, 0):
+    import swapper
+
+    Page = swapper.load_model("wagtailcore", "Page")
+else:
+    from wagtail.models import Page
 
 
 class TestMediaBlock(AbstractMediaChooserBlock):
