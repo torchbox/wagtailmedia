@@ -112,8 +112,14 @@ ALLOWED_HOSTS = ["*"]
 WAGTAIL_SITE_NAME = "wagtailmedia Test Site"
 WAGTAILADMIN_BASE_URL = "http://localhost:8020"
 
+USE_EXTENDS = False
 
-if WAGTAIL_VERSION >= (8, 0) and os.environ.get("USES_CUSTOM_PAGE_MODEL"):
-    INSTALLED_APPS.insert(2, "testapp.basepage")
-    WAGTAIL_PAGE_MODEL = "basepage.BasePage"
-    print("Custom base page model active [wagtailmedia]")
+if WAGTAIL_VERSION >= (8, 0):
+    if os.environ.get("USES_CUSTOM_PAGE_MODEL"):
+        INSTALLED_APPS.insert(2, "testapp.basepage")
+        WAGTAIL_PAGE_MODEL = "basepage.BasePage"
+        print("Custom base page model active [wagtailmedia]")
+
+    if os.environ.get("USE_EXTENDS"):
+        INSTALLED_APPS.insert(0, "testextends")
+        USE_EXTENDS = True

@@ -17,15 +17,16 @@ from wagtail import VERSION as WAGTAIL_VERSION
 import wagtailmedia.blocks
 
 
+PAGE_PTR_STR = "page_ptr"
 if WAGTAIL_VERSION >= (8, 0):
     import swapper
 
     swapper.set_app_prefix("wagtailcore", "wagtail")
     PAGE_MODEL_NAME = swapper.get_model_name("wagtailcore", "Page")
-    page_ptr_str = "basepage_ptr"
+    if swapper.is_swapped("wagtailcore", "Page"):
+        PAGE_PTR_STR = "basepage_ptr"
 else:
     PAGE_MODEL_NAME = "wagtailcore.page"
-    page_ptr_str = "page_ptr"
 
 
 class Migration(migrations.Migration):
@@ -43,7 +44,7 @@ class Migration(migrations.Migration):
             name="EventPage",
             fields=[
                 (
-                    page_ptr_str,
+                    PAGE_PTR_STR,
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
@@ -221,7 +222,7 @@ class Migration(migrations.Migration):
             name="BlogStreamPage",
             fields=[
                 (
-                    page_ptr_str,
+                    PAGE_PTR_STR,
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,

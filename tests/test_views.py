@@ -2,12 +2,14 @@ import json
 import os
 
 from http import HTTPStatus
+from unittest import skipIf, skipUnless
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
 from django.forms.utils import ErrorDict
-from django.test import TestCase, modify_settings
+from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 from testapp.models import EventPage, EventPageRelatedMedia
@@ -17,6 +19,7 @@ from wagtail.test.utils import WagtailTestUtils
 from wagtailmedia import models
 
 
+@skipIf(settings.USE_EXTENDS, "Skipped as the extends app is used")
 class TestMediaIndexView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
@@ -27,15 +30,6 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
         self.assertContains(response, "Add audio")
         self.assertContains(response, "Add video")
-
-    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
-    def test_extends(self):
-        response = self.client.get(reverse("wagtailmedia:index"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
-        self.assertNotContains(response, "Add audio")
-        self.assertNotContains(response, "Add video")
-        self.assertContains(response, "You shan't act")
 
     def test_search(self):
         response = self.client.get(reverse("wagtailmedia:index"), {"q": "Hello"})
@@ -440,6 +434,7 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         self.assertEqual(media.type, "video")
 
 
+@skipIf(settings.USE_EXTENDS, "Skipped as the extends app is used")
 class TestMediaEditView(TestCase, WagtailTestUtils):
     def setUp(self):
         self.login()
@@ -458,17 +453,6 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
         self.assertContains(response, "Filesize")
         self.assertNotContains(response, "wagtailadmin/js/draftail.js")
-
-    @modify_settings(INSTALLED_APPS={"prepend": "tests.testextends"})
-    def test_extends(self):
-        response = self.client.get(reverse("wagtailmedia:edit", args=(self.media.id,)))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
-        self.assertNotContains(response, "Filesize")
-        self.assertContains(response, "sweet-style")
-        self.assertContains(response, "sweet-code")
-        self.assertContains(response, "sweet-form-row")
-        self.assertContains(response, "sweet-stats")
 
     def test_action_block(self):
         with self.settings(
@@ -1173,6 +1157,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
             self.assertIn(error, json_data["html"])
 
 
+@skipIf(settings.USE_EXTENDS, "Skipped as the extends app is used")
 class TestUsageCount(TestCase, WagtailTestUtils):
     fixtures = ["test.json"]
 
@@ -1207,3 +1192,35 @@ class TestUsageCount(TestCase, WagtailTestUtils):
     def test_usage_count_zero_appears(self):
         response = self.client.get(reverse("wagtailmedia:edit", args=(1,)))
         self.assertContains(response, "Used 0 times")
+
+
+@skipUnless(settings.USE_EXTENDS, "Skipped as the extends app is not used")
+class TestExtends(TestCase, WagtailTestUtils):
+    def setUp(self):
+        self.login()
+
+        # Build a fake file
+        fake_file = ContentFile("A boring example song", name="song.mp3")
+
+        # Create a media to edit
+        self.media = models.get_media_model().objects.create(
+            title="Test media", file=fake_file, duration=100
+        )
+
+    def test_index_view(self):
+        response = self.client.get(reverse("wagtailmedia:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "wagtailmedia/media/index.html")
+        self.assertNotContains(response, "Add audio")
+        self.assertNotContains(response, "Add video")
+        self.assertContains(response, "You shan't act")
+
+    def test_edit_view(self):
+        response = self.client.get(reverse("wagtailmedia:edit", args=(self.media.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
+        self.assertNotContains(response, "Filesize")
+        self.assertContains(response, "sweet-style")
+        self.assertContains(response, "sweet-code")
+        self.assertContains(response, "sweet-form-row")
+        self.assertContains(response, "sweet-stats")
