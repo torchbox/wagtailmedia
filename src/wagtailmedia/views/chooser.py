@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from wagtail import hooks
-from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
+from wagtail.admin.auth import permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 from wagtail.admin.models import popular_tags_for_model
@@ -11,11 +11,11 @@ from wagtail.search.backends import get_search_backends
 
 from wagtailmedia.forms import get_media_form
 from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
+from wagtailmedia.permissions import MediaPermissionPolicyChecker
 from wagtailmedia.utils import paginate
 
 
-permission_checker = PermissionPolicyChecker(permission_policy)
+permission_checker = MediaPermissionPolicyChecker()
 
 
 def get_media_json(media):
@@ -43,7 +43,7 @@ def chooser(request, media_type=None):
     Media = get_media_model()
 
     ordering = get_ordering(request)
-    media_files = permission_policy.instances_user_has_any_permission_for(
+    media_files = permission_checker.policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
 
@@ -51,7 +51,7 @@ def chooser(request, media_type=None):
     for hook in hooks.get_hooks("construct_media_chooser_queryset"):
         media_files = hook(media_files, request)
 
-    if permission_policy.user_has_permission(request.user, "add"):
+    if permission_checker.policy.user_has_permission(request.user, "add"):
         MediaForm = get_media_form(Media)
         media_audio = Media(uploaded_by_user=request.user, type="audio")
         media_video = Media(uploaded_by_user=request.user, type="video")
@@ -174,7 +174,7 @@ def media_chosen(request, media_id):
     # and in the edit view, rather than a dedicated "choose" action - unlike
     # wagtailimages / wagtaildocs, wagtailmedia does not register a
     # choose_media permission, so nobody could ever be granted it.
-    if not permission_policy.user_has_any_permission_for_instance(
+    if not permission_checker.policy.user_has_any_permission_for_instance(
         request.user, ["change", "delete"], media
     ):
         return permission_denied(request)
@@ -193,7 +193,7 @@ def chooser_upload(request, media_type):
     upload_forms = {}
 
     if (
-        permission_policy.user_has_permission(request.user, "add")
+        permission_checker.policy.user_has_permission(request.user, "add")
         and request.method == "POST"
     ):
         Media = get_media_model()
@@ -237,7 +237,7 @@ def chooser_upload(request, media_type):
 
     ordering = get_ordering(request)
 
-    media_files = permission_policy.instances_user_has_any_permission_for(
+    media_files = permission_checker.policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
 

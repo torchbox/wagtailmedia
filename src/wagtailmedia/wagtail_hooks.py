@@ -2,6 +2,7 @@ from django.urls import include, path, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail import hooks
 from wagtail.admin.admin_url_finder import (
     ModelAdminURLFinder,
@@ -16,7 +17,16 @@ from wagtail.admin.staticfiles import versioned_static
 from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
 from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
+
+
+if WAGTAIL_VERSION >= (8, 0):
+    from wagtail.permissions import policy_registry
+
+    permission_policy = policy_registry.get_by_type(get_media_model())
+else:
+    from wagtailmedia.permissions import get_permission_policy
+
+    permission_policy = get_permission_policy()
 
 
 @hooks.register("register_admin_urls")

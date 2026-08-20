@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 from django.db.models import ForeignKey
+from wagtail import VERSION as WAGTAIL_VERSION
 
 
 class WagtailMediaAppConfig(AppConfig):
@@ -17,8 +18,15 @@ class WagtailMediaAppConfig(AppConfig):
 
         register_signal_handlers()
 
-        # Set up image ForeignKeys to use ImageFieldComparison as the comparison class
+        # Set up image ForeignKeys to use MediaFieldComparison as the comparison class
         # when comparing page revisions
         register_comparison_class(
             ForeignKey, to=get_media_model(), comparison_class=MediaFieldComparison
         )
+
+        if WAGTAIL_VERSION >= (8, 0):
+            from wagtail.permissions import register_permission_policy
+
+            from .permissions import get_permission_policy
+
+            register_permission_policy(get_media_model(), get_permission_policy())
