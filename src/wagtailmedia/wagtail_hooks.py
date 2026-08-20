@@ -14,9 +14,9 @@ from wagtail.admin.search import SearchArea
 from wagtail.admin.site_summary import SummaryItem
 from wagtail.admin.staticfiles import versioned_static
 
-from wagtailmedia import admin_urls
 from wagtailmedia.forms import GroupMediaPermissionFormSet
-from wagtailmedia.models import get_media_model
+
+from . import admin_urls, get_media_model
 
 
 if WAGTAIL_VERSION >= (8, 0):

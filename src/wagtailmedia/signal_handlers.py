@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.db.models.signals import post_delete
 
-from wagtailmedia.models import get_media_model
+from . import get_media_model
 
 
 def delete_files(instance):

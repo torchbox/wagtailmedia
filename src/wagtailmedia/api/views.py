@@ -1,7 +1,8 @@
 from wagtail.api.v2.filters import FieldsFilter, OrderingFilter, SearchFilter
 from wagtail.api.v2.views import BaseAPIViewSet
 
-from ..models import get_media_model
+from wagtailmedia import get_media_model
+
 from .serializers import MediaItemSerializer
 
 
