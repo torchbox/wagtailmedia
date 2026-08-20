@@ -9,6 +9,7 @@ from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.models import CollectionMember, ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
@@ -131,7 +132,14 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         return reverse("wagtailmedia:media_usage", args=(self.id,))
 
     def is_editable_by_user(self, user):
-        from wagtailmedia.permissions import permission_policy
+        if WAGTAIL_VERSION >= (8, 0):
+            from wagtail.permissions import policy_registry
+
+            permission_policy = policy_registry.get_by_type(get_media_model())
+        else:
+            from wagtailmedia.permissions import get_permission_policy
+
+            permission_policy = get_permission_policy()
 
         return permission_policy.user_has_permission_for_instance(user, "change", self)
 
