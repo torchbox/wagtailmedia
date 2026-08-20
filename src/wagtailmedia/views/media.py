@@ -13,8 +13,8 @@ from wagtail.admin.models import popular_tags_for_model
 from wagtail.models import Collection
 from wagtail.search.backends import get_search_backends
 
+from wagtailmedia import get_media_model
 from wagtailmedia.forms import get_media_form
-from wagtailmedia.models import get_media_model
 from wagtailmedia.permissions import MediaPermissionPolicyChecker
 from wagtailmedia.utils import paginate
 

@@ -12,8 +12,8 @@ class WagtailMediaAppConfig(AppConfig):
     def ready(self):
         from wagtail.admin.compare import register_comparison_class
 
+        from . import get_media_model
         from .edit_handlers import MediaFieldComparison
-        from .models import get_media_model
         from .signal_handlers import register_signal_handlers
 
         register_signal_handlers()

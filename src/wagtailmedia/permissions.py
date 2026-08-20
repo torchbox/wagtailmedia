@@ -1,19 +1,7 @@
 from django.utils.functional import cached_property
 from wagtail.admin.auth import PermissionPolicyChecker
 
-from wagtailmedia.models import get_media_model
-
-
-def get_permission_policy():
-    from wagtail.permission_policies.collections import (
-        CollectionOwnershipPermissionPolicy,
-    )
-
-    return CollectionOwnershipPermissionPolicy(
-        get_media_model(),
-        auth_model="wagtailmedia.Media",
-        owner_field_name="uploaded_by_user",
-    )
+from . import get_permission_policy
 
 
 # TODO: remove when dropping support for Wagtail < 8.0
@@ -28,4 +16,6 @@ class MediaPermissionPolicyChecker(PermissionPolicyChecker):
 
     @cached_property
     def policy(self):
+        # TODO: use wagtail.permissions.policy_registry.get_by_type(get_media_model())
+        # when dropping support for Wagtail < 8.0
         return get_permission_policy()
