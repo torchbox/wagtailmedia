@@ -12,7 +12,7 @@ class MediaPermissionPolicyChecker(PermissionPolicyChecker):
     def __init__(self):
         # Provide policy via a cached property so we can retrieve it from the
         # registry at runtime, rather than at import time.
-        ...
+        pass
 
     @cached_property
     def policy(self):
