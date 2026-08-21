@@ -218,6 +218,12 @@ class Migration(migrations.Migration):
             },
             bases=(wagtail.search.index.Indexed, models.Model),
         ),
+        migrations.AddConstraint(
+            model_name="custommedia",
+            constraint=models.UniqueConstraint(
+                fields=("title", "collection"), name="unique_collection_item"
+            ),
+        ),
         migrations.CreateModel(
             name="BlogStreamPage",
             fields=[

@@ -30,3 +30,15 @@ class WagtailMediaAppConfig(AppConfig):
         register_comparison_class(
             ForeignKey, to=Media, comparison_class=MediaFieldComparison
         )
+
+        if WAGTAIL_VERSION >= (8, 0):
+            # v3 API. Note: the import order matters
+            from .api.v3.registry import register_content_types
+
+            register_content_types()
+
+            from wagtail.api.v3.api import api
+
+            from .api.v3.router import router
+
+            api.add_router("/media/", router)
