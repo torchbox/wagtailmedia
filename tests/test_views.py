@@ -1210,6 +1210,7 @@ class TestViewsWithCustomMediaModel(TestCase, WagtailTestUtils):
         # form media should be imported
         self.assertContains(response, "wagtailadmin/js/draftail.js")
 
+    @skipIf(settings.USE_EXTENDS, "Skipped as the extends app is used")
     def test_edit_view(self):
         # Create a media to edit
         media = create_audio(title="Test custom media", duration=10)
