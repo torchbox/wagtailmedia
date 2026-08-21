@@ -33,6 +33,14 @@ class CustomMedia(AbstractMedia):
 
     admin_form_fields = Media.admin_form_fields + ("fancy_caption",)
 
+    class Meta(AbstractMedia.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                fields=("title", "collection"),
+                name="unique_collection_item",
+            )
+        ]
+
 
 class EventPageRelatedMedia(Orderable):
     page = ParentalKey(

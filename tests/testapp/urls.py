@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.urls import include, path
 from django.views.static import serve
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.api.v2.router import WagtailAPIRouter
@@ -15,7 +16,15 @@ api_router.register_endpoint("media", MediaAPIViewSet)
 urlpatterns = [
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
-    path("api/", api_router.urls),
+    path("api/v2/", api_router.urls),
+]
+
+if WAGTAIL_VERSION >= (8, 0):
+    from wagtail.api.v3.urls import api
+
+    urlpatterns += [path("api/v3/", api.urls)]
+
+urlpatterns += [
     path("", include(wagtail_urls)),
 ] + [
     path(

@@ -35,7 +35,8 @@ dependencies = [
 testing = [
     "coverage>=7.14.0",
     "tox>=4.54.0",
-    "psycopg"
+    "psycopg",
+    "wagtail-factories"
 ]
 linting = [
     "pre-commit>=4.6.0",
