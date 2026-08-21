@@ -7,15 +7,15 @@ from django.views.decorators.vary import vary_on_headers
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import messages
 from wagtail.admin.admin_url_finder import AdminURLFinder
-from wagtail.admin.auth import PermissionPolicyChecker, permission_denied
+from wagtail.admin.auth import permission_denied
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.models import popular_tags_for_model
 from wagtail.models import Collection
 from wagtail.search.backends import get_search_backends
 
+from wagtailmedia import get_media_model
 from wagtailmedia.forms import get_media_form
-from wagtailmedia.models import get_media_model
-from wagtailmedia.permissions import permission_policy
+from wagtailmedia.permissions import MediaPermissionPolicyChecker
 from wagtailmedia.utils import paginate
 
 
@@ -27,7 +27,7 @@ else:
     from wagtail.models import Page
 
 
-permission_checker = PermissionPolicyChecker(permission_policy)
+permission_checker = MediaPermissionPolicyChecker()
 
 
 @permission_checker.require_any("add", "change", "delete")
@@ -36,7 +36,7 @@ def index(request):
     Media = get_media_model()
 
     # Get media files (filtered by user permission)
-    media = permission_policy.instances_user_has_any_permission_for(
+    media = permission_checker.policy.instances_user_has_any_permission_for(
         request.user, ["change", "delete"]
     )
 
@@ -77,7 +77,7 @@ def index(request):
     # Pagination
     _paginator, media = paginate(request, media)
 
-    collections = permission_policy.collections_user_has_any_permission_for(
+    collections = permission_checker.policy.collections_user_has_any_permission_for(
         request.user, ["add", "change"]
     )
     if len(collections) < 2:
@@ -108,7 +108,7 @@ def index(request):
                 "search_form": form,
                 "popular_tags": popular_tags_for_model(Media),
                 "current_tag": current_tag,
-                "user_can_add": permission_policy.user_has_permission(
+                "user_can_add": permission_checker.policy.user_has_permission(
                     request.user, "add"
                 ),
                 "collections": collections,
@@ -167,7 +167,7 @@ def edit(request, media_id):
 
     media = get_object_or_404(Media, id=media_id)
 
-    if not permission_policy.user_has_permission_for_instance(
+    if not permission_checker.policy.user_has_permission_for_instance(
         request.user, "change", media
     ):
         return permission_denied(request)
@@ -232,7 +232,7 @@ def edit(request, media_id):
             "media": media,
             "filesize": filesize,
             "form": form,
-            "user_can_delete": permission_policy.user_has_permission_for_instance(
+            "user_can_delete": permission_checker.policy.user_has_permission_for_instance(
                 request.user, "delete", media
             ),
         },
@@ -244,7 +244,7 @@ def delete(request, media_id):
     Media = get_media_model()
     media = get_object_or_404(Media, id=media_id)
 
-    if not permission_policy.user_has_permission_for_instance(
+    if not permission_checker.policy.user_has_permission_for_instance(
         request.user, "delete", media
     ):
         return permission_denied(request)

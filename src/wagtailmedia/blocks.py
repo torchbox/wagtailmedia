@@ -24,7 +24,7 @@ class AbstractMediaChooserBlock(ChooserBlock):
 
     @cached_property
     def target_model(self):
-        from wagtailmedia.models import get_media_model
+        from wagtailmedia import get_media_model
 
         return get_media_model()
 

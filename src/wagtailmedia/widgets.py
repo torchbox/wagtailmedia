@@ -14,7 +14,7 @@ if WAGTAIL_VERSION >= (7, 1):
 else:
     from wagtail.telepath import register
 
-from wagtailmedia.models import get_media_model
+from . import get_media_model
 
 
 class AdminMediaChooser(BaseChooser):
