@@ -13,10 +13,13 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, reverse
 from testapp.models import EventPage, EventPageRelatedMedia
+from utils import create_audio
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.models import Collection, GroupCollectionPermission
 from wagtail.test.utils import WagtailTestUtils
 
-from wagtailmedia import models
+from wagtailmedia import get_media_model
+from wagtailmedia.models import Media
 
 
 @skipIf(settings.USE_EXTENDS, "Skipped as the extends app is used")
@@ -41,7 +44,7 @@ class TestMediaIndexView(TestCase, WagtailTestUtils):
         fake_file = ContentFile("A boring example song", name="song.mp3")
 
         for i in range(50):
-            media = models.Media(
+            media = Media(
                 title="Test " + str(i), duration=100 + i, file=fake_file, type="audio"
             )
             media.save()
@@ -228,10 +231,10 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertRedirects(response, reverse("wagtailmedia:index"))
 
         # Media should be created, and be placed in the root collection
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
         root_collection = Collection.get_first_root_node()
 
-        media = models.Media.objects.get(title="Test media")
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, root_collection)
         self.assertEqual(media.type, "audio")
 
@@ -255,9 +258,9 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertRedirects(response, reverse("wagtailmedia:index"))
 
         # Media should be created, and be placed in the root collection
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
         root_collection = Collection.get_first_root_node()
-        media = models.Media.objects.get(title="Test media")
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, root_collection)
         self.assertEqual(media.type, "video")
 
@@ -283,9 +286,9 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertRedirects(response, reverse("wagtailmedia:index"))
 
         # Media should be created, and be placed in the Evil Plans collection
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
 
-        media = models.Media.objects.get(title="Test media")
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, evil_plans_collection)
         self.assertEqual(media.type, "audio")
 
@@ -308,24 +311,11 @@ class TestMediaAddView(TestCase, WagtailTestUtils):
         self.assertRedirects(response, reverse("wagtailmedia:index"))
 
         # Media should be created, and be placed in the Evil Plans collection
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
 
-        media = models.Media.objects.get(title="Test media")
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, evil_plans_collection)
         self.assertEqual(media.type, "video")
-
-    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
-    def test_get_with_custom_model(self):
-        # both audio and video use the same template
-        response = self.client.get(reverse("wagtailmedia:add", args=("video",)))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
-
-        # Ensure the form supports file uploads
-        self.assertContains(response, 'enctype="multipart/form-data"')
-
-        # form media should be imported
-        self.assertContains(response, "wagtailadmin/js/draftail.js")
 
 
 class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtils):
@@ -407,8 +397,8 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         # Media should be created with type 'audio' and in the 'evil plans' collection,
         # despite there being no collection field in the form, because that's the
         # only one the user has access to
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
-        media = models.Media.objects.get(title="Test media")
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, self.evil_plans_collection)
         self.assertEqual(media.type, "audio")
 
@@ -428,8 +418,8 @@ class TestMediaAddViewWithLimitedCollectionPermissions(TestCase, WagtailTestUtil
         # Media should be created with type 'video' and in the 'evil plans' collection,
         # despite there being no collection field in the form, because that's the
         # only one the user has access to
-        self.assertTrue(models.Media.objects.filter(title="Test media").exists())
-        media = models.Media.objects.get(title="Test media")
+        self.assertTrue(Media.objects.filter(title="Test media").exists())
+        media = Media.objects.get(title="Test media")
         self.assertEqual(media.collection, self.evil_plans_collection)
         self.assertEqual(media.type, "video")
 
@@ -443,7 +433,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         fake_file = ContentFile("A boring example song", name="song.mp3")
 
         # Create a media to edit
-        self.media = models.get_media_model().objects.create(
+        self.media = get_media_model().objects.create(
             title="Test media", file=fake_file, duration=100
         )
 
@@ -500,7 +490,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
         # Media title should be changed
         self.assertEqual(
-            models.Media.objects.get(id=self.media.id).title, "Test media changed!"
+            Media.objects.get(id=self.media.id).title, "Test media changed!"
         )
 
     def test_with_missing_source_file(self):
@@ -508,7 +498,7 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
         fake_file = ContentFile("An ephemeral media", name="to-be-deleted.mp3")
 
         # Create a new media to delete the source for
-        media = models.Media.objects.create(
+        media = Media.objects.create(
             title="Test missing source media", file=fake_file, duration=100
         )
         media.file.delete(False)
@@ -519,31 +509,12 @@ class TestMediaEditView(TestCase, WagtailTestUtils):
 
         self.assertContains(response, "File not found")
 
-    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
-    def test_get_with_custom_model(self):
-        # Build a fake file
-        fake_file = ContentFile("A boring example song", name="song.mp3")
-
-        # Create a media to edit
-        media = models.get_media_model().objects.create(
-            title="Test custom media", file=fake_file, duration=100
-        )
-        response = self.client.get(reverse("wagtailmedia:edit", args=(media.id,)))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
-
-        # Ensure the form supports file uploads
-        self.assertContains(response, 'enctype="multipart/form-data"')
-
-        # form media should be imported
-        self.assertContains(response, "wagtailadmin/js/draftail.js")
-
 
 class TestMediaDeleteView(TestCase, WagtailTestUtils):
     @classmethod
     def setUpTestData(cls):
         # Create a media to delete
-        cls.media = models.Media.objects.create(title="Test media", duration=100)
+        cls.media = Media.objects.create(title="Test media", duration=100)
         cls.delete_media_url = reverse("wagtailmedia:delete", args=(cls.media.id,))
 
     def setUp(self):
@@ -561,7 +532,7 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
         self.assertRedirects(response, reverse("wagtailmedia:index"))
 
         # Media should be deleted
-        self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
+        self.assertFalse(Media.objects.filter(id=self.media.id).exists())
 
     def test_usage_link(self):
         response = self.client.get(self.delete_media_url)
@@ -580,7 +551,7 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
             self.client.post(self.delete_media_url)
 
         # Media should be deleted
-        self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
+        self.assertFalse(Media.objects.filter(id=self.media.id).exists())
 
         # The file should be deleted as well
         self.assertFalse(storage.exists(file_path))
@@ -600,7 +571,7 @@ class TestMediaDeleteView(TestCase, WagtailTestUtils):
             self.client.post(self.delete_media_url)
 
         # Media should be deleted
-        self.assertFalse(models.Media.objects.filter(id=self.media.id).exists())
+        self.assertFalse(Media.objects.filter(id=self.media.id).exists())
 
         # The files should be deleted as well
         for path in (file_path, thumbnail_path):
@@ -643,7 +614,7 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         fake_file = ContentFile("A boring example song", name="song.mp3")
 
         for i in range(50):
-            media = models.Media(
+            media = Media(
                 title="Test " + str(i), duration=100 + i, file=fake_file, type="audio"
             )
             media.save()
@@ -688,15 +659,13 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
         )
 
     def test_construct_queryset_hook_browse(self):
-        media = models.Media.objects.create(
+        media = Media.objects.create(
             title="Test media shown",
             duration=100,
             type="audio",
             uploaded_by_user=self.user,
         )
-        models.Media.objects.create(
-            title="Test media not shown", duration=100, type="audio"
-        )
+        Media.objects.create(title="Test media not shown", duration=100, type="audio")
 
         def filter_media(media, request):
             return media.filter(uploaded_by_user=self.user)
@@ -708,13 +677,13 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
 
     def test_construct_queryset_hook_search(self):
         with self.captureOnCommitCallbacks(execute=True):
-            media = models.Media.objects.create(
+            media = Media.objects.create(
                 title="Test media shown",
                 duration=100,
                 type="audio",
                 uploaded_by_user=self.user,
             )
-            models.Media.objects.create(
+            Media.objects.create(
                 title="Test media not shown", duration=100, type="audio"
             )
 
@@ -725,19 +694,6 @@ class TestMediaChooserView(TestCase, WagtailTestUtils):
             response = self.client.get(self.chooser_url, {"q": "Test"})
         self.assertEqual(len(response.context["media_files"]), 1)
         self.assertEqual(response.context["media_files"][0], media)
-
-    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
-    def test_with_custom_model(self):
-        response = self.client.get(self.chooser_url)
-        self.assertEqual(response.status_code, 200)
-        json_data = json.loads(response.content.decode())
-        self.assertEqual(json_data["step"], "chooser")
-
-        # custom form fields should be present
-        self.assertIn('name="media-chooser-upload-fancy_caption"', json_data["html"])
-
-        # form media imports should appear on the page
-        self.assertIn("wagtailadmin/js/draftail.js", json_data["html"])
 
 
 class TestMediaChosenViewPermissions(TestCase, WagtailTestUtils):
@@ -773,13 +729,13 @@ class TestMediaChosenViewPermissions(TestCase, WagtailTestUtils):
         self.user.groups.add(group)
         self.user.user_permissions.add(change_media_permission)
 
-        self.secret_media = models.Media.objects.create(
+        self.secret_media = Media.objects.create(
             title="Board Meeting Q3 Recording",
             duration=100,
             type="audio",
             collection=self.confidential_collection,
         )
-        self.allowed_media = models.Media.objects.create(
+        self.allowed_media = Media.objects.create(
             title="Public jingle",
             duration=100,
             type="audio",
@@ -826,7 +782,7 @@ class TestMediaChosenViewPermissions(TestCase, WagtailTestUtils):
 class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
     @classmethod
     def setUpTestData(cls):
-        audio = models.Media(
+        audio = Media(
             title="Test audio",
             duration=100,
             file=ContentFile("A boring example song", name="song.mp3"),
@@ -834,7 +790,7 @@ class TestTypedMediaChooserView(TestCase, WagtailTestUtils):
         )
         audio.save()
 
-        video = models.Media(
+        video = Media(
             title="Test video",
             duration=100,
             file=ContentFile("An exciting video", name="video.mp4"),
@@ -931,7 +887,7 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
         )
         user.groups.add(conspirators_group)
 
-        media = models.Media(
+        media = Media(
             title="Test",
             duration=100,
             file=ContentFile("A boring song", name="test-song.mp3"),
@@ -983,7 +939,7 @@ class TestMediaChooserViewPermissions(TestCase, WagtailTestUtils):
 class TestMediaChooserChosenView(TestCase, WagtailTestUtils):
     @classmethod
     def setUpTestData(cls):
-        cls.media = models.Media.objects.create(
+        cls.media = Media.objects.create(
             title="Test media", file="media.mp3", duration=100
         )
 
@@ -1029,7 +985,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
 
         # Check that the audio was created
-        media_files = models.Media.objects.filter(title="Test audio")
+        media_files = Media.objects.filter(title="Test audio")
         self.assertEqual(media_files.count(), 1)
 
         # Test that fields are populated correctly
@@ -1055,7 +1011,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
 
         # Check that the video was created
-        media_files = models.Media.objects.filter(title="Test video")
+        media_files = Media.objects.filter(title="Test video")
         self.assertEqual(media_files.count(), 1)
 
         # Test that fields are populated correctly
@@ -1127,7 +1083,7 @@ class TestMediaChooserUploadView(TestCase, WagtailTestUtils):
         self.assertEqual(response.status_code, 200)
 
         # Check that the video was created
-        self.assertTrue(models.Media.objects.filter(title="Test video").exists())
+        self.assertTrue(Media.objects.filter(title="Test video").exists())
 
     def test_none_field_errors_are_being_rendered(self):
         response = self.client.post(
@@ -1165,11 +1121,11 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         self.login()
 
     def test_unused_media_usage_count(self):
-        media = models.Media.objects.get(id=1)
+        media = Media.objects.get(id=1)
         self.assertEqual(media.get_usage().count(), 0)
 
     def test_used_media_usage_count(self):
-        media = models.Media.objects.get(id=1)
+        media = Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
         with self.captureOnCommitCallbacks(execute=True):
             event_page_related_link = EventPageRelatedMedia()
@@ -1179,7 +1135,7 @@ class TestUsageCount(TestCase, WagtailTestUtils):
         self.assertEqual(media.get_usage().count(), 1)
 
     def test_usage_count_appears(self):
-        media = models.Media.objects.get(id=1)
+        media = Media.objects.get(id=1)
         page = EventPage.objects.get(id=3)
         with self.captureOnCommitCallbacks(execute=True):
             event_page_related_link = EventPageRelatedMedia()
@@ -1203,7 +1159,7 @@ class TestExtends(TestCase, WagtailTestUtils):
         fake_file = ContentFile("A boring example song", name="song.mp3")
 
         # Create a media to edit
-        self.media = models.get_media_model().objects.create(
+        self.media = get_media_model().objects.create(
             title="Test media", file=fake_file, duration=100
         )
 
@@ -1224,3 +1180,57 @@ class TestExtends(TestCase, WagtailTestUtils):
         self.assertContains(response, "sweet-code")
         self.assertContains(response, "sweet-form-row")
         self.assertContains(response, "sweet-stats")
+
+
+@override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
+class TestViewsWithCustomMediaModel(TestCase, WagtailTestUtils):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = cls.create_test_user()
+
+        if WAGTAIL_VERSION >= (8, 0):
+            from wagtail.permissions import register_permission_policy
+
+            from wagtailmedia import get_media_model, get_permission_policy
+
+            register_permission_policy(get_media_model(), get_permission_policy())
+
+    def setUp(self):
+        self.login(self.user)
+
+    def test_add_view(self):
+        # both audio and video use the same template
+        response = self.client.get(reverse("wagtailmedia:add", args=("video",)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "wagtailmedia/media/add.html")
+
+        # Ensure the form supports file uploads
+        self.assertContains(response, 'enctype="multipart/form-data"')
+
+        # form media should be imported
+        self.assertContains(response, "wagtailadmin/js/draftail.js")
+
+    def test_edit_view(self):
+        # Create a media to edit
+        media = create_audio(title="Test custom media", duration=10)
+        response = self.client.get(reverse("wagtailmedia:edit", args=(media.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "wagtailmedia/media/edit.html")
+
+        # Ensure the form supports file uploads
+        self.assertContains(response, 'enctype="multipart/form-data"')
+
+        # form media should be imported
+        self.assertContains(response, "wagtailadmin/js/draftail.js")
+
+    def test_chooser_view(self):
+        response = self.client.get(reverse("wagtailmedia:chooser"))
+        self.assertEqual(response.status_code, 200)
+        json_data = json.loads(response.content.decode())
+        self.assertEqual(json_data["step"], "chooser")
+
+        # custom form fields should be present
+        self.assertIn('name="media-chooser-upload-fancy_caption"', json_data["html"])
+
+        # form media imports should appear on the page
+        self.assertIn("wagtailadmin/js/draftail.js", json_data["html"])

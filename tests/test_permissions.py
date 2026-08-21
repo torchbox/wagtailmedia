@@ -1,12 +1,17 @@
+from unittest import skipUnless
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.files.base import ContentFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
+from testapp.models import CustomMedia
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.models import Collection, GroupCollectionPermission
+from wagtail.permission_policies.collections import CollectionOwnershipPermissionPolicy
 from wagtail.test.utils import WagtailTestUtils
 
-from wagtailmedia import models
+from wagtailmedia import get_media_model, models
 
 
 class TestMediaPermissions(TestCase):
@@ -55,6 +60,28 @@ class TestMediaPermissions(TestCase):
 
     def test_user_cant_edit(self):
         self.assertFalse(self.media.is_editable_by_user(self.user))
+
+    @skipUnless(WAGTAIL_VERSION >= (8, 0), "Skipping as not on Wagtail 8.0 or newer")
+    def test_get_from_registry(self):
+        from wagtail.permissions import policy_registry
+
+        model = get_media_model()
+        permission_policy = policy_registry.get_by_type(model)
+        self.assertIsInstance(permission_policy, CollectionOwnershipPermissionPolicy)
+        self.assertIs(permission_policy.model, model)
+
+    @skipUnless(WAGTAIL_VERSION >= (8, 0), "Skipping as not on Wagtail 8.0 or newer")
+    @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
+    def test_get_from_registry_with_custom_model(self):
+        from wagtail.permissions import policy_registry, register_permission_policy
+
+        from wagtailmedia import get_media_model, get_permission_policy
+
+        register_permission_policy(get_media_model(), get_permission_policy())
+
+        permission_policy = policy_registry.get_by_type(CustomMedia)
+        self.assertIsInstance(permission_policy, CollectionOwnershipPermissionPolicy)
+        self.assertIs(permission_policy.model, CustomMedia)
 
 
 class TestEditOnlyPermissions(TestCase, WagtailTestUtils):

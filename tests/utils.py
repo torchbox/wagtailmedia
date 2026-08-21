@@ -5,10 +5,7 @@ import tempfile
 from django.core.files.base import ContentFile
 from django.test import TestCase
 
-from wagtailmedia.models import MediaType, get_media_model
-
-
-Media = get_media_model()
+from wagtailmedia.models import AbstractMedia, MediaType, get_media_model
 
 
 class TempDirMediaRootMixin(TestCase):
@@ -32,10 +29,10 @@ def create_media(
     title: str,
     duration: int | None = 100,
     thumbnail: str | None = False,
-) -> Media:
+) -> AbstractMedia:
     filename = re.sub(r"[/:\"\'] ", "_", title).lower()
     extension = "mp3" if media_type == MediaType.AUDIO else "mp4"
-    item = Media.objects.create(
+    item = get_media_model().objects.create(
         type=media_type,
         title=title,
         duration=duration,
@@ -44,18 +41,18 @@ def create_media(
 
     if thumbnail:
         item.thumbnail = ContentFile("Thumbnail", name=thumbnail)
-        item.save()
+        item.save(update_fields=["thumbnail"])
 
     return item
 
 
-def create_video(title="Test video", duration=100, thumbnail=None) -> Media:
+def create_video(title="Test video", duration=100, thumbnail=None) -> AbstractMedia:
     return create_media(
         MediaType.VIDEO, title=title, duration=duration, thumbnail=thumbnail
     )
 
 
-def create_audio(title="Test audio", duration=100, thumbnail=None) -> Media:
+def create_audio(title="Test audio", duration=100, thumbnail=None) -> AbstractMedia:
     return create_media(
         MediaType.AUDIO, title=title, duration=duration, thumbnail=thumbnail
     )
