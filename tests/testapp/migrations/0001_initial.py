@@ -12,8 +12,21 @@ import wagtail.search.index
 
 from django.conf import settings
 from django.db import migrations, models
+from wagtail import VERSION as WAGTAIL_VERSION
 
 import wagtailmedia.blocks
+
+
+PAGE_PTR_STR = "page_ptr"
+if WAGTAIL_VERSION >= (8, 0):
+    import swapper
+
+    swapper.set_app_prefix("wagtailcore", "wagtail")
+    PAGE_MODEL_NAME = swapper.get_model_name("wagtailcore", "Page")
+    if swapper.is_swapped("wagtailcore", "Page"):
+        PAGE_PTR_STR = "basepage_ptr"
+else:
+    PAGE_MODEL_NAME = "wagtailcore.page"
 
 
 class Migration(migrations.Migration):
@@ -31,14 +44,14 @@ class Migration(migrations.Migration):
             name="EventPage",
             fields=[
                 (
-                    "page_ptr",
+                    PAGE_PTR_STR,
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="wagtailcore.page",
+                        to=PAGE_MODEL_NAME,
                     ),
                 ),
                 ("date_from", models.DateField(null=True, verbose_name="Start date")),
@@ -67,7 +80,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("wagtailcore.page",),
+            bases=(PAGE_MODEL_NAME,),
         ),
         migrations.CreateModel(
             name="EventPageRelatedMedia",
@@ -209,14 +222,14 @@ class Migration(migrations.Migration):
             name="BlogStreamPage",
             fields=[
                 (
-                    "page_ptr",
+                    PAGE_PTR_STR,
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="wagtailcore.page",
+                        to=PAGE_MODEL_NAME,
                     ),
                 ),
                 ("author", models.CharField(max_length=255)),
@@ -260,6 +273,6 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("wagtailcore.page",),
+            bases=(PAGE_MODEL_NAME,),
         ),
     ]

@@ -2,10 +2,11 @@ from django.db import models
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 from modelcluster.fields import ParentalKey
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField, StreamField
-from wagtail.models import Orderable, Page
+from wagtail.models import Orderable
 
 from wagtailmedia.blocks import (
     AbstractMediaChooserBlock,
@@ -14,6 +15,17 @@ from wagtailmedia.blocks import (
 )
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import AbstractMedia, Media
+
+
+if WAGTAIL_VERSION >= (8, 0):
+    import swapper
+
+    if swapper.is_swapped("wagtailcore", "Page"):
+        from testapp.basepage.models import BasePage as Page
+    else:
+        from wagtail.models import Page
+else:
+    from wagtail.models import Page
 
 
 class CustomMedia(AbstractMedia):
