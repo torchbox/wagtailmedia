@@ -69,7 +69,8 @@ class TestApiMediaListing(ApiTestBase):
 
             # Check detail_url
             self.assertEqual(
-                item["meta"]["detail_url"], f"http://localhost/api/media/{item['id']}/"
+                item["meta"]["detail_url"],
+                f"http://localhost/api/v2/media/{item['id']}/",
             )
 
             media = Media.objects.get(pk=item["id"])
@@ -465,7 +466,9 @@ class TestApiMediaDetail(ApiTestBase):
 
         # Check the meta detail_url
         self.assertIn("detail_url", content["meta"])
-        self.assertEqual(content["meta"]["detail_url"], "http://localhost/api/media/1/")
+        self.assertEqual(
+            content["meta"]["detail_url"], "http://localhost/api/v2/media/1/"
+        )
 
         # Check the meta download_url
         self.assertIn("download_url", content["meta"])

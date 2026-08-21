@@ -60,7 +60,9 @@ class BaseMediaForm(BaseCollectionMemberForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if file_accept_value := self.get_file_accept_value(self.instance.type):
+        if "file" in self.fields and (
+            file_accept_value := self.get_file_accept_value(self.instance.type)
+        ):
             self.fields["file"].widget.attrs["accept"] = file_accept_value
 
         if self.instance.type == "audio":
@@ -105,8 +107,11 @@ def get_media_base_form():
     return base_form
 
 
-def get_media_form(model):
-    fields = model.admin_form_fields
+def get_media_form(model, fields=None):
+    if fields is None:
+        fields = model.admin_form_fields
+    fields = list(fields)
+
     if "collection" not in fields:
         # force addition of the 'collection' field, because leaving it out can
         # cause dubious results when multiple collections exist (e.g adding the

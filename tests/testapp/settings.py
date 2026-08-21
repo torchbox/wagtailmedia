@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "wagtail.users",
     "wagtail.documents",
     "wagtail.admin",
+    "wagtail.sites",
     "wagtail",
     "wagtail.search",
 ]
@@ -115,6 +116,8 @@ WAGTAILADMIN_BASE_URL = "http://localhost:8020"
 USE_EXTENDS = False
 
 if WAGTAIL_VERSION >= (8, 0):
+    INSTALLED_APPS.append("wagtail.api.v3")
+
     if os.environ.get("USES_CUSTOM_PAGE_MODEL"):
         INSTALLED_APPS.insert(2, "testapp.basepage")
         WAGTAIL_PAGE_MODEL = "basepage.BasePage"
