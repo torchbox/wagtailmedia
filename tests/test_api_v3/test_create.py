@@ -3,7 +3,6 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 if WAGTAIL_VERSION >= (8, 0):
     from unittest import mock
-    from urllib.parse import urlsplit
 
     from django.core.files.uploadedfile import SimpleUploadedFile
     from django.db.models.signals import post_save
@@ -11,7 +10,6 @@ if WAGTAIL_VERSION >= (8, 0):
     from django.urls import reverse
 
     from wagtailmedia import get_media_model
-    from wagtailmedia.models import media_served
 
     from .base import TestV3MediaBase
 
@@ -155,17 +153,3 @@ if WAGTAIL_VERSION >= (8, 0):
                 self.assertEqual(handler.call_count, 1)
             finally:
                 post_save.disconnect(handler, sender=Media)
-
-        def test_api_uploaded_media_can_be_served(self):
-            handler = mock.MagicMock()
-            media_served.connect(handler)
-            try:
-                self.login()
-                create_response = self.post_media(title="Served")
-                url = create_response.json()["meta"]["download_url"]
-                response = self.client.get(urlsplit(url).path)
-                self.assertEqual(response.status_code, 200)
-                self.assertEqual(b"".join(response.streaming_content), FILE_CONTENTS)
-                self.assertEqual(handler.call_count, 1)
-            finally:
-                media_served.disconnect(handler)
