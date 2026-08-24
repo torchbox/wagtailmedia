@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
@@ -33,6 +33,7 @@ def _restore_hidden_collection_field(
 
 def build_media_form(
     model: type,
+    media_type: Literal["audio", "video"],
     data: Any,
     file: UploadedFile,
     user: AbstractBaseUser | AnonymousUser,
@@ -40,7 +41,7 @@ def build_media_form(
     form_class = get_media_form(model)
     payload = data.model_dump()
     form_data = build_form_data(form_class, payload)
-    instance = model(uploaded_by_user=user)
+    instance = model(uploaded_by_user=user, type=media_type)
     form = form_class(
         data=form_data,
         files={"file": file},

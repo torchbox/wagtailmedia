@@ -22,7 +22,9 @@ if WAGTAIL_VERSION >= (8, 0):
                 "file": SimpleUploadedFile("test.mp3", FILE_CONTENTS),
             }
             data.update(kwargs)
-            return self.client.post(reverse("wagtailapi_v3:create_media"), data)
+            return self.client.post(
+                reverse("wagtailapi_v3:create_media", args=("audio",)), data
+            )
 
         def test_anonymous_returns_401(self):
             response = self.post_media(title="Test")
@@ -45,7 +47,7 @@ if WAGTAIL_VERSION >= (8, 0):
         def test_missing_file_returns_422(self):
             self.login()
             response = self.client.post(
-                reverse("wagtailapi_v3:create_media"),
+                reverse("wagtailapi_v3:create_media", args=("audio",)),
                 {"title": "No file"},
             )
             self.assert_problem_response(response, status_code=422)
@@ -134,7 +136,13 @@ if WAGTAIL_VERSION >= (8, 0):
             self.assert_problem_response(
                 response,
                 status_code=422,
-                errors=[{"loc": ["file"]}],
+                errors=[
+                    {
+                        "type": "invalid_extension",
+                        "loc": ["__all__"],
+                        "msg": "File extension “mp3” is not allowed. Allowed extensions are: wav.",
+                    }
+                ],
             )
 
         def test_audit_log(self):

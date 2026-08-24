@@ -75,7 +75,7 @@ def build_media_schemas():
         Media,
         base_class=Schema,
         fields=BASE_MEDIA_FIELDS,
-        required_fields=("title",),
+        required_fields=("title", "file"),
     )
     patch_schema = patch_generator.generate_schema(
         Media,

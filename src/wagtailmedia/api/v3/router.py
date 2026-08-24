@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Literal, cast
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -93,7 +93,7 @@ def get_media_item(request: HttpRequest, media_id: int):
 
 
 @router.post(
-    "/",
+    "/{media_type}",
     response={201: MediaDetailSchema},
     url_name="create_media",
     summary="Create media",
@@ -103,10 +103,11 @@ def get_media_item(request: HttpRequest, media_id: int):
 @require_any_permission(Media, ("add",))
 def create_media(
     request: HttpRequest,
+    media_type: Literal["audio", "video"],
     file: UploadedFile = File(...),  # noqa: B008 ty: ignore[call-non-callable]
     data: MediaCreateSchema = Form(...),  # noqa: B008 ty: ignore[call-non-callable, invalid-type-form]
 ):
-    form = build_media_form(Media, data, file, request.user)
+    form = build_media_form(Media, media_type, data, file, request.user)
     action_class = action_registry.get_action_class(Media, "create")
     action = action_class(form.instance, user=request.user, form=form)
     action.execute()

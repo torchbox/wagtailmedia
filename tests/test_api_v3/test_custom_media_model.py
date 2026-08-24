@@ -115,6 +115,7 @@ if WAGTAIL_VERSION >= (8, 0):
             )
             form = build_media_form(
                 CustomMedia,
+                "audio",
                 data,
                 SimpleUploadedFile("custom.mp3", b"Custom contents"),
                 self.user,
@@ -136,6 +137,7 @@ if WAGTAIL_VERSION >= (8, 0):
             data = self.create_schema().model_validate({"title": "Duplicate"})
             form = build_media_form(
                 CustomMedia,
+                "video",
                 data,
                 SimpleUploadedFile("second.mp4", b"Second"),
                 self.user,
@@ -153,6 +155,7 @@ if WAGTAIL_VERSION >= (8, 0):
             data = self.create_schema().model_validate({"title": "Custom form"})
             form = build_media_form(
                 CustomMedia,
+                "audio",
                 data,
                 SimpleUploadedFile("custom-form.mp3", b"Custom form contents"),
                 self.user,
