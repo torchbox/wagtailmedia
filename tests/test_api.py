@@ -4,7 +4,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from wagtail import VERSION as WAGTAIL_VERSION
 
-from wagtailmedia.models import get_media_model
+from wagtailmedia import get_media_model
 
 from .utils import create_audio, create_video
 

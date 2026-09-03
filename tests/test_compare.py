@@ -2,13 +2,13 @@ from django.test import TestCase
 from django.utils.safestring import SafeString
 from testapp.models import BlogStreamPage
 
+from wagtailmedia import get_media_model
 from wagtailmedia.blocks import (
     AudioChooserBlock,
     MediaChooserBlockComparison,
     VideoChooserBlock,
 )
 from wagtailmedia.edit_handlers import MediaFieldComparison
-from wagtailmedia.models import get_media_model
 from wagtailmedia.utils import format_audio_html, format_video_html
 
 from .utils import create_audio, create_video

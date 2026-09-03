@@ -2,18 +2,19 @@ import mimetypes
 import os.path
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.dispatch import Signal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.models import CollectionMember, ReferenceIndex
 from wagtail.search import index
 from wagtail.search.queryset import SearchableQuerySetMixin
 
-from wagtailmedia.settings import wagtailmedia_settings
+from . import get_media_model
+from .settings import wagtailmedia_settings
 
 
 ALLOWED_EXTENSIONS_THUMBNAIL = ["gif", "jpg", "jpeg", "png", "webp"]
@@ -131,7 +132,14 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
         return reverse("wagtailmedia:media_usage", args=(self.id,))
 
     def is_editable_by_user(self, user):
-        from wagtailmedia.permissions import permission_policy
+        if WAGTAIL_VERSION >= (8, 0):
+            from wagtail.permissions import policy_registry
+
+            permission_policy = policy_registry.get_by_type(get_media_model())
+        else:
+            from . import get_permission_policy
+
+            permission_policy = get_permission_policy()
 
         return permission_policy.user_has_permission_for_instance(user, "change", self)
 
@@ -159,29 +167,6 @@ class AbstractMedia(CollectionMember, index.Indexed, models.Model):
 
 class Media(AbstractMedia):
     pass
-
-
-def get_media_model():
-    from django.apps import apps
-
-    from wagtailmedia.settings import wagtailmedia_settings
-
-    try:
-        app_label, model_name = wagtailmedia_settings.MEDIA_MODEL.split(".")
-    except AttributeError:
-        return Media
-    except ValueError as err:
-        raise ImproperlyConfigured(
-            "WAGTAILMEDIA[\"MEDIA_MODEL\"] must be of the form 'app_label.model_name'"
-        ) from err
-
-    media_model = apps.get_model(app_label, model_name)
-    if media_model is None:
-        raise ImproperlyConfigured(
-            f"WAGTAILMEDIA[\"MEDIA_MODEL\"] refers to model '{wagtailmedia_settings.MEDIA_MODEL}' that has not been installed"
-        )
-
-    return media_model
 
 
 # Provides `request` as an argument
