@@ -2,8 +2,42 @@
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-09-04
 
-## [0.18.0] - 2026-08-11
+### Added
+
+- Support for Wagtail 8.0, Django 6.1
+- Support for Wagtail 8.0
+  - [Custom base page models](https://docs.wagtail.org/en/latest/advanced_topics/customization/custom_base_page_models.html). [Example project](https://github.com/wagtail/wagtail-custom-base-page-template)
+  - [Permission policy registry](https://docs.wagtail.org/en/latest/reference/permissions.html#permission-policy-registry)
+  - [API v3](https://docs.wagtail.org/en/stable/advanced_topics/api/v3/index.html). To enable API v3 support, set `ENABLE_API_V3` to `True` in the `WAGTAILMEDIA` setting dictionary.
+
+### Changed
+
+- `get_media_model` has moved to the module top level.
+- `wagtailmedia.permissions.permission_policy` is now deprecated and will be removed in a future release.
+
+### Upgrade considerations
+
+Update `get_media_model` imports:
+
+```diff
+- from wagtailmedia.models import get_media_model
++ from wagtailmedia import get_media_model
+```
+
+Update `permission_policy` imports:
+
+```diff
+- from wagtailmedia.permissions import permission_policy
++ from wagtailmedia import get_permission_policy
++
++ permission_policy = get_permission_policy()
+```
+
+## [0.18.1] - 2026-08-11
+
+Note: 0.18.1 is the same of 0.18.0 with the publishing workflow fixed.
 
 ### Added
 
@@ -368,8 +402,9 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.18.0...HEAD
-[0.18.0]: https://github.com/torchbox/wagtailmedia/compare/v0.17.2...v0.18.0
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/torchbox/wagtailmedia/compare/v0.18.1...v0.19.0
+[0.18.1]: https://github.com/torchbox/wagtailmedia/compare/v0.17.2...v0.18.1
 [0.17.2]: https://github.com/torchbox/wagtailmedia/compare/v0.17.1...v0.17.2
 [0.17.1]: https://github.com/torchbox/wagtailmedia/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/torchbox/wagtailmedia/compare/v0.16.0...v0.17.0
