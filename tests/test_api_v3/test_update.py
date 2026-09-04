@@ -4,8 +4,9 @@ from wagtail import VERSION as WAGTAIL_VERSION
 if WAGTAIL_VERSION >= (8, 0):
     import json
 
-    from unittest import mock
+    from unittest import mock, skipUnless
 
+    from django.conf import settings
     from django.db.models.signals import post_save
     from django.urls import reverse
 
@@ -15,6 +16,7 @@ if WAGTAIL_VERSION >= (8, 0):
 
     Media = get_media_model()
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     class TestV3MediaUpdate(TestV3MediaBase):
         def setUp(self):
             super().setUp()

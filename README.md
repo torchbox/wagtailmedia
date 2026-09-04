@@ -70,6 +70,7 @@ WAGTAILMEDIA = {
         "ogv",
         "webm",
     ],  # list of extensions
+    "ENABLE_API_V3": False,  # Wagtail 8.0+ - enable the v3 API endpoints
 }
 ```
 
@@ -285,6 +286,8 @@ class BlogPage(Page):
 
 ### API
 
+#### v2
+
 To expose media items in the API, you can follow the [Wagtail documentation guide](https://docs.wagtail.org/en/stable/advanced_topics/api/v2/configuration.html#api-v2-configuration)
 for API configuration with wagtailmedia specifics:
 
@@ -300,9 +303,16 @@ api_router = WagtailAPIRouter("wagtailapi")
 api_router.register_endpoint("media", MediaAPIViewSet)
 ```
 
+#### v3 (preview)
+
+Starting with version 8.0, Wagtail provides an [experimental API v3](https://docs.wagtail.org/en/stable/advanced_topics/api/v3/index.html), powered by [django-ninja](https://github.com/vitalik/django-ninja).
+To opt-in, set `ENABLE_API_V3` to `True` in the `WAGTAILMEDIA` setting. The wagtailmedia endpoint will be available under the `<v3 API root>/media/`.
+
+For further details, explore the [Wagtail API v3 documentation](https://docs.wagtail.org/en/stable/advanced_topics/api/v3/index.html).
+
 ## Translations
 
-wagtailmedia has translations in French and Chinese. More translations welcome!
+wagtailmedia has translations in Chinese, French, German, Romanian, Ukrainian. More translations welcome!
 
 ## Contributing
 

@@ -2,8 +2,9 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION >= (8, 0):
-    from unittest import mock
+    from unittest import mock, skipUnless
 
+    from django.conf import settings
     from django.core.files.uploadedfile import SimpleUploadedFile
     from django.db.models.signals import post_save
     from django.test import override_settings
@@ -16,6 +17,7 @@ if WAGTAIL_VERSION >= (8, 0):
     Media = get_media_model()
     FILE_CONTENTS = b"Test media contents"
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     class TestV3MediaCreate(TestV3MediaBase):
         def post_media(self, **kwargs):
             data = {

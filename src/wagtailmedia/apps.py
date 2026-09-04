@@ -32,13 +32,16 @@ class WagtailMediaAppConfig(AppConfig):
         )
 
         if WAGTAIL_VERSION >= (8, 0):
-            # v3 API. Note: the import order matters
-            from .api.v3.registry import register_content_types
+            from .settings import wagtailmedia_settings
 
-            register_content_types()
+            if wagtailmedia_settings.ENABLE_API_V3:
+                # v3 API. Note: the import order matters
+                from .api.v3.registry import register_content_types
 
-            from wagtail.api.v3.api import api
+                register_content_types()
 
-            from .api.v3.router import router
+                from wagtail.api.v3.api import api
 
-            api.add_router("/media/", router)
+                from .api.v3.router import router
+
+                api.add_router("/media/", router)

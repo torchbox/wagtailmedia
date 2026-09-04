@@ -2,6 +2,9 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION >= (8, 0):
+    from unittest import skipUnless
+
+    from django.conf import settings
     from django.urls import reverse
     from wagtail.api.v3.registry import registry
 
@@ -12,6 +15,7 @@ if WAGTAIL_VERSION >= (8, 0):
 
     Media = get_media_model()
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     class TestV3MediaSchemas(TestV3MediaBase):
         def test_content_type_registered_for_schema_discovery(self):
             registration = registry.get(Media._meta.label)
