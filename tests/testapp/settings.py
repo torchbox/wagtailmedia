@@ -119,7 +119,7 @@ if WAGTAIL_VERSION >= (8, 0):
     INSTALLED_APPS.append("wagtail.api.v3")
 
     if os.environ.get("USES_CUSTOM_PAGE_MODEL", "no").lower().strip() == "yes":
-        INSTALLED_APPS.insert(2, "testapp.basepage")
+        INSTALLED_APPS.insert(0, "testapp.basepage")
         WAGTAIL_PAGE_MODEL = "basepage.BasePage"
         print("[wagtailmedia] Custom base page model active")
 
