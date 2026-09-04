@@ -83,9 +83,12 @@ Your Django project may already have this in place, but if not, add the followin
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    # ... the rest of your URLconf goes here ...
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = (
+    [
+        # ... the rest of your URLconf goes here ...
+    ]
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
 ```
 
 Note that this only works in development mode (`DEBUG = True`);
