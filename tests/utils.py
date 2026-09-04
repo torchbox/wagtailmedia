@@ -29,15 +29,19 @@ def create_media(
     title: str,
     duration: int | None = 100,
     thumbnail: str | None = False,
+    **kwargs,
 ) -> AbstractMedia:
     filename = re.sub(r"[/:\"\'] ", "_", title).lower()
     extension = "mp3" if media_type == MediaType.AUDIO else "mp4"
-    item = get_media_model().objects.create(
-        type=media_type,
-        title=title,
-        duration=duration,
-        file=ContentFile("📼", name=f"{filename}.{extension}"),
-    )
+
+    defaults = {
+        "type": media_type,
+        "title": title,
+        "duration": duration,
+        "file": ContentFile("📼", name=f"{filename}.{extension}"),
+    }
+    defaults.update(kwargs)
+    item = get_media_model().objects.create(**defaults)
 
     if thumbnail:
         item.thumbnail = ContentFile("Thumbnail", name=thumbnail)
@@ -46,13 +50,17 @@ def create_media(
     return item
 
 
-def create_video(title="Test video", duration=100, thumbnail=None) -> AbstractMedia:
+def create_video(
+    title="Test video", duration=100, thumbnail=None, **kwargs
+) -> AbstractMedia:
     return create_media(
-        MediaType.VIDEO, title=title, duration=duration, thumbnail=thumbnail
+        MediaType.VIDEO, title=title, duration=duration, thumbnail=thumbnail, **kwargs
     )
 
 
-def create_audio(title="Test audio", duration=100, thumbnail=None) -> AbstractMedia:
+def create_audio(
+    title="Test audio", duration=100, thumbnail=None, **kwargs
+) -> AbstractMedia:
     return create_media(
-        MediaType.AUDIO, title=title, duration=duration, thumbnail=thumbnail
+        MediaType.AUDIO, title=title, duration=duration, thumbnail=thumbnail, **kwargs
     )
