@@ -2,8 +2,9 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION >= (8, 0):
-    from unittest import mock
+    from unittest import mock, skipUnless
 
+    from django.conf import settings
     from django.db.models.signals import post_delete
     from django.urls import reverse
 
@@ -13,6 +14,7 @@ if WAGTAIL_VERSION >= (8, 0):
 
     Media = get_media_model()
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     class TestV3MediaDelete(TestV3MediaBase):
         def delete(self, media_id):
             return self.client.delete(

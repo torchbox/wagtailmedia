@@ -2,8 +2,10 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION >= (8, 0):
+    from unittest import skipUnless
     from unittest.mock import patch
 
+    from django.conf import settings
     from django.contrib.auth.models import Group, Permission
     from django.core.files.uploadedfile import SimpleUploadedFile
     from django.test import TestCase, override_settings
@@ -19,6 +21,7 @@ if WAGTAIL_VERSION >= (8, 0):
     from wagtailmedia.api.v3.form_data import build_media_form
     from wagtailmedia.forms import get_media_form
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     @override_settings(WAGTAILMEDIA={"MEDIA_MODEL": "wagtailmedia_tests.CustomMedia"})
     class TestV3CustomMediaModel(WagtailTestUtils, TestCase):
         @classmethod

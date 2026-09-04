@@ -2,11 +2,15 @@ from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION >= (8, 0):
+    from unittest import skipUnless
+
+    from django.conf import settings
     from django.urls import reverse
     from wagtail.models import CollectionViewRestriction
 
     from .base import TestV3MediaBase
 
+    @skipUnless(settings.ENABLE_API_V3, "Skipped as testing with ENABLE_API_V3=False")
     class TestV3MediaDetail(TestV3MediaBase):
         def get_response(self, media_id):
             return self.client.get(

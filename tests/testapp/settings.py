@@ -118,11 +118,16 @@ USE_EXTENDS = False
 if WAGTAIL_VERSION >= (8, 0):
     INSTALLED_APPS.append("wagtail.api.v3")
 
-    if os.environ.get("USES_CUSTOM_PAGE_MODEL"):
+    if os.environ.get("USES_CUSTOM_PAGE_MODEL", "no").lower().strip() == "yes":
         INSTALLED_APPS.insert(2, "testapp.basepage")
         WAGTAIL_PAGE_MODEL = "basepage.BasePage"
-        print("Custom base page model active [wagtailmedia]")
+        print("[wagtailmedia] Custom base page model active")
 
-    if os.environ.get("USE_EXTENDS"):
+    if os.environ.get("USE_EXTENDS", "no").lower().strip() == "yes":
         INSTALLED_APPS.insert(0, "testextends")
         USE_EXTENDS = True
+        print("[wagtailmedia] Testing with template extensions")
+
+    ENABLE_API_V3 = os.environ.get("ENABLE_API_V3", "yes").lower().strip() == "yes"
+    WAGTAILMEDIA = {"ENABLE_API_V3": ENABLE_API_V3}
+    print(f"[wagtailmedia] Testing with {ENABLE_API_V3=}")

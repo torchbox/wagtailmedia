@@ -31,6 +31,7 @@ DEFAULTS = {
         "ogv",
         "webm",
     ],
+    "ENABLE_API_V3": False,
 }
 
 # List of settings that have been deprecated
