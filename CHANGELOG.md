@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-09-11
+
+### Fixed
+
+- A potential race condition with using `policy_registry.get_by_type(get_media_model())` in `wagtail_hooks.py` being called before we
+  register our permission policy via `apps.py`
+
 ## [0.19.0] - 2026-09-04
 
 ### Added
@@ -402,7 +409,8 @@ Initial release
 
 ---
 
-[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.19.0...HEAD
+[unreleased]: https://github.com/torchbox/wagtailmedia/compare/v0.19.1...HEAD
+[0.19.1]: https://github.com/torchbox/wagtailmedia/compare/v0.19.0...v0.19.1
 [0.19.0]: https://github.com/torchbox/wagtailmedia/compare/v0.18.1...v0.19.0
 [0.18.1]: https://github.com/torchbox/wagtailmedia/compare/v0.17.2...v0.18.1
 [0.17.2]: https://github.com/torchbox/wagtailmedia/compare/v0.17.1...v0.17.2
